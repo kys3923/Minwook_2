@@ -1,0 +1,15 @@
+{
+  "name": "back",
+  "version": "1.0.0",
+  "description": "Minwook Website backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server"
+  },
+  "author": "YK",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2",
+    "mongoose": "^6.1.2"
+  }
+}
