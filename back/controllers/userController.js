@@ -16,5 +16,3 @@ router.post('', (req, res) => {
     updateRecord(req, res)
   }
 })
-
-function
