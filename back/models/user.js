@@ -29,11 +29,13 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
+      unique: true
     },
     address: {
       type: String,
       required: true,
-    },  
+    },
+    // TODO: add orders, Credit card#, Reservation
   },
   options
 );
