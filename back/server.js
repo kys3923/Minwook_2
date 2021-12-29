@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 
 const app = express();
 
@@ -12,11 +11,13 @@ app.use(express.json());
 
 // routes
 app.get('/', (req, res) => {
-  res.send(`
-  <h2>Welcome to database</h2>`);
+  res.json({
+    message: 'welcome to database'
+  });
 });
 
 // controllers
+app.use('/api', require('./controllers/auth'))
 
 // opening server
 app.listen(process.env.PORT || 8000, () => {
