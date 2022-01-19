@@ -6,10 +6,11 @@ const Header = (props) => {
       </div>
       <ul>
         <li>Menu</li>
-        <li>Order Take Out</li>
+        {/* connnect to backend to toggle the delivery options */}
+        <li>Order</li>
         <li>Reservation</li>
         <li>Contact</li>
-        <li>Sign In / Register</li>
+        <li>Account</li>
       </ul>
     </div>
   );

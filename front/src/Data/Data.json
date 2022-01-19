@@ -1,4 +1,4 @@
-"MenuData" : [
+[
   {
     "id": "1",
     "name": "New Jersey",
@@ -1976,5 +1976,5 @@
     "Category": "Lunch Special",
     "Sub_Category": "Udon Lunch",
     "Stock_availability": true
-  },
+  }
 ]

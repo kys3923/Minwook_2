@@ -1,6 +1,6 @@
 import Maps from './landing_parts/Maps';
 import IntroAndOrder from './landing_parts/IntroAndOrder';
-import Menu from './landing_parts/Menu';
+import Menu from './landing_parts/MenuComponents/Menu';
 
 const Landing = (props) => {
   return (
