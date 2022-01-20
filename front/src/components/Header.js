@@ -7,13 +7,12 @@ const Header = (props) => {
         <h6>Logo here</h6>
       </div>
       <ul>
-        <li>Menu</li>
+        <Link to='/'>Home</Link>
+        <Link to='/Order'>Order</Link>
         {/* connnect to backend to toggle the delivery options */}
-        <li>Order</li>
-        <li>Reservation</li>
-        <li>Contact</li>
-        <li>Account</li>
-        <li>Cart</li>
+        <Link to='/Reservation'>Reservation</Link>
+        <Link to='/Account'>Account</Link>
+        <Link to='/Cart'>Cart</Link>
       </ul>
     </nav>
   );
