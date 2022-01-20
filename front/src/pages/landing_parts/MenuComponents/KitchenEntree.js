@@ -1,5 +1,5 @@
 import kMenuData from '../../../Data/KitchenEntree.json';
-console.log(kMenuData)
+
 const noodleItems =
   kMenuData.map((card) => {
     if (card.Category ==='Noodles') {
