@@ -5,7 +5,7 @@ const Header = (props) => {
   return (
     <nav className="header-nav">
       <div className="logo-imagebox">
-        <Link to="/"><a><img src='/images/logo_sushivill.png' style={{ "maxWidth": "200px" }}/></a></Link>
+        <Link to="/"><img src='/images/logo_sushivill.png' style={{ "maxWidth": "200px" }}/></Link>
       </div>
       <ul className='nav-links'>
         <li><Link to='/Order'><a>Order</a></Link></li>
