@@ -8,6 +8,7 @@ import RegularRolls from './RegularRolls';
 import SoupSalad from './SoupSalad';
 import SpecialRolls from './SpecialRolls';
 import SushiSashimi from './SushiSashimi';
+import PartyPlatterItems from './PartyPlatter';
 
 const Menu = (props) => {
 
@@ -47,8 +48,13 @@ const Menu = (props) => {
     setMenuSelected(<ALaCarte />)
   }
 
+  const PartyHandler = () => {
+    setMenuSelected( <PartyPlatterItems /> )
+  }
+
   return (
     <nav className="Menu_Container">
+      <h1>MENU</h1>
       <ul>
         <li onClick={sRollHandler}>Special Rolls</li>
         <li onClick={rRollHandler}>Regular Rolls</li>
@@ -58,18 +64,10 @@ const Menu = (props) => {
         <li onClick={kitchenEntreeHandler}>Kitchen Entree</li>
         <li onClick={sSashimiHandler}>Sushi & Sashimi</li>
         <li onClick={aLaCarteHandler}>A La Carte</li>
+        <li onClick={PartyHandler}>Party Platter</li>
       </ul>
       <div className='menuContents'>
-        {/* content will be show here */}
         {menuSelected}
-        {/* <SpecialRolls />
-        <RegularRolls />
-        <LunchSpecial />
-        <Appetizer />
-        <SoupSalad />
-        <KitchenEntree />
-        <SushiSashimi />
-        <ALaCarte /> */}
       </div>
     </nav>
   );

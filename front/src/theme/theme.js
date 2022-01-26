@@ -5,7 +5,6 @@ const theme = createTheme({
     type: 'light',
     primary: {
       main: '#DB5A41',
-      appbar: '#FFFFFF'
     },
     secondary: {
       main: '#2c3545',
