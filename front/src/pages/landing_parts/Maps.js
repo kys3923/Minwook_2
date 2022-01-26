@@ -22,7 +22,7 @@ import restaurantData from '../../Data/Restaurant.json'
 // const WrappedMap = withScriptjs(withGoogleMap(Map));
 
 const mapContainerStyle = {
-  width: "100vw",
+  width: "100%",
   height: "50vh"
 }
 
@@ -39,7 +39,7 @@ const Maps = (props) => {
   if(!isLoaded) return "Loading...";
 
   return (
-    <div style={{ width: "100vw", height: "50vh "}}>
+    <div style={{ width: "100%", height: "50vh "}}>
       <GoogleMap
         id="map"
         mapContainerStyle={mapContainerStyle}
