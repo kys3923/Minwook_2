@@ -60,11 +60,11 @@ const Maps = (props) => {
             }}
           >
             <div>
-              <h2>
+              <h3>
                 SushiVille
-              </h2>
+              </h3>
               <p>{restaurantData[0].address}</p>
-              <a target="_blank" href="https://www.google.com/maps/place/Sushiville/@41.155677,-74.193748,16z/data=!4m8!1m2!3m1!2sSushiville!3m4!1s0x89c2dfc1c127b3e3:0x4735a45026923a62!8m2!3d41.1556049!4d-74.1935692">View on Google Maps</a>
+              <a target="_blank" rel="noreferrer" href="https://www.google.com/maps/place/Sushiville/@41.155677,-74.193748,16z/data=!4m8!1m2!3m1!2sSushiville!3m4!1s0x89c2dfc1c127b3e3:0x4735a45026923a62!8m2!3d41.1556049!4d-74.1935692">View on Google Maps</a>
             </div>
           </InfoWindow>
         ) : !showInfoWindow}

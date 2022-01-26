@@ -1,4 +1,4 @@
-import { Redirect, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Main from './landing_parts/Main';
 import Order from './Order';
 import Reservation from './Reservation';
