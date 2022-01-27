@@ -6,11 +6,11 @@ const freshRollItems =
     if (card.Sub_Category ==='Fresh Rolls') {
       return (
         <div key={card.id} className='menuCard'>
-          <div className='menuCard_image'></div>
-          <h3>{card.name}</h3>
-          <p>{card.sub_name}</p>
-          <p>{card.description}</p>
-          <p>${card.Price}</p>
+          <div className='menuCard_top'>
+            <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
+            <p className='menuCard_description'>{card.description}</p>
+          </div>
+          <p className='menuCard_price'>${card.Price}</p>
         </div>
       )
     }
@@ -22,10 +22,9 @@ sRolls.map((card) => {
   if (card.Sub_Category === 'Baked Rolls') {
     return (
       <div key={card.id} className='menuCard'>
-        <h3>{card.name}</h3>
-        <p>{card.sub_name}</p>
-        <p>{card.description}</p>
-        <p>${card.Price}</p>
+        <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
+        <p className='menuCard_description'>{card.description}</p>
+        <p className='menuCard_price'>${card.Price}</p>
       </div>
     )
   }
@@ -37,10 +36,9 @@ sRolls.map((card) => {
   if (card.Sub_Category === 'Tempura Rolls') {
     return (
       <div key={card.id} className='menuCard'>
-        <h3>{card.name}</h3>
-        <p>{card.sub_name}</p>
-        <p>{card.description}</p>
-        <p>${card.Price}</p>
+        <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
+        <p className='menuCard_description'>{card.description}</p>
+        <p className='menuCard_price'>${card.Price}</p>
       </div>
     )
   }

@@ -4,23 +4,22 @@ const PartyPlatterMenu =
   PartyPlatter.map((card) => {
     let DoubleMap = card.description.map((items, i) => {
       return (
-        <p key={i}>{items}</p>
+        <p key={i} className='menuCard_description_list'>{items}</p>
       )
     })
     return (
-      <div key={card.id} className='menuCard'>
-        <h3>{card.name}</h3>
-        <p>{card.sub_name}</p>
+      <div key={card.id} className='menuCard_listitems'>
+        <h3 className='menuCard_name'>{card.name}</h3>
         {DoubleMap}
-        <p>${card.Price}</p>
+        <p className='menuCard_pricelist'>${card.Price}</p>
       </div>
     )
   })
 
 const PartyPlatterItems = (props) => {
   return (
-    <div>
-      <h2>Party Platters</h2>
+    <div className='menuCardContainer'>
+      <h2 className='menuCardTitle1'>Party Platters</h2>
       {PartyPlatterMenu}
     </div>
   );

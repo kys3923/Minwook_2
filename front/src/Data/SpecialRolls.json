@@ -3,8 +3,7 @@
     "id": "1",
     "name": "New Jersey",
     "sub_name": [
-      "Soy paper",
-      "6pcs"
+      "Soy paper"
     ],
     "description": "Tuna, Salmon, Yellowtail, Avocado, Masago w/soy paper",
     "Price" : 11.95,
@@ -102,8 +101,7 @@
     "id": "10",
     "name": "Flamingo",
     "sub_name": [
-      "Soy paper",
-      "6pcs"
+      "Soy paper"
     ],
     "description": "Salmon, avocado, special sauce on salmon avocado roll",
     "Price" : 12.95,
@@ -285,8 +283,7 @@
     "id": "27",
     "name": "Yellow Submarine",
     "sub_name": [
-      "Soy Paper",
-      "6pcs"
+      "Soy Paper"
     ],
     "description": "Shrimp tempura, avocado in soy paper topped with spicy tuna, masago, scallion",
     "Price" : 12.95,

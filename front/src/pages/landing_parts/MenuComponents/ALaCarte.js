@@ -1,22 +1,39 @@
 import carteData from '../../../Data/ALaCarte.json';
 
-const carteItems =
+const sashimiItems =
   carteData.map((card) => {
+    if (card.Sub_Category === "Sashimi") {
+      return (
+        <div key={card.id} className='menuCard'>
+          <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
+          <p className='menuCard_description'>{card.description}</p>
+          <p className='menuCard_price'>${card.Price}</p>
+        </div>
+      )
+    }
+  })
+
+const nigiriItems =
+carteData.map((card) => {
+  if (card.Sub_Category === "Nigiri") {
     return (
       <div key={card.id} className='menuCard'>
-        <h3>{card.name}</h3>
-        <p>{card.sub_name}</p>
-        <p>{card.description}</p>
-        <p>${card.Price}</p>
+        <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
+        <p className='menuCard_description'>{card.description}</p>
+        <p className='menuCard_price'>${card.Price}</p>
       </div>
     )
-  })
+  }
+})
 
 const ALaCarte = (props) => {
   return (
-    <div>
-      <h2>A La Carte</h2>
-      {carteItems}
+    <div className='menuCardContainer'>
+      <h2 className='menuCardTitle1'>A La Carte</h2>
+      <h2 className='menuCardTitle2'>Nigiri<br /><span className='menuCardTitleSub'>Sushi</span></h2>
+      {nigiriItems}
+      <h2 className='menuCardTitle2'>Sashimi</h2>
+      {sashimiItems}
     </div>
   );
 }

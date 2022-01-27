@@ -1,31 +1,44 @@
 const Footer = (props) => {
   return (
     <div className="Footer_Container">
-      <h1>footer</h1>
       <div className="Footer_Hours">
-        <ul>
-          <h4>Hours</h4>
-          <li>Monday 12-9pm</li>
-          <li>Tuesday Closed</li>
-          <li>Wednesday 12-9pm</li>
-          <li>Thursday 12-9pm</li>
-          <li>Friday 12-9:30pm</li>
-          <li>Saturday 12-9:30pm</li>
-          <li>Sunday 12-9pm</li>
+        <h4>Opening Hours</h4>
+        <ul className="footer_days">
+          <li>Monday</li>
+          <li>Tuesday</li>
+          <li>Wednesday</li>
+          <li>Thursday</li>
+          <li>Friday</li>
+          <li>Saturday</li>
+          <li>Sunday</li>
+        </ul>
+        <ul className="footer_hours_detail">
+          <li>12-9pm</li>
+          <li>Closed</li>
+          <li>12-9pm</li>
+          <li>12-9pm</li>
+          <li>12-9:30pm</li>
+          <li>12-9:30pm</li>
+          <li>12-9pm</li>
         </ul>
       </div>
       <div className="Footer_Contact">
+          <h4>Contact Info</h4>
         <ul>
-          <h4>Contact</h4>
-          <li>Address 67 Orange Turnpike, Sloatsburg, NY 10974</li>
+          <li>67 Orange Turnpike, Sloatsburg, NY 10974</li>
           <li>(845) 712-5006</li>
         </ul>
       </div>
       <div className="Footer_Social">
+          <h4>Connect</h4>
         <ul>
-          <h4>Social Media</h4>
-          <li>list1</li>
+          <li>facebook</li>
+          <li>instagram</li>
+          <li>twitter</li>
         </ul>
+      </div>
+      <div className="copyrights">
+        <p>© 2022 Sushivill. All Rights Reserved. developed & designed by YK Technology Corporation</p>
       </div>
     </div>
   );
