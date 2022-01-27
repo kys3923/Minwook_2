@@ -26,7 +26,7 @@ const Menu = (props) => {
         </ul>
       </div>
       <div className='Tab_Container'>
-        <h1>MENU</h1>
+        <h1 className='tab_Title' >MENU</h1>
         <Tabs>
           <TabList>
             <Tab>Special Rolls</Tab>

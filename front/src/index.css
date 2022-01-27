@@ -188,12 +188,17 @@ a {
   font-size: 1em;
   text-align: center;
   line-height: 3em;
-  margin: 1em 1em;
+  margin: .5em .5em;
+}
+
+.react-tabs__tab:hover{
+  background: #2c3545;
+  color: #fff;
 }
 
 .react-tabs__tab--selected {
-  background: #dc5a41;
-  border-color: #aaa;
+  background: #2c3545;
+  border: none;
   color: white;
 }
 
@@ -203,10 +208,61 @@ a {
 }
 
 .react-tabs__tab-panel {
-  width: 90%;
+  width: 100%;
   display: none;
+  background-image: url(/public/images/menu_background_optimized.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: bottom;
+  padding-bottom: 25vh;
 }
 
 .react-tabs__tab-panel--selected {
   display: block;
+}
+
+.tab_Title {
+  display: block;
+  color: darkgreen;
+  width: 100%;
+  text-align: center;
+  font-size: 5vw;
+}
+
+/* ------------------------- menu cards */
+
+.menuCardContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.menuCardTitle1 {
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: darkgreen;
+  font-size: 2.5vw;
+}
+
+.menuCardTitle2 {
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: #dc5a41;
+  font-size: 2.25vw;
+  border-bottom: 1px solid #dc5a41;
+  padding-bottom: 1em;
+}
+
+.menuCard {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 30vw;
+  border: 1px solid black;
+  border-radius: 10px;
+  background-color: rgb(255,255,255,.75);
 }
