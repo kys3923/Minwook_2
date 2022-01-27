@@ -29,6 +29,7 @@ a {
   line-height: 5em;
   align-items: center;
   margin: 0;
+  z-index: 9;
 }
 
 .logo-imagebox img {
@@ -106,4 +107,106 @@ a {
   flex-direction: column;
   justify-content: center;
   padding-left: 3em;
+}
+
+/* ----------------------- MENU */
+.Menu_Container {
+  width: 100%;
+}
+
+.logosContainer {
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+  background-color: white;
+  padding-top: 1em;
+  padding-bottom: 2em;
+  border-bottom: 3px solid #2c3545;
+}
+
+.logosList {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0;
+}
+
+.logoListTitle {
+  display: block;
+  width: 100%;
+  font-size: 2.5vw;
+  color: #dc5a41;
+  font-weight: bold;
+  padding-bottom: 1em;
+}
+
+.deliveryLogos {
+  max-width: 6em;
+  filter: saturate(0);
+  margin: 0 2em;
+}
+
+.deliveryLogos:hover {
+  filter: saturate(1);
+  filter: drop-shadow(2px 2px 10px #999999)
+}
+
+.Tab_Container {
+
+}
+/* -------------------importing react tab */
+.react-tabs {
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.react-tabs__tab-list {
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 90%;
+}
+
+.react-tabs__tab {
+  display: block;
+  border: 1px solid #dc5a41;
+  list-style: none;
+  cursor: pointer;
+  border-radius: 10px;
+  width: 10em;
+  height: 3em;
+  font-size: 1em;
+  text-align: center;
+  line-height: 3em;
+  margin: 1em 1em;
+}
+
+.react-tabs__tab--selected {
+  background: #dc5a41;
+  border-color: #aaa;
+  color: white;
+}
+
+.react-tabs__tab--disabled {
+  color: GrayText;
+  cursor: default;
+}
+
+.react-tabs__tab-panel {
+  width: 90%;
+  display: none;
+}
+
+.react-tabs__tab-panel--selected {
+  display: block;
 }

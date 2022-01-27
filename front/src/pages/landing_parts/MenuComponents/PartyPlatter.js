@@ -2,9 +2,9 @@ import PartyPlatter from '../../../Data/PartyPlatter.json';
 
 const PartyPlatterMenu =
   PartyPlatter.map((card) => {
-    let DoubleMap = card.description.map((items) => {
+    let DoubleMap = card.description.map((items, i) => {
       return (
-        <p>{items}</p>
+        <p key={i}>{items}</p>
       )
     })
     return (
