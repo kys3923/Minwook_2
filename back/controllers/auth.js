@@ -1,45 +1,57 @@
-const express = require('express');
-const router = express.Router();
-const bcrypt = require('bcrypt');
-const db = require('../models');
-const { createUserToken } = require('../middleware/auth');
+const User = require ('../models/User');
+const ErrorResponse = require('../utils/errorResponse');
 
-// URL prefix - /api
+exports.register = async ( req, res, next ) => {
+	const { username, email, password } = req.body;
 
-// Signup - POST /api/signup
-router.post('/signup', (req, res) => {
-	// res.json({ message: 'SignUp POST' }); // test purpose
-	bcrypt
-		.hash(req.body.password, 10) //hashing the password
-		.then((hash) =>
-			db.User.create({
-				name: req.body.name,
-				email: req.body.email,
-				password: hash
-			})
-		)
-		.then((createdUser) =>
-			res.json({
-				token: createUserToken(req, createdUser),
-				user: createdUser
-			})
-		)
-		.catch((err) => {
-			console.log(`ERROR in the POST signup`, err);
-			res.json({ error: err });
+	try {
+		const user = await User.create({
+			username, email, password
 		});
-	// db.User.create(req.body)
-	// 	.then((user) => res.json(user))
-	// 	.catch((err) => {
-	// 		console.log(`Error in the POST signup:`, err);
-	// 		res.json({ error: err });
-	// 	});
-});
 
-// Login - POST /api/login
-router.post('/login', (req, res) => {
-	res.json({ message: 'LogIn POST' });
-});
+		sendToken(user, 201, res);
 
-module.exports = router;
-// can check jwt token at jwt.io
+	} catch (error) {
+		next(error);
+	}
+};
+
+exports.login = async ( req, res, next ) => {
+	const { email, password } = req.body;
+
+	if(!email || !password) {
+		return next(new ErrorResponse("Please provide an email and password", 400))
+	}
+
+	try {
+		const user = await User.findOne ({ email }).select("+password");
+
+		if(!user) {
+			return next(new ErrorResponse("Invalid Credentials", 401))
+		}
+
+		const isMatch = await user.matchPasswords(password);
+
+		if(!isMatch) {
+			return next(new ErrorResponse("Invalid Credentials", 401))
+		}
+
+		sendToken(user, 200, res);
+
+	} catch (error) {
+		res.status(500).json({ success: false, error: error.message });
+	}
+};
+
+exports.forgotpassword = ( req, res, next ) => {
+	res.send("Forgot Password Route");
+};
+
+exports.resetpassword = ( req, res, next ) => {
+	res.send("Resetting Password Route");
+};
+
+const sendToken = (user, statusCode, res) => {
+	const token = user.getSignedToken();
+	res.status(statusCode).json({ success: true, token})
+}

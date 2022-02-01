@@ -1,18 +1,24 @@
-const express = require('express');
-let router = express.Router();
-const mongoose = require('mongoose');
-const User = mongoose.model('User');
+// const express = require('express');
+// const db = require('../models')
+// const mongoose = require('mongoose');
+// const passport = require('passport');
 
-router.get('/', (req, res) => {
-  res.render('user/addOrEdit', {
-    viewTitle: 'Insert User'
-  })
-})
+// router.get('/', (req, res) => {
+//   res.render('user/addOrEdit', {
+//     viewTitle: 'Insert User'
+//   })
+// })
 
-router.post('', (req, res) => {
-  if (req.body._id == '') {
-    insertRecord(req, res)
-  } else {
-    updateRecord(req, res)
-  }
-})
+// router.get('/profile', (req, res) => {
+
+// })
+
+// router.get('/test', passport.authenticate('jwt', { session: false }), (req, res) => {
+//   console.log(` Signed in with ${ req.user }`)
+
+//   db.User.findOne({ email: req.body.email })
+//     .then(userSearched => {
+//       console.log(`searched user ${userSearched}`);
+//       res.status(201).json(userSearched)
+//     })
+// })
