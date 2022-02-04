@@ -1,3 +1,8 @@
+*{
+  transition: all .75s ease;
+
+}
+
 html, body {
   padding: 0;
   margin: 0;
@@ -306,7 +311,7 @@ a {
 }
 
 .menuCardLunchContainer {
-  width: 80%;
+  width: 90%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

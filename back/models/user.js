@@ -23,9 +23,29 @@ const UserSchema = new mongoose.Schema({
     minlength: 6,
     select: false
   },
+  isAdmin: {
+    type: String,
+    default: 'user'
+  },
+  address1: String,
+  address2: String,
+  address3: String,
+  contact: {
+    type: Number,
+    required: [true, "10 digit numbers"],
+    minlength: 10
+  },
+  Orders: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Order'
+  }],
+  Reservations: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Reservation'
+  }],
   resetPasswordToken: String,
   resetPasswordExpire: Date
-})
+}, {timestamps: true})
 
 UserSchema.pre("save", async function(next) {
   if(!this.isModified("password")) {
@@ -36,7 +56,7 @@ UserSchema.pre("save", async function(next) {
   this.password = await bcrypt.hash(this.password, salt)
   next();
 
-});
+}, {timestamps: true});
 
 UserSchema.methods.matchPasswords = async function(password) {
   return await bcrypt.compare(password, this.password);

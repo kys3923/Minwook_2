@@ -8,10 +8,13 @@ const Header = (props) => {
         <Link to="/"><img src='/images/logo_sushivill.png' style={{ "maxWidth": "200px" }}/></Link>
       </div>
       <ul className='nav-links'>
-        <li><Link to='/Order'>Order</Link></li>
-        <li><Link to='/Reservation'>Reservation</Link></li>
-        <li><Link to='/Account'>Account</Link></li>
-        <li><Link to='/Cart'>Cart</Link></li>
+        <li><Link to='order'>Order</Link></li>
+        <li><Link to='reservation'>Reservation</Link></li>
+        <li><Link to='account/login'>Account</Link></li>
+        <li><Link to='account/register'>Register</Link></li>
+        <li><Link to='account/forgotpassword'>ForgotPassword</Link></li>
+        <li><Link to='account/passwordreset/:1'>PasswordReset</Link></li>
+        <li><Link to='cart'>Cart</Link></li>
       </ul>
 
       {/* <div className={classes.buttonContainer}>
