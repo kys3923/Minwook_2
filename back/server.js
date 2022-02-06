@@ -25,9 +25,9 @@ app.get('/', (req, res, next) => {
 });
 
 // controllers
-// app.use('/api', require('./controllers/auth'))
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/private', require('./routes/private'));
+app.use('/api/menu', require('./routes/menu'));
 
 // opening server
 const server =  app.listen(process.env.PORT || 8000, () => {
