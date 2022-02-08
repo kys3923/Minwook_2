@@ -1,16 +1,20 @@
 const mongoose = require('mongoose');
 
 const reserveSchema = new mongoose.Schema({
-  _id: {
-    type: mongoose.Schema.ObjectId,
-    auto: true
-  },
   totalParty: Number,
   comments: String,
-  customer: [{
+  customer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }]
+    ref: 'User',
+    required: true
+  },
+  isShowedUp: {
+    type: Boolean,
+    default: false
+  },
+  reserveDate: Date,
 }, {timestamps: true});
 
-module.exports = mongoose.model('Reservation', reserveSchema);
+const Reservation = mongoose.model('Reservation', reserveSchema);
+
+module.exports = Reservation;

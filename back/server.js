@@ -28,6 +28,7 @@ app.get('/', (req, res, next) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/private', require('./routes/private'));
 app.use('/api/menu', require('./routes/menu'));
+app.use('/api/reservation', require('./routes/reservation'));
 
 // opening server
 const server =  app.listen(process.env.PORT || 8000, () => {

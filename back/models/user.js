@@ -78,6 +78,15 @@ UserSchema.methods.getResetPasswordToken = function() {
 
 // TODO: add credit card, order, reservation, contact number, ask for send text, billing address, shipping address
 
+// UserSchema.virtual('Reservations', {
+//   ref: 'Reservation',
+//   localField: '_id',
+//   foreignField: 'customer'
+// })
+
+// UserSchema.set('toObject', { virtuals: true });
+// UserSchema.set('toJSON', { virtuals: true })
+
 const User = mongoose.model("User", UserSchema);
 
 module.exports = User;
