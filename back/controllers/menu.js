@@ -64,36 +64,53 @@ exports.listAllMenu = async (req, res, next ) => {
   }
 }
 
+exports.updateMenu = async ( req, res, next ) => {
+  const id = req.params.id;
+  const {name, caption, description, price, category, Sub_Category, stock_availability } = req.body; 
+
+  try {
+    const menu = await Menu.findByIdAndUpdate(id, {
+      name,
+      caption,
+      description,
+      price,
+      category,
+      Sub_Category,
+      stock_availability
+    });
+
+    res.json({
+      message: "menu has been updated",
+      menu
+    })
+  } catch (error) {
+    next(error);
+  }
+
+}
 
 
-// exports.updateMenu = (req, res) => {
-//   AppMenu.findByIdAndUpdate(req.params.id, req.body)
-//   .then((menu) => {
-//     return res.json({
-//       message: "menu has been updated",
-//       menu
-//     })
-//   })
-//   .catch((error) => {
-//     res.status(404).json({
-//       message: "error at updating menu",
-//       error: error.message
-//     })
-//   })
-// }
+exports.deleteMenu = async ( req, res, next ) => {
+  const id = req.params.id;
+  const {name, caption, description, price, category, Sub_Category, stock_availability } = req.body; 
 
-// exports.deleteMenu = (req, res) => {
-//   AppMenu.findByIdAndRemove(req.params.id, req.body)
-//   .then((menu) => {
-//     res.json({
-//       message: "menu deleted",
-//       menu
-//     })
-//   })
-//   .catch((error) => {
-//     res.status(404).json({
-//       message: "error at deleting menu",
-//       error: error.message
-//     })
-//   })
-// }
+  try {
+    const menu = await Menu.findByIdAndRemove(id, {
+      name,
+      caption,
+      description,
+      price,
+      category,
+      Sub_Category,
+      stock_availability
+    });
+
+    res.json({
+      message: "menu has been deleted",
+      menu
+    })
+  } catch (error) {
+    next(error);
+  }
+
+}

@@ -9,8 +9,8 @@ router.route("/").post(registerMenu);
 
 router.route("/allmenu").get(listAllMenu);
 
-// router.route("/:id").put(updateMenu);
+router.route("/:id").put(updateMenu);
 
-// router.route("/:id").delete(deleteMenu);
+router.route("/:id").delete(deleteMenu);
 
 module.exports = router;
