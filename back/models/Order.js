@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
-  _id: {
-    type: mongoose.Schema.ObjectId,
-    auto: true
-  },
   totalPrice: Number,
   orderedItem: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -15,11 +11,21 @@ const OrderSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  customer: [{
+  customer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  }],
+  },
+  isConfirmed: {
+    type: Boolean,
+    default: false
+  },
+  isReady: {
+    type: Boolean,
+    default: false
+  },
   willReadyBy: Date
 }, {timestamps: true});
+
+OrderSchema.index({ updatedAt: 1 })
 
 module.exports = mongoose.model('Order', OrderSchema);
