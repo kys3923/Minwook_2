@@ -1,19 +1,25 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const LogIn = ({history}, props) => {
+const LogIn = (props) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (localStorage.getItem("authToken")) {
-      history.push('/');
-      // push to default route
+      console.log(localStorage)
+      if (localStorage.getItem("role") == "user") {
+        navigate('/');
+      }
+      if (localStorage.getItem("role") == 'admin') {
+        navigate('/dashboard')
+      }
     }
-  }, [history]);
+  }, []);
 
   const loginHandler = async (e) => {
     e.preventDefault();
@@ -26,18 +32,14 @@ const LogIn = ({history}, props) => {
 
     try {
       const { data } = await axios.post(
-        "/api/auth/login",
+        `${process.env.REACT_APP_SERVER_URL}/api/auth/login`,
+        { email, password },
         config
       );
-
       localStorage.setItem("authToken", data.token);
-
-      history.push("/");
+      localStorage.setItem("role", data.role)
     } catch (error) {
-      setError(error.response.data.error);
-      setTimeout(() => {
-        setError("");
-      }, 5000);
+      setError('Please check your email and password')
     }
   }
 
@@ -62,7 +64,6 @@ const LogIn = ({history}, props) => {
         <div className='form-group'>
           <label htmlFor='password'>
             Password: {" "}
-            <Link to="forgotpassword" className='login_forgotpassword'>Forgot Password?</Link>
           </label>
           <input
             type='password'
@@ -78,9 +79,10 @@ const LogIn = ({history}, props) => {
         <button type='submit' className='form_button_primary'>
           login
         </button>
+        <Link to="../forgotpassword" className='login_forgotpassword'>Forgot Password?</Link>
         <span className='login_subtext'>
           Don't have an account?
-          <Link to='register'>Register</Link>
+          <Link to='../register' className='login_register'>  Register</Link>
         </span>
       </form>
 

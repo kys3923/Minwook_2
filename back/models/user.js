@@ -30,11 +30,7 @@ const UserSchema = new mongoose.Schema({
   address1: String,
   address2: String,
   address3: String,
-  contact: {
-    type: Number,
-    required: [true, "10 digit numbers"],
-    minlength: 10
-  },
+  contact: String,
   Orders: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Order'

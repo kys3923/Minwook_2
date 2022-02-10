@@ -1,22 +1,38 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Register = ({history}, props) => {
+function formatPhoneNumber(telNum) {
+  if (!telNum) return telNum;
+
+  const telPhoneNum = telNum.replace(/[^\d]/g, "");
+  const phoneNumberLength = telPhoneNum.length;
+  if (phoneNumberLength < 4) return telPhoneNum;
+  if (phoneNumberLength < 7) {
+    return `(${telPhoneNum.slice(0, 3)}) ${telPhoneNum.slice(3)}`;
+  }
+  return `(${telPhoneNum.slice(0, 3)}) ${telPhoneNum.slice(
+    3,
+    6
+  )}-${telPhoneNum.slice(6, 10)}`;
+}
+
+
+const Register = (props) => {
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(0);
+  const [contact, setContact] = useState('');
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (localStorage.getItem("authToken")) {
-      history.push('/');
+      // history.push('/');
       // push to default route
     }
-  }, [history]);
+  }, []);
 
   const registerHandler = async (e) => {
     e.preventDefault();
@@ -32,22 +48,33 @@ const Register = ({history}, props) => {
       setConfirmPassword("");
       setTimeout(() => {
         setError("")
-      }, 5000);
+      }, 10000);
       return setError("Passwords do not match")
     }
 
+    
     try {
-      const {data} = await axios.post("/api/auth/register", {username, email, password, phoneNumber}, config);
+      const {data} = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/api/auth/register`,
+        {username, email, password, contact}, 
+        config);
 
       localStorage.setItem("authToken", data.token);
-      history.pushState("/");
+      // history.pushState("/");
     } catch (error) {
-      setError(error.response.data.error);
+      setError('The email address has already taken');
       setTimeout(() => {
         setError("");
-      }, 5000);
+      }, 10000);
     }
   }
+
+
+  const phoneNumberHandler = (e) => {
+    const formattedPhoneNumber = formatPhoneNumber(e.target.value);
+    setContact(formattedPhoneNumber);
+  };
+
   
   return (
     <div className='Register_Container'>
@@ -55,12 +82,12 @@ const Register = ({history}, props) => {
         <h3 className='register_title'>Register</h3>
         {error && <span className='error_message'>{error}</span>}
         <div className='form-group'>
-          <label htmlFor='name'>Username:</label>
+          <label htmlFor='name'>Name:</label>
           <input 
             type='text' 
             required 
             id="name" 
-            placeholder='Enter username' 
+            placeholder='Enter name' 
             value={username} 
             onChange={(e) => setUsername(e.target.value)} 
           />
@@ -103,21 +130,22 @@ const Register = ({history}, props) => {
         </div>
 
         <div className='form-group'>
-          <label htmlFor='contact'>Contact:</label>
+          <label htmlFor='contact'>Contact Number:</label>
           <input 
-            type='tel' 
+            type='tel'
+            placeholder='(123) 456-7890'
             required 
-            id="contact" 
-            value={phoneNumber} 
-            onChange={(e) => setPhoneNumber(e.target.value)} 
+            id="contact"
+            value={contact}
+            autoComplete="off" 
+            onChange={(e) => phoneNumberHandler(e)} 
           />
         </div>
 
         <button type="submit" className='form_button_primary'>Register</button>
 
-        <span className='register_subtext'>Already have an account? <Link to="login">Login</Link></span>
+        <span className='register_subtext'>Already have an account? <Link to="../login" className='login_register'>   Login</Link></span>
       </form>
-      <p>this is register page</p>
     </div>
   );
 }

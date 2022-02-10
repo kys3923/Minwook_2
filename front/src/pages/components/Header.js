@@ -1,6 +1,23 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const Header = (props) => {
+
+  const [ role, setRole ] = useState('');
+  const navigate = useNavigate();
+  
+  const logoutHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      localStorage.clear();
+      if (!localStorage.getItem("authToken")) {
+        navigate('/');
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <nav className="header-nav">
@@ -10,11 +27,11 @@ const Header = (props) => {
       <ul className='nav-links'>
         <li><Link to='order'>Order</Link></li>
         <li><Link to='reservation'>Reservation</Link></li>
-        <li><Link to='account/login'>Account</Link></li>
-        <li><Link to='account/register'>Register</Link></li>
-        <li><Link to='account/forgotpassword'>ForgotPassword</Link></li>
-        <li><Link to='account/passwordreset/:1'>PasswordReset</Link></li>
+        <li><Link to='login'>Login/Register</Link></li>
+        <li><Link to='forgotpassword'>ForgotPassword</Link></li>
+        <li><Link to='passwordreset/:1'>PasswordReset</Link></li>
         <li><Link to='cart'>Cart</Link></li>
+        <button onClick={logoutHandler}>Logout</button>
       </ul>
 
       {/* <div className={classes.buttonContainer}>

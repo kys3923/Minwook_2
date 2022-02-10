@@ -465,4 +465,135 @@ a {
   text-align: center;
 }
 
+/* Account sections */
+/* login */
+
+.LogIn_Container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+}
+
+.login_form {
+  width: 25em;
+  background-color: white;
+  padding: 3em 3em;
+  box-shadow: 0 10px 20px rgba(97, 97, 97, 0.2);
+}
+
+.form_button_primary {
+  border: none;
+  display: block;
+  background-color: #dc5a41;
+  color: white;
+  font-size: 1em;
+  width: 10em;
+  height: 3em;
+  border-radius: 10px;
+  margin-right: 1em;
+  text-align: center;
+  line-height: 3em;
+  font-family: 'Raleway', sans-serif;
+  margin: 0 auto;
+  margin-top: 2em;
+}
+
+.form_button_primary:hover {
+  background-color: #2c3545;
+  font-family: 'Raleway', sans-serif;
+}
+
+.login_title {
+  text-align: center;
+  font-size: 2em;
+  color: darkgreen;
+}
+
+label {
+  display: block;
+  margin-top: 2em;
+  font-size: 1em;
+  font-weight: bold;
+  color: #2c3545;
+}
+
+input {
+  display: block;
+  height: 35px;
+  width: 92%;
+  background-color: rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+  padding: 0 10px;
+  margin-top: 8px;
+  font-size: 14px;
+  border: 1px solid #dc5a41;
+}
+::placeholder{
+  color: #2c3545;
+}
+
+.login_forgotpassword {
+  display: block;
+  margin-top: 1em;
+  font-size: .75em;
+  text-align: center;
+  color: #dc5a41;
+}
+
+.login_forgotpassword:hover {
+  color: #2c3545;
+}
+
+.login_subtext {
+  margin-top: 1.5em;
+  display: block;
+  text-align: center;
+  font-size: .75em;
+  margin-bottom: 2em;
+}
+
+.login_register {
+  color: #dc5a41;
+}
+
+.login_register:hover {
+  color: #2c3545;
+}
+
+.Register_Container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+}
+
+.register_form {
+  width: 25em;
+  background-color: white;
+  padding: 3em 3em;
+  box-shadow: 0 10px 20px rgba(97, 97, 97, 0.2);
+}
+
+.register_title {
+  text-align: center;
+  font-size: 2em;
+  color: darkgreen;
+}
+
+.error_message {
+  display: block;
+  text-align: center;
+  color: #dc5a41;
+  font-size: 1em;
+}
+
+.register_subtext {
+  margin-top: 1.5em;
+  display: block;
+  text-align: center;
+  font-size: .75em;
+  margin-bottom: 2em;
+}
+
 /* TODO: design for responsive */

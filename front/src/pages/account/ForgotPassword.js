@@ -36,7 +36,7 @@ const ForgotPassword = (props) => {
   return (
     <div className='forgotpassword_container'>
       <form
-        onsubmit={forgotPasswordHandler}
+        onSubmit={forgotPasswordHandler}
         className='forgotpassword_form'
       >
         <h3 className='forgotpassword_title'>Forgot Password</h3>
