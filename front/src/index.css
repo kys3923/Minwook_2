@@ -670,4 +670,22 @@ input {
   background-color: red;
 }
 
+/* Admin - Menu Management */
+
+.menumgmt_container {
+  width: 100%;
+  height: 100vh;
+  margin-top: 5em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.menumgmt_totalcontainer {
+  width: 90%;
+  height: 80vh;
+  box-shadow: 0 10px 20px rgba(97, 97, 97, 0.2);
+}
+
 /* TODO: design for responsive */

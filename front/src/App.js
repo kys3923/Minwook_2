@@ -15,6 +15,7 @@ import ForgotPassword from './pages/account/ForgotPassword';
 import PasswordReset from './pages/account/PasswordReset';
 import Admin from './pages/admin/Admin';
 import Dashboard from './pages/admin/Dashboard';
+import MenuManagement from './pages/admin/MenuManagement';
 
 
 function App() {
@@ -67,9 +68,8 @@ function App() {
         </Route>
         {/* admin route */}
         <Route element={<AdminRoute />}>
-          <Route element={<Admin />}>
-            <Route path='dashboard' element={<Dashboard />} />
-          </Route>
+          <Route path='dashboard' element={<Dashboard />} />
+          <Route path='menu' element={<MenuManagement />} />
         </Route>
       </Routes>
       <Footer />

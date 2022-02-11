@@ -33,8 +33,11 @@ const Header = (props) => {
           <li><Link to='account'>Account</Link></li>
         }
         <li><Link to='cart'>Cart</Link></li>
-        {localStorage.role == "admin" &&
+        {localStorage.role == "admin" && <>
           <li><Link to='dashboard'>Dashboard</Link></li>
+          <li><Link to='menu'>Menu Management</Link></li>
+        </>
+
           // TODO: add admin header menu itself, rewrite everything
         }
         <button onClick={logoutHandler}>Logout</button>
