@@ -18,7 +18,7 @@ const ForgotPassword = (props) => {
 
     try {
       const { data } = await axios.post(
-        "api/auth/forgotpassword",
+        `${process.env.REACT_APP_SERVER_URL}/api/auth/forgotpassword`,
         { email },
         config
       );
@@ -44,7 +44,7 @@ const ForgotPassword = (props) => {
         {success && <span className='success_message'>{success}</span>}
         <div className='form-group'>
           <p className='forgotpassword_subtext'>
-            Please enter the email address you register your account with.
+            Please enter the email address you register your account with. <br />
             We will send you reset password confirmation to this email.
           </p>
           <label htmlFor='email'>Email:</label>
@@ -59,7 +59,6 @@ const ForgotPassword = (props) => {
         </div>
         <button type='submit' className='form_button_primary'>Send Email</button>
       </form>
-      <p>this is forgot password page</p>
     </div>
   );
 }

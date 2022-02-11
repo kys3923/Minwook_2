@@ -11,9 +11,8 @@ const Header = (props) => {
 
     try {
       localStorage.clear();
-      if (!localStorage.getItem("authToken")) {
-        navigate('/');
-      }
+      navigate('/')
+      window.location.reload(false)
     } catch (error) {
       console.log(error)
     }

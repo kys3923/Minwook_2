@@ -1,6 +1,6 @@
 const DashBoard = (props) => {
   return (
-    <div>
+    <div className="dashboard_Container">
       <h1>this is dashboard for admin page</h1>
     </div>
   );

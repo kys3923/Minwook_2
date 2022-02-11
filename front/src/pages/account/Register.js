@@ -26,11 +26,11 @@ const Register = (props) => {
   const [confirmpassword, setConfirmPassword] = useState("");
   const [contact, setContact] = useState('');
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("authToken")) {
-      // history.push('/');
-      // push to default route
+    if (localStorage.authToken) {
+      navigate('/')
     }
   }, []);
 
@@ -60,7 +60,8 @@ const Register = (props) => {
         config);
 
       localStorage.setItem("authToken", data.token);
-      // history.pushState("/");
+      localStorage.setItem("role", data.role)
+      window.location.reload(false)
     } catch (error) {
       setError('The email address has already taken');
       setTimeout(() => {

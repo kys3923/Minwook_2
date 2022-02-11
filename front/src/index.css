@@ -473,6 +473,8 @@ a {
   flex-direction: row;
   width: 100%;
   justify-content: center;
+  height: 100vh;
+  align-items: center;
 }
 
 .login_form {
@@ -566,6 +568,8 @@ input {
   flex-direction: row;
   width: 100%;
   justify-content: center;
+  height: 100vh;
+  align-items: center;
 }
 
 .register_form {
@@ -588,12 +592,82 @@ input {
   font-size: 1em;
 }
 
+.success_message {
+  display: block;
+  text-align: center;
+  color: #dc5a41;
+  font-size: 1em;
+}
+
 .register_subtext {
   margin-top: 1.5em;
   display: block;
   text-align: center;
   font-size: .75em;
   margin-bottom: 2em;
+}
+
+.forgotpassword_container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  height: 100vh;
+  align-items: center;
+}
+
+.forgotpassword_form {
+  width: 25em;
+  background-color: white;
+  padding: 3em 3em;
+  box-shadow: 0 10px 20px rgba(97, 97, 97, 0.2);
+}
+
+.forgotpassword_title {
+  text-align: center;
+  font-size: 2em;
+  color: darkgreen;
+}
+
+.forgotpassword_subtext {
+  margin-top: 1.5em;
+  display: block;
+  text-align: center;
+  font-size: .75em;
+  margin-bottom: 2em;
+  line-height: 1.5em;
+}
+
+.resetpassword_container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  height: 100vh;
+  align-items: center;
+}
+
+.resetpassword_form {
+  width: 25em;
+  background-color: white;
+  padding: 3em 3em;
+  box-shadow: 0 10px 20px rgba(97, 97, 97, 0.2);
+}
+
+.resetPassword_title {
+  text-align: center;
+  font-size: 2em;
+  color: darkgreen;
+}
+
+.dashboard_Container {
+  height: 100vh;
+  background-color: gray;
+}
+
+.dashHeader_Container {
+  height: 30vh;
+  background-color: red;
 }
 
 /* TODO: design for responsive */

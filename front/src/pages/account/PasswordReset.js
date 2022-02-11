@@ -28,7 +28,7 @@ const PasswordReset = ({ match }) => {
 
     try {
       const { data } = await axios.put(
-        `/api/auth/passwordreset/${match.params.resetToken}`,
+        `${process.env.REACT_APP_SERVER_URL}/api/auth/passwordreset/${match.params.resetToken}`,
         {
           password,
         },
@@ -49,7 +49,7 @@ const PasswordReset = ({ match }) => {
         onSubmit={resetPasswordHandler}
         className='resetpassword_form'
       >
-        <h3 className='resetPassword_title'>Forgot Password</h3>
+        <h3 className='resetPassword_title'>Reset Password</h3>
         {error && <span className='error_message'>{error}</span>}
         {success && (<span className='success_message'>{success} <Link to="login">Login</Link></span>)}
         <div className='form-group'>
@@ -78,7 +78,6 @@ const PasswordReset = ({ match }) => {
         </div>
         <button type="submit" className='form_button_primary'>Reset Password</button>
       </form>
-      <p>this is password Reset page</p>
     </div>
   );
 }

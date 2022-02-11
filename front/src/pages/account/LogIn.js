@@ -9,39 +9,41 @@ const LogIn = (props) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (localStorage.getItem("authToken")) {
-      console.log(localStorage)
-      if (localStorage.getItem("role") == "user") {
-        navigate('/');
-      }
-      if (localStorage.getItem("role") == 'admin') {
-        navigate('/dashboard')
-      }
-    }
-  }, []);
-
+  
   const loginHandler = async (e) => {
     e.preventDefault();
-
+    
     const config = {
       header: {
         "Content-Type": "application/json",
       }
     };
-
+    
     try {
       const { data } = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/api/auth/login`,
         { email, password },
         config
-      );
-      localStorage.setItem("authToken", data.token);
-      localStorage.setItem("role", data.role)
-    } catch (error) {
-      setError('Please check your email and password')
+        );
+        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("role", data.role)
+      } catch (error) {
+        setError('Please check your email and password')
+      }
+      window.location.reload(false)
     }
-  }
+
+  useEffect(() => {
+    console.log(localStorage.role, 'useEffect called in login')
+    if (localStorage.role == 'admin') {
+      navigate('/dashboard')
+
+    } else if (localStorage.authToken) {
+      console.log('useeffect clicked in login2')
+      navigate('/')
+    }
+  }, []);
+
 
   return (
     <div className='LogIn_Container'>

@@ -1,7 +1,11 @@
+import DashBoard from "./Dashboard";
+import DashboardHeader from "./DashboardHeader";
+
 const Admin = (props) => {
   return (
     <div>
-      <h1>Admin page</h1>
+      <DashboardHeader />
+      <DashBoard />
     </div>
   );
 }

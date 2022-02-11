@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, Navigate, Outlet } from 'react-router-dom'
+import { useState, useEffect } from 'react';
 
 // import Landing from './pages/Landing';
 import Header from './pages/components/Header';
@@ -17,9 +18,42 @@ import Dashboard from './pages/admin/Dashboard';
 
 
 function App() {
+
+  const adminUser = localStorage.role;
+  const [ authUser, setAuthUser ] = useState('');
+
+  useEffect(() => {
+    console.log(adminUser, 'useEffect clicked at app')
+    if (adminUser == 'user') {
+      setAuthUser('user')
+    }
+    if (adminUser == "admin") {
+      setAuthUser('admin')
+    }
+  },[])
+
+  const AdminRoute = () => {
+    if(authUser == 'admin') {
+      return <Outlet />
+    } else {
+      return <Navigate to='login' />
+    }
+  }
+
+  const UserRoute = () => {
+    if(authUser == 'user' || authUser == 'admin') {
+      console.log(authUser, 'clicked at app')
+      return <Outlet />
+    }
+    if(!adminUser) {
+      return <Navigate to='login' />
+    }
+  }
+
+
   return (
     <Router>
-      <Header />
+      <Header authUser={authUser}/>
       <Routes>
         {/* public route */}
         <Route path='/' element={<Main />} />
@@ -28,12 +62,16 @@ function App() {
         <Route path='forgotpassword' element={<ForgotPassword />} />
         <Route path='passwordreset/:resetToken' element={<PasswordReset />} />
         {/* private route */}
-        <Route path='order' element={<Order />} />
-        <Route path='reservation' element={<Reservation />} />
-        <Route path='cart' element={<Cart />} />
+        <Route element={<UserRoute />}>
+          <Route path='order' element={<Order />} />
+          <Route path='reservation' element={<Reservation />} />
+          <Route path='cart' element={<Cart />} />
+        </Route>
         {/* admin route */}
-        <Route path='admin' element={<Admin />}>
-          <Route path='dashboard' element={<Dashboard />} />
+        <Route element={<AdminRoute />}>
+          <Route element={<Admin />}>
+            <Route path='dashboard' element={<Dashboard />} />
+          </Route>
         </Route>
       </Routes>
       <Footer />
