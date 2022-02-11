@@ -23,7 +23,6 @@ function App() {
   const [ authUser, setAuthUser ] = useState('');
 
   useEffect(() => {
-    console.log(adminUser, 'useEffect clicked at app')
     if (adminUser == 'user') {
       setAuthUser('user')
     }
@@ -42,7 +41,6 @@ function App() {
 
   const UserRoute = () => {
     if(authUser == 'user' || authUser == 'admin') {
-      console.log(authUser, 'clicked at app')
       return <Outlet />
     }
     if(!adminUser) {

@@ -3,9 +3,8 @@ import { useState } from 'react';
 
 const Header = (props) => {
 
-  const [ role, setRole ] = useState('');
   const navigate = useNavigate();
-  
+
   const logoutHandler = async (e) => {
     e.preventDefault();
 
@@ -26,20 +25,20 @@ const Header = (props) => {
       <ul className='nav-links'>
         <li><Link to='order'>Order</Link></li>
         <li><Link to='reservation'>Reservation</Link></li>
-        <li><Link to='login'>Login/Register</Link></li>
-        <li><Link to='forgotpassword'>ForgotPassword</Link></li>
-        <li><Link to='passwordreset/:1'>PasswordReset</Link></li>
+        {!props.authUser ? <li><Link to='login'>Login/Register</Link></li>
+          :
+          <></>
+        }
+        {localStorage.role == "user" &&
+          <li><Link to='account'>Account</Link></li>
+        }
         <li><Link to='cart'>Cart</Link></li>
+        {localStorage.role == "admin" &&
+          <li><Link to='dashboard'>Dashboard</Link></li>
+          // TODO: add admin header menu itself, rewrite everything
+        }
         <button onClick={logoutHandler}>Logout</button>
       </ul>
-
-      {/* <div className={classes.buttonContainer}>
-        <Button className={classes.buttons} href="/Order">Order</Button>
-        <Button className={classes.buttons} href="Reservation">Reservation</Button>
-        <Button className={classes.buttons} href="/Account">Account</Button>
-        <Button className={classes.buttons} href="/Cart">Cart</Button>
-      </div> */}
-
     </nav>
   );
 }

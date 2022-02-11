@@ -34,12 +34,10 @@ const LogIn = (props) => {
     }
 
   useEffect(() => {
-    console.log(localStorage.role, 'useEffect called in login')
     if (localStorage.role == 'admin') {
       navigate('/dashboard')
 
     } else if (localStorage.authToken) {
-      console.log('useeffect clicked in login2')
       navigate('/')
     }
   }, []);
