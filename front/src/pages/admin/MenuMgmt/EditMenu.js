@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import { makeStyles } from '@mui/styles';
 import axios from 'axios';
 
 
@@ -52,19 +53,35 @@ const EditMenu = (props) => {
 
   // MUI grid components
 
+  const useStyles = makeStyles({
+
+    dataGrid: {
+      width: "100%"
+    }
+  })
+
   const columns = [
-    { field: 'name', headerName: 'Name', editable: true },
-    { field: 'caption', headerName: 'Caption', editable: true },
-    { field: 'description', headerName: 'Description', editable: true },
-    { field: 'category', headerName: 'Category', editable: true },
-    { field: 'Sub_Category', headerName: 'Sub Category', editable: true },
-    { field: 'stock_availability', headerName: 'Stock', editable: true },
+    { field: '_id', hide: true },
+    { field: 'name', headerName: 'Name', editable: true, width: 100 },
+    { field: 'caption', headerName: 'Caption', editable: true, width: 100 },
+    { field: 'category', headerName: 'Category', editable: true, width: 100 },
+    { field: 'Sub_Category', headerName: 'Sub Category', editable: true, width: 120 },
+    { field: 'stock_availability', headerName: 'Stock', editable: true, width: 70 },
+    { field: 'description', headerName: 'Description', editable: true, width: 500 },
   ]
 
+  const classes = useStyles();
   return (
     <div className="view_admin_container">
-      {allMenuBoxes}
-      <DataGrid columns={columns} />
+      {/* {allMenuBoxes} */}
+      <DataGrid 
+        className={classes.dataGrid} 
+        columns={columns} 
+        rows={receivedData} 
+        getRowId={(row) => row._id} 
+        density="compact" 
+        autoPageSize={true}
+      />
     </div>
   )
 }
