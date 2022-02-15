@@ -13,9 +13,10 @@ import LogIn from './pages/account/LogIn';
 import Register from './pages/account/Register';
 import ForgotPassword from './pages/account/ForgotPassword';
 import PasswordReset from './pages/account/PasswordReset';
-import Admin from './pages/admin/Admin';
 import Dashboard from './pages/admin/Dashboard';
 import MenuManagement from './pages/admin/MenuManagement';
+import EditMenu from './pages/admin/MenuMgmt/EditMenu';
+import RegisterMenu from './pages/admin/MenuMgmt/RegisterMenu';
 
 
 function App() {
@@ -69,7 +70,10 @@ function App() {
         {/* admin route */}
         <Route element={<AdminRoute />}>
           <Route path='dashboard' element={<Dashboard />} />
-          <Route path='menu' element={<MenuManagement />} />
+          <Route path='menu' element={<MenuManagement />}>
+            <Route path='edit' element={<EditMenu />} />
+            <Route path='registermenu' element={<RegisterMenu />} />
+          </Route>
         </Route>
       </Routes>
       <Footer />

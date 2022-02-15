@@ -60,8 +60,6 @@ a {
 
 /* -------------------- IntroAndOrder */
 .IntroAndOrder_Container {
-  /* margin-top: 5em; */
-  /* padding-left: 3em; */
   width: 100%;
   height: 80vh;
   background-image: url(/public/images/backG1.jpg);
@@ -711,6 +709,7 @@ input {
   margin-right: 1em;
   text-align: center;
   line-height: 3em;
+  box-shadow: 0 10px 20px rgba(97, 97, 97, 0.2);
 }
 
 .admin_buttons:hover {
@@ -729,7 +728,6 @@ input {
   margin-right: 1em;
   text-align: center;
   line-height: 3em;
-  border: 1px solid #dc5a41;
 }
 
 .Register_admin_Container {
@@ -737,7 +735,6 @@ input {
   flex-direction: row;
   width: 100%;
   justify-content: center;
-  height: 100vh;
   align-items: center;
   padding-top: 1em;
 }
@@ -754,6 +751,35 @@ input {
   color: #dc5a41;
   font-style: italic;
 }
+
+/* admin - edit items */
+
+.view_admin_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin_menubox {
+  width: 85%;
+  border-radius: 10px;
+  border: 1px solid red;
+}
+
+.admin_menubox_ul {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+}
+
+.admin_menubox_name {
+  display: block;
+  font-weight: bold;
+  width: 28%;
+}
+
 
 /* TODO: design for responsive */
 

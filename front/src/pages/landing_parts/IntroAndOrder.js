@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 
+
 const IntroAndOrder = (props) => {
+
   return (
     <div className="IntroAndOrder_Container">
       <div className="IO_TextBox">
