@@ -3,7 +3,6 @@ import { DataGrid } from '@mui/x-data-grid';
 import { makeStyles } from '@mui/styles';
 import axios from 'axios';
 
-
 const EditMenu = (props) => {
   // menu model : name, description, price, category, Sub_Category, stock_availability
   const [ name, setName ] = useState('');
@@ -17,6 +16,7 @@ const EditMenu = (props) => {
   const [ receivedData, setReceivedData ] = useState([]);
   const [ id, setId ] = useState('');
   const [ isLoaded, setIsLoaded ] = useState(false);
+  const [ isPopUpOpen, SetIsPopUpOpen ] = useState(false);
   
   // ------------------------------------- receiving all menu from api
   useEffect(() => {
@@ -27,7 +27,26 @@ const EditMenu = (props) => {
   },[props.receivedData])
   
   // ------------------------------------ menu boxes
+  const popupHandler = (e) => {
+    SetIsPopUpOpen(true)
+  }
 
+  const popupClose = (e) => {
+    SetIsPopUpOpen(false)
+  }
+  
+  let EditPopUp =
+    isPopUpOpen ? 
+      <div>
+        <h2>This is popup page</h2>
+        <button onClick={(e) => {popupClose()}}>Close</button>
+      </div>
+    :
+    <></>
+
+
+
+  
   let allMenuBoxes =
   isLoaded ?
     receivedData.map((menu, i) => {
@@ -62,11 +81,12 @@ const EditMenu = (props) => {
 
   const columns = [
     { field: '_id', hide: true },
-    { field: 'name', headerName: 'Name', editable: true, width: 100 },
-    { field: 'caption', headerName: 'Caption', editable: true, width: 100 },
-    { field: 'category', headerName: 'Category', editable: true, width: 100 },
-    { field: 'Sub_Category', headerName: 'Sub Category', editable: true, width: 120 },
+    { field: 'name', headerName: 'Name', editable: true, width: 200 },
+    { field: 'category', headerName: 'Category', editable: true, width: 150 },
+    { field: 'Sub_Category', headerName: 'Sub Category', editable: true, width: 160 },
+    { field: 'price', headerName: 'Price', editable: true, width: 70 },
     { field: 'stock_availability', headerName: 'Stock', editable: true, width: 70 },
+    { field: 'caption', headerName: 'Caption', editable: true, width: 150 },
     { field: 'description', headerName: 'Description', editable: true, width: 500 },
   ]
 
@@ -82,6 +102,8 @@ const EditMenu = (props) => {
         density="compact" 
         autoPageSize={true}
       />
+      <button onClick={(e) => {popupHandler()}} className='admin_edit_button'>Edit</button>
+      {EditPopUp}
     </div>
   )
 }

@@ -75,7 +75,6 @@ const RegisterMenu = (props) => {
           <label htmlFor="caption">Caption:</label>
           <input
             type='text'
-            required
             id='caption'
             placeholder="Enter caption"
             value={caption}
@@ -87,7 +86,6 @@ const RegisterMenu = (props) => {
           <label htmlFor="description">Description:</label>
           <input
             type='text'
-            required
             id='description'
             placeholder="Enter description"
             value={description}
@@ -123,7 +121,6 @@ const RegisterMenu = (props) => {
           <label htmlFor="Sub_Category">Sub Category:</label>
           <input
             type='text'
-            required
             id='Sub_Category'
             placeholder="Enter sub category"
             value={Sub_Category}
