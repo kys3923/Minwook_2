@@ -1,62 +1,59 @@
-import lSpecial from '../../../Data/LunchSpecial.json';
-
-const bentoItems = 
-  lSpecial.map((card) => {
-
-    if (card.Sub_Category ==='Bento Lunch') {
-      return (
-        <div key={card.id} className='menuCard'>
-          <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
-          <p className='menuCard_description'>{card.description}</p>
-          <p className='menuCard_price'>${card.Price}</p>
-        </div>
-      )
-    }
-  })
-
-const sushiItems = 
-  lSpecial.map((card) => {
-
-    if (card.Sub_Category ==='Sushi & Sashimi Lunch') {
-      return (
-        <div key={card.id} className='menuCard'>
-          <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
-          <p className='menuCard_description'>{card.description}</p>
-          <p className='menuCard_price'>${card.Price}</p>
-        </div>
-      )
-    }
-  })
-
-const rollCItems = 
-  lSpecial.map((card) => {
-
-    if (card.Sub_Category ==='Lunch Roll Combo') {
-      return (
-        <div key={card.id} className='menuCard'>
-          <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
-          <p className='menuCard_description'>{card.description}</p>
-          <p className='menuCard_price'>${card.Price}</p>
-        </div>
-      )
-    }
-  })
-
-const udonItems = 
-  lSpecial.map((card) => {
-
-    if (card.Sub_Category ==='Udon Lunch') {
-      return (
-        <div key={card.id} className='menuCard'>
-          <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
-          <p className='menuCard_description'>{card.description}</p>
-          <p className='menuCard_price'>${card.Price}</p>
-        </div>
-      )
-    }
-  })
-
 const LunchSpecial = (props) => {
+  const bentoItems = 
+    props.fetchedData.map((card, i) => {
+  
+      if (card.Sub_Category ==='Bento Lunch') {
+        return (
+          <div key={i} className='menuCard'>
+            <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.caption}</span></h3>
+            <p className='menuCard_description'>{card.description}</p>
+            <p className='menuCard_price'>${card.price}</p>
+          </div>
+        )
+      }
+    })
+  
+  const sushiItems = 
+  props.fetchedData.map((card, i) => {
+  
+      if (card.Sub_Category ==='Sushi & Sashimi Lunch') {
+        return (
+          <div key={i} className='menuCard'>
+            <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.caption}</span></h3>
+            <p className='menuCard_description'>{card.description}</p>
+            <p className='menuCard_price'>${card.price}</p>
+          </div>
+        )
+      }
+    })
+  
+  const rollCItems = 
+  props.fetchedData.map((card, i) => {
+  
+      if (card.Sub_Category ==='Lunch Roll Combo') {
+        return (
+          <div key={i} className='menuCard'>
+            <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.caption}</span></h3>
+            <p className='menuCard_description'>{card.description}</p>
+            <p className='menuCard_price'>${card.price}</p>
+          </div>
+        )
+      }
+    })
+  
+  const udonItems = 
+  props.fetchedData.map((card, i) => {
+  
+      if (card.Sub_Category ==='Udon Lunch') {
+        return (
+          <div key={i} className='menuCard'>
+            <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.caption}</span></h3>
+            <p className='menuCard_description'>{card.description}</p>
+            <p className='menuCard_price'>${card.price}</p>
+          </div>
+        )
+      }
+    })
   return (
     <div className='menuCardContainer'>
       <h1 className='menuCardTitle1'>Lunch Special<br /><span className='menuCardTitleSub'>available on 12pm - 3pm, served with miso soup</span></h1>

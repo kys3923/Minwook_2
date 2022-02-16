@@ -1,34 +1,31 @@
-import appetData from '../../../Data/Appetizer.json'
-
-const coldItems = 
-  appetData.map((card) => {
-
-    if (card.Sub_Category ==='Cold') {
-      return (
-        <div key={card.id} className='menuCard'>
-          <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
-          <p className='menuCard_description'>{card.description}</p>
-          <p className='menuCard_price'>${card.Price}</p>
-        </div>
-      )
-    }
-  })
-
-const hotItems = 
-  appetData.map((card) => {
-
-    if (card.Sub_Category ==='Hot') {
-      return (
-        <div key={card.id} className='menuCard'>
-          <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
-          <p className='menuCard_description'>{card.description}</p>
-          <p className='menuCard_price'>${card.Price}</p>
-        </div>
-      )
-    }
-  })
-
 const Appetizer = (props) => {
+  const coldItems = 
+    props.fetchedData.map((card, i) => {
+  
+      if (card.Sub_Category ==='Cold') {
+        return (
+          <div key={i} className='menuCard'>
+            <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.caption}</span></h3>
+            <p className='menuCard_description'>{card.description}</p>
+            <p className='menuCard_price'>${card.price}</p>
+          </div>
+        )
+      }
+    })
+  
+  const hotItems = 
+    props.fetchedData.map((card, i) => {
+  
+      if (card.Sub_Category ==='Hot') {
+        return (
+          <div key={i} className='menuCard'>
+            <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.caption}</span></h3>
+            <p className='menuCard_description'>{card.description}</p>
+            <p className='menuCard_price'>${card.price}</p>
+          </div>
+        )
+      }
+    })
   return (
     <div className='menuCardContainer'>
       <h1 className='menuCardTitle1'>Appetizer</h1>

@@ -1,84 +1,82 @@
-import kMenuData from '../../../Data/KitchenEntree.json';
-
-const noodleItems =
-  kMenuData.map((card) => {
-    if (card.Category ==='Noodles') {
-      return (
-        <div key={card.id} className='menuCard'>
-          <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
-          <p className='menuCard_description'>{card.description}</p>
-          <p className='menuCard_price'>${card.Price}</p>
-        </div>
-      )
-    }
-  })
-
-const fRiceItems =
-  kMenuData.map((card) => {
-    if (card.Category === 'Fried Rice') {
-      return (
-        <div key={card.id} className='menuCard'>
-          <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
-          <p className='menuCard_description'>{card.description}</p>
-          <p className='menuCard_price'>${card.Price}</p>
-        </div>
-      )
-    }
-  })
-
-const bentoItems =
-  kMenuData.map((card) => {
-    if (card.Category === 'Bento') {
-      return (
-        <div key={card.id} className='menuCard'>
-          <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
-          <p className='menuCard_description'>{card.description}</p>
-          <p className='menuCard_price'>${card.Price}</p>
-        </div>
-      )
-    }
-  })
-
-const teriItems =
-  kMenuData.map((card) => {
-    if (card.Category === 'Teriyaki') {
-      return (
-        <div key={card.id} className='menuCard'>
-          <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
-          <p className='menuCard_description'>{card.description}</p>
-          <p className='menuCard_price'>${card.Price}</p>
-        </div>
-      )
-    }
-  })
-
-const katsuItems =
-  kMenuData.map((card) => {
-    if (card.Category === 'Katsu') {
-      return (
-        <div key={card.id} className='menuCard'>
-          <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
-          <p className='menuCard_description'>{card.description}</p>
-          <p className='menuCard_price'>${card.Price}</p>
-        </div>
-      )
-    }
-  })
-
-const bowlItems =
-  kMenuData.map((card) => {
-    if (card.Category === 'Rice Bowl') {
-      return (
-        <div key={card.id} className='menuCard'>
-          <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.sub_name}</span></h3>
-          <p className='menuCard_description'>{card.description}</p>
-          <p className='menuCard_price'>${card.Price}</p>
-        </div>
-      )
-    }
-  })
 
 const KitchenEntree = (props) => {
+  const noodleItems =
+    props.fetchedData.map((card, i) => {
+      if (card.Sub_Category ==='Noodles') {
+        return (
+          <div key={i} className='menuCard'>
+            <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.caption}</span></h3>
+            <p className='menuCard_description'>{card.description}</p>
+            <p className='menuCard_price'>${card.price}</p>
+          </div>
+        )
+      }
+    })
+  
+  const fRiceItems =
+  props.fetchedData.map((card, i) => {
+      if (card.Sub_Category === 'Fried Rice') {
+        return (
+          <div key={i} className='menuCard'>
+            <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.caption}</span></h3>
+            <p className='menuCard_description'>{card.description}</p>
+            <p className='menuCard_price'>${card.price}</p>
+          </div>
+        )
+      }
+    })
+  
+  const bentoItems =
+  props.fetchedData.map((card, i) => {
+      if (card.Sub_Category === 'Bento') {
+        return (
+          <div key={i} className='menuCard'>
+            <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.caption}</span></h3>
+            <p className='menuCard_description'>{card.description}</p>
+            <p className='menuCard_price'>${card.price}</p>
+          </div>
+        )
+      }
+    })
+  
+  const teriItems =
+  props.fetchedData.map((card, i) => {
+      if (card.Sub_Category === 'Teriyaki') {
+        return (
+          <div key={i} className='menuCard'>
+            <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.caption}</span></h3>
+            <p className='menuCard_description'>{card.description}</p>
+            <p className='menuCard_price'>${card.price}</p>
+          </div>
+        )
+      }
+    })
+  
+  const katsuItems =
+  props.fetchedData.map((card, i) => {
+      if (card.Sub_Category === 'Katsu') {
+        return (
+          <div key={i} className='menuCard'>
+            <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.caption}</span></h3>
+            <p className='menuCard_description'>{card.description}</p>
+            <p className='menuCard_price'>${card.price}</p>
+          </div>
+        )
+      }
+    })
+  
+  const bowlItems =
+  props.fetchedData.map((card, i) => {
+      if (card.Sub_Category === 'Rice Bowl') {
+        return (
+          <div key={i} className='menuCard'>
+            <h3 className='menuCard_name'>{card.name}<span className='menuCard_tags'><br />{card.caption}</span></h3>
+            <p className='menuCard_description'>{card.description}</p>
+            <p className='menuCard_price'>${card.price}</p>
+          </div>
+        )
+      }
+    })
   return (
     <div className='menuCardContainer'>
       <h1 className='menuCardTitle1'>Kitchen Entree</h1>

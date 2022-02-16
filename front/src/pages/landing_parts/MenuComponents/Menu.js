@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 // import 'react-tabs/style/react-tabs.css'
 
@@ -11,9 +11,29 @@ import SoupSalad from './SoupSalad';
 import SpecialRolls from './SpecialRolls';
 import SushiSashimi from './SushiSashimi';
 import PartyPlatterItems from './PartyPlatter';
+import axios from 'axios';
 
 const Menu = (props) => {
 
+  const [fetchedData, SetFetchedData ] = useState([])
+  // const [fetchedData, SetFetchedData ] = useState([])
+  // const [fetchedData, SetFetchedData ] = useState([])
+
+  useEffect(() => {
+    async function fetchData() {
+      const config = {
+        header: {
+          "Content-Type": "application/json"
+        }
+      }
+      const request = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/menu/allmenu`, config);
+      SetFetchedData(request.data.menu);
+      return request
+    }
+    fetchData();
+  },[])
+
+  console.log(fetchedData, 'from app page')
 
   return (
     <nav className="Menu_Container">
@@ -41,47 +61,47 @@ const Menu = (props) => {
           </TabList>
           <TabPanel>
             <div className='panelContainer'>
-              <SpecialRolls />
+              <SpecialRolls fetchedData={fetchedData}/>
             </div>
           </TabPanel>
           <TabPanel>
             <div className='panelContainer'>
-              <RegularRolls />
+              <RegularRolls fetchedData={fetchedData} />
             </div>
           </TabPanel>
           <TabPanel>
             <div className='panelContainer'>
-              <LunchSpecial />
+              <LunchSpecial fetchedData={fetchedData} />
             </div>
           </TabPanel>
           <TabPanel>
             <div className='panelContainer'>
-              <Appetizer />
+              <Appetizer fetchedData={fetchedData} />
             </div>
           </TabPanel>
           <TabPanel>
             <div className='panelContainer'>
-              <SoupSalad />
+              <SoupSalad fetchedData={fetchedData} />
             </div>
           </TabPanel>
           <TabPanel>
             <div className='panelContainer'>
-              <KitchenEntree />
+              <KitchenEntree fetchedData={fetchedData} />
             </div>
           </TabPanel>
           <TabPanel>
             <div className='panelContainer'>
-              <SushiSashimi />
+              <SushiSashimi fetchedData={fetchedData} />
             </div>
           </TabPanel>
           <TabPanel>
             <div className='panelContainer'>
-              <ALaCarte />
+              <ALaCarte fetchedData={fetchedData} />
             </div>
           </TabPanel>
           <TabPanel>
             <div className='panelContainer'>
-              <PartyPlatterItems />
+              <PartyPlatterItems fetchedData={fetchedData} />
             </div>
           </TabPanel>
         </Tabs>
