@@ -122,7 +122,110 @@ exports.resetpassword = async ( req, res, next ) => {
 	}
 };
 
+exports.listAllUser = async ( req, res, next ) => {
+
+	const title = req.query.title;
+  let condition = title ? { title: { $regex: new RegExp(title), $options: "i"}} : {};
+
+  try {
+    const user = await User.find(condition);
+
+    res.json({
+      message: "all menu listed",
+      user
+    })
+  } catch (error) {
+    next(error);
+  }
+}
+
+// list 1 user
+exports.listUser = async ( req, res, next ) => {
+	const id = req.params.id;
+
+	if(!id) {
+		return next(new ErrorResponse('we need an id to request', 400))
+	}
+
+	try {
+		const user = await User.findById(id)
+		.populate({
+			path: 'Orders',
+			populate: {
+				path: 'orderedItem',
+				model: 'Menu'
+			}
+		})
+		.populate('Reservations')
+		
+		res.json({
+			message: 'found user listed',
+			user
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+// update 1 user
+exports.editUser = async ( req, res, next ) => {
+	const id = req.params.id;
+	const { username, address1, email, contact, password, isAdmin } = req.body;
+
+	try {
+		const user = await User.findByIdAndUpdate(id, {
+			username,
+			email,
+			contact,
+			address1,
+			password,
+			isAdmin
+		});
+
+		res.json({
+			message: "updated the user",
+			user
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+// delete 1 user
+
+exports.deleteUser = async ( req, res, next ) => {
+	const id = req.params.id;
+	const {
+		username,
+		email,
+		password,
+		isAdmin,
+		address1,
+		contact,
+		Orders,
+		Reservations
+	} = req.body
+
+	try {
+		const user = await User.findByIdAndRemove(id, {
+			username,
+			email,
+			password,
+			isAdmin,
+			address1,
+			contact,
+			Orders,
+			Reservations
+		});
+
+		res.json({
+			message: "user has been deleted",
+			user
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+
 const sendToken = (user, statusCode, res) => {
 	const token = user.getSignedToken();
-	res.status(statusCode).json({ success: true, token, role: user.isAdmin })
+	res.status(statusCode).json({ success: true, token, role: user.isAdmin, userId: user._id })
 }

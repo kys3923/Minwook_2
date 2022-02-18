@@ -26,7 +26,8 @@ const LogIn = (props) => {
         config
         );
         localStorage.setItem("authToken", data.token);
-        localStorage.setItem("role", data.role)
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("userId", data.userId);
       } catch (error) {
         setError('Please check your email and password')
       }

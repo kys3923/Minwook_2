@@ -17,12 +17,14 @@ import Dashboard from './pages/admin/Dashboard';
 import MenuManagement from './pages/admin/MenuManagement';
 import EditMenu from './pages/admin/MenuMgmt/EditMenu';
 import RegisterMenu from './pages/admin/MenuMgmt/RegisterMenu';
+import Account from './pages/account/Account';
 
 
 function App() {
 
   const adminUser = localStorage.role;
   const [ authUser, setAuthUser ] = useState('');
+  const [ cart, setCart ] = useState([]);
 
   useEffect(() => {
     if (adminUser == 'user') {
@@ -63,9 +65,10 @@ function App() {
         <Route path='passwordreset/:resetToken' element={<PasswordReset />} />
         {/* private route */}
         <Route element={<UserRoute />}>
-          <Route path='order' element={<Order />} />
+          <Route path='account' element={<Account />} />
+          <Route path='order' element={<Order cart={cart} />} />
           <Route path='reservation' element={<Reservation />} />
-          <Route path='cart' element={<Cart />} />
+          <Route path='cart' element={<Cart cart={cart} />} />
         </Route>
         {/* admin route */}
         <Route element={<AdminRoute />}>

@@ -28,8 +28,6 @@ const UserSchema = new mongoose.Schema({
     default: 'user'
   },
   address1: String,
-  address2: String,
-  address3: String,
   contact: String,
   Orders: [{
     type: mongoose.Schema.Types.ObjectId,

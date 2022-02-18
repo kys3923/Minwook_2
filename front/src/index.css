@@ -462,8 +462,104 @@ a {
   line-height: 1.5em;
   text-align: center;
 }
+/* -------------------- Order ---------------------- */
+.orderContainer {
+  margin-top: 5.25em;
+  background-color: lightslategray;
+  display: flex;
+  flex-direction: row;
+}
+
+.order_left {
+  width: 66%;
+  background-color: #999999;
+}
+
+.order_right {
+  width: 34%;
+  background-color: #dc5a41;
+  color: #fff;
+}
+
+.order_card {
+  border-bottom: 1px solid #dc5a41;
+  margin-bottom: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.order_card_name {
+  display: block;
+  font-size: 1em;
+}
+
+.order_card_caption {
+  font-size: .75em;
+  color: #dc5a41;
+}
+
+.order_card_description {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: .75em;
+  width: 100%;
+}
+
+.order_card_description {
+  display: block;
+  width: 80%;
+}
+
+.order_card_button {
+  border: none;
+  display: block;
+  background-color: #dc5a41;
+  color: white;
+  font-family: 'Roboto';
+  font-weight: 200;
+  font-size: .75em;
+  width: 8em;
+  height: 2.5em;
+  border-radius: 10px;
+  margin-right: 1em;
+  text-align: center;
+  line-height: 2.5em
+}
+
+.order_card_left {
+  width: 100%;
+}
+
+.order_panel_title {
+  font-size: 2em;
+  color: darkgreen;
+}
+
+.order_panel_subtitle {
+  font-weight: 600;
+  font-size: 1.5em;
+  margin-top: 2em;
+  margin-bottom: .5em;
+}
+
+.thebox {
+  min-width: 100%;
+}
+
+/* --------------------- Reservation ------------------- */
+.reservationContainer {
+  margin-top: 5em;
+}
+
 
 /* Account sections */
+.loginContainer {
+  margin-top: 5em;
+}
+
 /* login */
 
 .LogIn_Container {
@@ -794,4 +890,24 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-container .react-datepicker-wrapper {
+  margin: 12px 0;
+  width: 100%;
+}
+
+.input-container .react-datepicker-wrapper input {
+  padding: 4px 12px;
+}
+
+.summary {
+  font-size: 18px;
 }
