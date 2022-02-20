@@ -5,7 +5,6 @@ import Menu from './MenuComponents/Menu';
 const Main = (props) => {
   return (
     <div className="mainContainer">
-      <h3>Main Container</h3>
       <IntroAndOrder />
       <Menu />
       <Maps />

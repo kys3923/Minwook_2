@@ -1,9 +1,43 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+
+// MUI components
+import { makeStyles } from '@mui/styles';
+import { ThemeProvider } from '@mui/material/styles'
+import { Box, Container, Paper, Grid, Stack, Button } from '@mui/material/';
+import SetMealIcon from '@mui/icons-material/SetMeal';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import LoginIcon from '@mui/icons-material/Login';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+
+import theme from '../../theme/theme';
 
 const Header = (props) => {
 
+  const useStyles = makeStyles((theme) => ({
+    logoContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection: 'column',
+      justifyContent: 'center',
+    },
+    navContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      minHeight: '80px',
+      paddingTop: '0'
+    },
+    navItems: {
+      marginRight: "1em",
+    },
+  }))
+
+
   const navigate = useNavigate();
+  const classes = useStyles();
 
   const logoutHandler = async (e) => {
     e.preventDefault();
@@ -18,31 +52,41 @@ const Header = (props) => {
   }
 
   return (
-    <nav className="header-nav">
-      <div className="logo-imagebox">
-        <Link to="/"><img src='/images/logo_sushivill.png' style={{ "maxWidth": "200px" }}/></Link>
-      </div>
-      <ul className='nav-links'>
-        <li><Link to='order'>Order</Link></li>
-        <li><Link to='reservation'>Reservation</Link></li>
-        {!props.authUser ? <li><Link to='login'>Login/Register</Link></li>
-          :
-          <></>
-        }
-        {localStorage.role == "user" &&
-          <li><Link to='account'>Account</Link></li>
-        }
-        <li><Link to='cart'>Cart</Link></li>
-        {localStorage.role == "admin" && <>
-          <li><Link to='dashboard'>Dashboard</Link></li>
-          <li><Link to='menu'>Menu Management</Link></li>
-        </>
-
-          // TODO: add admin header menu itself, rewrite everything
-        }
-        <button onClick={logoutHandler}>Logout</button>
-      </ul>
-    </nav>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ flexGrow: 1}}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
+            <Container className={classes.logoContainer}>
+              <div className="logo-imagebox">
+                <Link to="/"><img src='/images/logo_sushivill.png' style={{ "maxWidth": "200px" }}/></Link>
+              </div>
+            </Container>
+          </Grid>
+          <Grid className={classes.navContainer} item xs={12} md={6} lg={6} xl={6}>
+            <Stack direction='row' spacing={2}>
+              <Link to='order'><Button className={classes.navItems}><SetMealIcon />&nbsp;Order</Button></Link>
+              <Link to='reservation'><Button className={classes.navItems}><EventAvailableIcon />&nbsp;Reservation</Button></Link>
+              {!props.authUser ? <Link to='login'><Button className={classes.navItems}><LoginIcon />&nbsp;Login/Register</Button></Link>
+                :
+                <></>
+              }
+              {localStorage.role == "user" &&
+                <Link to='account'><Button className={classes.navItems}><AccountBoxIcon />&nbsp;Account</Button></Link>
+              }
+              <Link to='cart'><Button className={classes.navItems}><ShoppingCartIcon />&nbsp;Cart</Button></Link>
+            </Stack>
+            {localStorage.role == "admin" && <>
+              <Link to='dashboard'><Button className={classes.navItems}><DashboardIcon /> Dashboard</Button></Link>
+              <Link to='/menu'><Button className={classes.navItems}>Menu Management</Button></Link>
+            </>
+            }
+            <Paper className={classes.navItems}>
+              {/* <button onClick={logoutHandler}>Logout</button> */}
+            </Paper>
+          </Grid>
+        </Grid>
+      </Box>
+    </ThemeProvider>
   );
 }
 export default Header;

@@ -66,7 +66,7 @@ exports.listAllMenu = async (req, res, next ) => {
 
 exports.updateMenu = async ( req, res, next ) => {
   const id = req.params.id;
-  const {name, caption, description, price, category, Sub_Category, stock_availability } = req.body; 
+  const {name, caption, description, price, category, Sub_Category, stock_availability, addOn } = req.body; 
 
   try {
     const menu = await Menu.findByIdAndUpdate(id, {
@@ -76,7 +76,8 @@ exports.updateMenu = async ( req, res, next ) => {
       price,
       category,
       Sub_Category,
-      stock_availability
+      stock_availability,
+      addOn
     });
 
     res.json({
@@ -92,7 +93,7 @@ exports.updateMenu = async ( req, res, next ) => {
 
 exports.deleteMenu = async ( req, res, next ) => {
   const id = req.params.id;
-  const {name, caption, description, price, category, Sub_Category, stock_availability } = req.body; 
+  const {name, caption, description, price, category, Sub_Category, stock_availability, addOn } = req.body; 
 
   try {
     const menu = await Menu.findByIdAndRemove(id, {
@@ -102,7 +103,8 @@ exports.deleteMenu = async ( req, res, next ) => {
       price,
       category,
       Sub_Category,
-      stock_availability
+      stock_availability,
+      addOn
     });
 
     res.json({

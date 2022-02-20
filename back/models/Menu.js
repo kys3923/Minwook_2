@@ -10,6 +10,10 @@ const MenuSchema = new mongoose.Schema({
   stock_availability: {
     type: Boolean,
     default: true
+  },
+  addOn: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'AddOn'
   }
 })
 

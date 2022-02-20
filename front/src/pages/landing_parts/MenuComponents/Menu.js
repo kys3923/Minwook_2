@@ -37,14 +37,14 @@ const Menu = (props) => {
 
   return (
     <nav className="Menu_Container">
-      <div className='logosContainer'>
+      {/* <div className='logosContainer'>
         <ul className='logosList'>
           <li className='logoListTitle'>Order a delivery</li>
           <li><a target="_blank" href='https://www.ubereats.com/store/sushi-ville/mKWTjH-SVjSSGVSNwK3KMw?utm_source=google&utm_medium=organic&utm_campaign=place-action-link'><img className='deliveryLogos' src='/images/uberEatsLogo.png' /></a></li>
           <li><a target="_blank" href='https://www.doordash.com/store/sushiville-sloatsburg-2571701/?utm_campaign=gpa'><img className='deliveryLogos' src='/images/doorDashLogo.png' /></a></li>
           <li><a target="_blank" href='https://www.grubhub.com/restaurant/sushiville-67-orange-turnpike-sloatsburg/3061762?utm_source=google&utm_medium=organic&utm_campaign=place-action-link'><img className='deliveryLogos' src='/images/grubHubLogo.png' /></a></li>
         </ul>
-      </div>
+      </div> */}
       <div className='Tab_Container'>
         <h1 className='tab_Title' >MENU</h1>
         <Tabs>
