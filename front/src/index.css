@@ -161,7 +161,6 @@ a {
 .deliveryLogos {
   max-width: 6em;
   filter: saturate(0);
-
 }
 
 .deliveryLogos:hover {
@@ -169,9 +168,6 @@ a {
   filter: drop-shadow(2px 2px 10px #999999)
 }
 
-.Tab_Container {
-
-}
 /* -------------------importing react tab */
 .react-tabs {
   -webkit-tap-highlight-color: transparent;
@@ -419,7 +415,6 @@ a {
 .footer_days {
   list-style: none;
   padding: 0;
-  font-size: 13px;
   font-family: 'Roboto', sans-serif;
   line-height: 1.5em;
   margin: 0;
@@ -427,7 +422,6 @@ a {
 
 .footer_hours_detail {
   list-style: none;
-  font-size: 13px;
   font-family: 'Roboto', sans-serif;
   line-height: 1.5em;
   margin: 0;

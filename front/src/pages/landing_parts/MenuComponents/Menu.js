@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { Box, Stack, Button, Grid } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 // import 'react-tabs/style/react-tabs.css'
 
 import ALaCarte from './ALaCarte';
@@ -12,12 +14,19 @@ import SpecialRolls from './SpecialRolls';
 import SushiSashimi from './SushiSashimi';
 import PartyPlatterItems from './PartyPlatter';
 import axios from 'axios';
+import { ThemeProvider } from '@emotion/react';
+
+import theme from '../../../theme/theme';
 
 const Menu = (props) => {
 
-  const [fetchedData, SetFetchedData ] = useState([])
-  // const [fetchedData, SetFetchedData ] = useState([])
-  // const [fetchedData, SetFetchedData ] = useState([])
+  const [ fetchedData, SetFetchedData ] = useState([]);
+  const [ selected, setSelected ] = useState();
+
+  // MUI styles
+  const useStyles = makeStyles((theme) => {
+
+  })
 
   useEffect(() => {
     async function fetchData() {
@@ -33,78 +42,74 @@ const Menu = (props) => {
     fetchData();
   },[])
 
-  console.log(fetchedData, 'from app page')
+  const classes = useStyles();
 
   return (
     <nav className="Menu_Container">
-      {/* <div className='logosContainer'>
-        <ul className='logosList'>
-          <li className='logoListTitle'>Order a delivery</li>
-          <li><a target="_blank" href='https://www.ubereats.com/store/sushi-ville/mKWTjH-SVjSSGVSNwK3KMw?utm_source=google&utm_medium=organic&utm_campaign=place-action-link'><img className='deliveryLogos' src='/images/uberEatsLogo.png' /></a></li>
-          <li><a target="_blank" href='https://www.doordash.com/store/sushiville-sloatsburg-2571701/?utm_campaign=gpa'><img className='deliveryLogos' src='/images/doorDashLogo.png' /></a></li>
-          <li><a target="_blank" href='https://www.grubhub.com/restaurant/sushiville-67-orange-turnpike-sloatsburg/3061762?utm_source=google&utm_medium=organic&utm_campaign=place-action-link'><img className='deliveryLogos' src='/images/grubHubLogo.png' /></a></li>
-        </ul>
-      </div> */}
       <div className='Tab_Container'>
-        <h1 className='tab_Title' >MENU</h1>
-        <Tabs>
-          <TabList>
-            <Tab>Special Rolls</Tab>
-            <Tab>Regular Rolls</Tab>
-            <Tab>Lunch Special</Tab>
-            <Tab>Appetizer</Tab>
-            <Tab>Soup & Salad</Tab>
-            <Tab>Kitchen Entree</Tab>
-            <Tab>Sushi & Sashimi</Tab>
-            <Tab>A La Carte</Tab>
-            <Tab>Party Platter</Tab>
-          </TabList>
-          <TabPanel>
-            <div className='panelContainer'>
-              <SpecialRolls fetchedData={fetchedData}/>
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className='panelContainer'>
-              <RegularRolls fetchedData={fetchedData} />
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className='panelContainer'>
-              <LunchSpecial fetchedData={fetchedData} />
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className='panelContainer'>
-              <Appetizer fetchedData={fetchedData} />
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className='panelContainer'>
-              <SoupSalad fetchedData={fetchedData} />
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className='panelContainer'>
-              <KitchenEntree fetchedData={fetchedData} />
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className='panelContainer'>
-              <SushiSashimi fetchedData={fetchedData} />
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className='panelContainer'>
-              <ALaCarte fetchedData={fetchedData} />
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className='panelContainer'>
-              <PartyPlatterItems fetchedData={fetchedData} />
-            </div>
-          </TabPanel>
-        </Tabs>
+        <ThemeProvider theme={theme}>
+          <h1 className='tab_Title' >MENU</h1>
+          <Tabs>
+            <TabList>
+              {/* <Stack spacing={2}> */}
+                <Tab>Special Rolls</Tab>
+                <Tab>Regular Rolls</Tab>
+                <Tab>Lunch Special</Tab>
+                <Tab>Appetizer</Tab>
+                <Tab>Soup & Salad</Tab>
+                <Tab>Kitchen Entree</Tab>
+                <Tab>Sushi & Sashimi</Tab>
+                <Tab>A La Carte</Tab>
+                <Tab>Party Platter</Tab>
+              {/* </Stack> */}
+            </TabList>
+            <TabPanel>
+              <div className='panelContainer'>
+                <SpecialRolls fetchedData={fetchedData}/>
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className='panelContainer'>
+                <RegularRolls fetchedData={fetchedData} />
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className='panelContainer'>
+                <LunchSpecial fetchedData={fetchedData} />
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className='panelContainer'>
+                <Appetizer fetchedData={fetchedData} />
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className='panelContainer'>
+                <SoupSalad fetchedData={fetchedData} />
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className='panelContainer'>
+                <KitchenEntree fetchedData={fetchedData} />
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className='panelContainer'>
+                <SushiSashimi fetchedData={fetchedData} />
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className='panelContainer'>
+                <ALaCarte fetchedData={fetchedData} />
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className='panelContainer'>
+                <PartyPlatterItems fetchedData={fetchedData} />
+              </div>
+            </TabPanel>
+          </Tabs>
+        </ThemeProvider>
       </div>
     </nav>
   );
