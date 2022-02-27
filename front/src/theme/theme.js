@@ -8,7 +8,7 @@ const theme = createTheme({
     },
     secondary: {
       main: '#2c3545',
-    }
+    },
   },
   typography: {
     fontFamily: 'roboto',

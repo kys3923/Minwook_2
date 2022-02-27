@@ -81,7 +81,6 @@ const Header = (props) => {
             </>
             }
             <Paper className={classes.navItems}>
-              {/* <button onClick={logoutHandler}>Logout</button> */}
             </Paper>
           </Grid>
         </Grid>

@@ -399,19 +399,6 @@ a {
   padding-bottom: 1em;
 }
 
-.Footer_Hours {
-  width: 25%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin-left: 10%;
-}
-
-.Footer_Hours h4 {
-  display: block;
-  width: 100%;
-}
-
 .footer_days {
   list-style: none;
   padding: 0;
@@ -420,44 +407,18 @@ a {
   margin: 0;
 }
 
-.footer_hours_detail {
-  list-style: none;
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.5em;
-  margin: 0;
+.footer_days li {
+  padding-left: 1em;
 }
 
-.Footer_Contact {
-  width: 25%;
-}
-.Footer_Contact ul {
+.footer_connect {
   list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.Footer_Contact li {
   padding: 0;
   margin: 0;
-  font-size: 13px;
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.5em;
 }
 
-.Footer_Social {
-  width: 25%;
-}
-
-.Footer_Social ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.Footer_Social li {
-  font-size: 13px;
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.5em;
+.footer_connect li {
+  display: inline-block;
 }
 
 .copyrights {
@@ -560,28 +521,12 @@ a {
   margin-top: 5em;
 }
 
-
-/* Account sections */
-.loginContainer {
-  margin-top: 5em;
-}
-
 /* login */
-
-.LogIn_Container {
+.form_login {
   display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: center;
-  height: 100vh;
+  flex-direction: column;
   align-items: center;
-}
-
-.login_form {
-  width: 25em;
-  background-color: white;
-  padding: 3em 3em;
-  box-shadow: 0 10px 20px rgba(97, 97, 97, 0.2);
+  justify-content: center;
 }
 
 .form_button_primary {
@@ -690,6 +635,7 @@ input {
   text-align: center;
   color: #dc5a41;
   font-size: 1em;
+  margin-bottom: 1.5em;
 }
 
 .success_message {
@@ -697,6 +643,7 @@ input {
   text-align: center;
   color: #dc5a41;
   font-size: 1em;
+  margin-bottom: 1.5em;
 }
 
 .register_subtext {

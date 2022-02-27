@@ -2,6 +2,12 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
+// MUI components
+import { TextField, Paper, Grid, Button } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+
+import theme from '../../theme/theme';
+
 const LogIn = (props) => {
 
   const [email, setEmail] = useState('');
@@ -28,10 +34,10 @@ const LogIn = (props) => {
         localStorage.setItem("authToken", data.token);
         localStorage.setItem("role", data.role);
         localStorage.setItem("userId", data.userId);
+        window.location.reload(false)
       } catch (error) {
         setError('Please check your email and password')
       }
-      window.location.reload(false)
     }
 
   useEffect(() => {
@@ -45,49 +51,87 @@ const LogIn = (props) => {
 
 
   return (
-    <div className='LogIn_Container'>
-      <form onSubmit={loginHandler} className='login_form'>
-        <h3 className='login_title'>Login</h3>
-        {error && <span className='error_message'>{error}</span>}
-        <div className='form-group'>
-          <label htmlFor='email'>Email:</label>
-          <input
-            type='email'
+    <ThemeProvider theme={theme}>
+      <Grid container 
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          width: '100vw',
+          minHeight: '65vh',
+          marginBottom: '10em',
+          marginTop: '3em'
+        }}
+      >
+        <Paper elevation={2}
+          sx={{
+            width: '40em',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            paddingTop: '1em'
+          }}
+        >
+          <h3 className='login_title'>Login</h3>
+          {error && <span className='error_message'>{error}</span>}
+          <form onSubmit={loginHandler} className='form_login'>
+            { error ?
+              <TextField
+              required
+              error
+              placeholder='Enter email address'
+              helperText='Check email and passward again'
+              id='email'
+              type='email'
+              variant="filled"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              tabIndex={1}
+              sx={{
+                marginBottom: '1.5em',
+                width: '23em'
+              }}
+            />
+            :
+            <TextField
             required
-            id='email'
             placeholder='Enter email address'
+            id='email'
+            type='email'
+            variant="filled"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             tabIndex={1}
+            sx={{
+              marginBottom: '1.5em',
+              width: '23em'
+            }}
           />
-        </div>
-
-        <div className='form-group'>
-          <label htmlFor='password'>
-            Password: {" "}
-          </label>
-          <input
-            type='password'
-            required
-            id='password'
-            autoComplete='true'
-            placeholder='Enter password'
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            tabIndex={2}
-          />
-        </div>
-        <button type='submit' className='form_button_primary'>
-          login
-        </button>
-        <Link to="../forgotpassword" className='login_forgotpassword'>Forgot Password?</Link>
-        <span className='login_subtext'>
-          Don't have an account?
-          <Link to='../register' className='login_register'>  Register</Link>
-        </span>
-      </form>
-
-    </div>
+          }
+            <TextField
+              required
+              type='password'
+              placeholder='Enter Password'
+              autoComplete='true'
+              id='password'
+              variant="filled"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              tabIndex={2}
+              sx={{
+                marginBottom: '2em',
+                width: '23em'
+              }}
+            />
+            <Button type='submit' className='IO_buttons' variant="contained">Login</Button>
+          </form>
+          <Link to="../forgotpassword" className='login_forgotpassword'>Forgot Password?</Link>
+          <span className='login_subtext'>
+            Don't have an account?
+            <Link to='../register' className='login_register'>  Register</Link>
+          </span>
+        </Paper>
+      </Grid>
+    </ThemeProvider>
   );
 }
 export default LogIn;

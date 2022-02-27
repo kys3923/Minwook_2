@@ -2,6 +2,13 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
+// MUI components
+
+import { TextField, Paper, Grid, Button } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+
+import theme from '../../theme/theme';
+
 function formatPhoneNumber(telNum) {
   if (!telNum) return telNum;
 
@@ -78,76 +85,105 @@ const Register = (props) => {
 
   
   return (
-    <div className='Register_Container'>
-      <form onSubmit={registerHandler} className='register_form'>
-        <h3 className='register_title'>Register</h3>
-        {error && <span className='error_message'>{error}</span>}
-        <div className='form-group'>
-          <label htmlFor='name'>Name:</label>
-          <input 
-            type='text' 
-            required 
-            id="name" 
-            placeholder='Enter name' 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-          />
-        </div>
-
-        <div className='form-group'>
-          <label htmlFor='email'>Email:</label>
-          <input 
-            type='email' 
-            required 
-            id="email" 
-            placeholder='Enter email address' 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-          />
-        </div>
-
-        <div className='form-group'>
-          <label htmlFor='password'>Password:</label>
-          <input 
-            type='password' 
-            required 
-            id="password" 
-            placeholder='Enter password' 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-          />
-        </div>
-
-        <div className='form-group'>
-          <label htmlFor='confirmpassword'>Confirm Password:</label>
-          <input 
-            type='password' 
-            required 
-            id="confirmpassword" 
-            placeholder='Confirm password' 
-            value={confirmpassword} 
-            onChange={(e) => setConfirmPassword(e.target.value)} 
-          />
-        </div>
-
-        <div className='form-group'>
-          <label htmlFor='contact'>Contact Number:</label>
-          <input 
-            type='tel'
-            placeholder='(123) 456-7890'
-            required 
-            id="contact"
-            value={contact}
-            autoComplete="off" 
-            onChange={(e) => phoneNumberHandler(e)} 
-          />
-        </div>
-
-        <button type="submit" className='form_button_primary'>Register</button>
-
-        <span className='register_subtext'>Already have an account? <Link to="../login" className='login_register'>   Login</Link></span>
-      </form>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Grid container
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          width: '100vw',
+          minHeight: '60vh',
+          marginBottom: '10em',
+          marginTop: '3em'
+        }}
+      >
+        <Paper elevation={2}
+          sx={{
+            width: '40em',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            paddingTop: '1em'
+          }}
+        >
+          <h3 className='login_title'>Register</h3>
+          {error && <span className='error_message'>{error}</span>}
+          <form onSubmit={registerHandler} className='form_login'>
+            <TextField 
+              type='text'
+              required
+              id='name'
+              placeholder='Enter your name'
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              variant='filled'
+              autoComplete='on'
+              sx={{
+                marginBottom: '2em',
+                width: '23em'
+              }}
+            />
+            <TextField 
+              type='email'
+              required
+              id='email'
+              placeholder='Enter email address'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              variant='filled'
+              autoComplete='on'
+              sx={{
+                marginBottom: '2em',
+                width: '23em'
+              }}
+            />
+            <TextField 
+              type='password'
+              required
+              id='password'
+              placeholder='Enter password'
+              value={password}
+              autoComplete='on'
+              onChange={(e) => setPassword(e.target.value)}
+              variant='filled'
+              sx={{
+                marginBottom: '2em',
+                width: '23em'
+              }}
+            />
+            <TextField 
+              type='password'
+              required
+              id='password'
+              placeholder='Confirm password'
+              value={confirmpassword}
+              autoComplete='on'
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              variant='filled'
+              sx={{
+                marginBottom: '2em',
+                width: '23em'
+              }}
+            />
+            <TextField 
+              type='tel'
+              required
+              id='contact'
+              placeholder='Enter contact number'
+              value={contact}
+              autoComplete='on'
+              onChange={(e) => phoneNumberHandler(e)}
+              variant='filled'
+              sx={{
+                marginBottom: '2em',
+                width: '23em'
+              }}
+            />
+            <Button type='submit' className='IO_buttons' variant='contained'>Register</Button>
+          </form>
+          <span className='register_subtext'>Already have an account? <Link to="../login" className='login_register'>&nbsp;Login</Link></span>
+        </Paper>
+      </Grid>
+    </ThemeProvider>
   );
 }
 export default Register;

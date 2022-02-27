@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { useNavigate, Navigate, Outlet } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -26,6 +26,21 @@ const Account = (props) => {
     fetchData();
   }, [])
 
+  const navigate = useNavigate();
+
+  const logoutHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      localStorage.clear();
+      navigate('/')
+      window.location.reload(false)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
   // Reservation History
 
 
@@ -44,8 +59,8 @@ const Account = (props) => {
     <div className="loginContainer">
       { !userData ? 
         <div className="error_account">
-          <h3>Loading...</h3>
-          <button> Click to reload </button>
+          <h3>Error getting your data. Please logout and login again.</h3>
+          <button onClick={logoutHandler}>Logout</button>
         </div>
       :
         <div className="accountContainer">
@@ -69,6 +84,7 @@ const Account = (props) => {
               return <li key={i}>{reserve.reserveDate}, totalParty, </li>
             })}
           </ul>
+          <button onClick={logoutHandler}>Logout</button>
         </div>
       }
       {userData ? console.log(userData) : <p>userData not found</p>}
