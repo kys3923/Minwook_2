@@ -78,6 +78,7 @@ const Header = (props) => {
             {localStorage.role == "admin" && <>
               <Link to='dashboard'><Button className={classes.navItems}><DashboardIcon /> Dashboard</Button></Link>
               <Link to='/menu'><Button className={classes.navItems}>Menu Management</Button></Link>
+              <button onClick={logoutHandler}>Logout</button>
             </>
             }
             <Paper className={classes.navItems}>

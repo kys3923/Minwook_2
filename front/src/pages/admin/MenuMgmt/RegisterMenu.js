@@ -1,6 +1,13 @@
 import axios from 'axios';
 import { useState } from 'react';
 
+// MUI components
+
+import { TextField, Paper, Grid, Button } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+
+import theme from '../../../theme/theme';
+
 const RegisterMenu = (props) => {
 
   const [ name, setName ] = useState('');
@@ -50,7 +57,6 @@ const RegisterMenu = (props) => {
     setPrice(0);
     setCategory('');
     setSubCategory('');
-    console.log('reset state complete')
   }
 
 

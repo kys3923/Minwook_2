@@ -80,8 +80,6 @@ function App() {
         </Route>
       </Routes>
       <Footer />
-
-      {/* <Landing /> */}
     </Router>
   );
 }
