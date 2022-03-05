@@ -14,7 +14,7 @@ exports.orderRegistration = async ( req, res, next ) => {
     await user.save();
 
 
-  // TODO: send customer the order confirmation email/text
+  // TODO: send customer the order confirmation email
 
     res.json({
       message: "order has been made",

@@ -64,6 +64,19 @@ exports.listAllMenu = async (req, res, next ) => {
   }
 }
 
+exports.listMenuById = async (req, res, next ) => {
+  try {
+    const menu = await Menu.findById(req.params.id);
+
+    res.json({
+      message: 'menu listed',
+      menu
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 exports.updateMenu = async ( req, res, next ) => {
   const id = req.params.id;
   const {name, caption, description, price, category, Sub_Category, stock_availability, addOn } = req.body; 

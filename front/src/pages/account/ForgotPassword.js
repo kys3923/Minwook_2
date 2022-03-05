@@ -65,7 +65,7 @@ const ForgotPassword = (props) => {
           {error && <span className='error_message'>{error}</span>}
           {success && <span className='success_message'>{success}</span>}
           <p className='forgotpassword_subtext'>
-            Please enter the email address you register your account with. <br />
+            Please enter the email address you registered your account with. <br />
             We will send you reset password confirmation to this email.
           </p>
           <form onSubmit={forgotPasswordHandler} className='form_login'>

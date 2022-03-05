@@ -153,7 +153,7 @@ const Register = (props) => {
             <TextField 
               type='password'
               required
-              id='password'
+              id='confirmPassword'
               placeholder='Confirm password'
               value={confirmpassword}
               autoComplete='on'
