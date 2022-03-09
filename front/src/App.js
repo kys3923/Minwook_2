@@ -24,7 +24,6 @@ function App() {
 
   const adminUser = localStorage.role;
   const [ authUser, setAuthUser ] = useState('');
-  const [ cart, setCart ] = useState([]);
 
   useEffect(() => {
     if (adminUser == 'user') {
@@ -66,9 +65,9 @@ function App() {
         {/* private route */}
         <Route element={<UserRoute />}>
           <Route path='account' element={<Account />} />
-          <Route path='order' element={<Order cart={cart} />} />
+          <Route path='order' element={<Order />} />
           <Route path='reservation' element={<Reservation />} />
-          <Route path='cart' element={<Cart cart={cart} />} />
+          <Route path='cart' element={<Cart />} />
         </Route>
         {/* admin route */}
         <Route element={<AdminRoute />}>

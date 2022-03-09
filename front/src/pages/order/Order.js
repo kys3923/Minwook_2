@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// importing redux
-import { useSelector, useDispatch } from 'react-redux';
-import { getProducts as listProducts } from '../../redux/actions/productActions';
-import { addToCart } from '../../redux/actions/cartActions';
+// body scroll lock
 
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 
 //TODO: ADD MODAL FOR CART SECTION
-
 
 import PropTypes from 'prop-types';
 import { Tabs, Tab, Box, Card, CardContent, Typography, CardActions, Button } from '@mui/material';
@@ -16,6 +13,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import theme from '../../theme/theme';
+
+import OrderItem from './OrderItem';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -28,7 +27,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3}}>
+        <Box sx={{ p: 3, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
           <div className='thebox'>{children}</div>
         </Box>
       )}
@@ -51,46 +50,90 @@ function allyProps(index) {
 
 
 const Order = (props) => {
+  const [ dataLoaded, setDataLoaded ] = useState(false);
   const [ value, setValue ] = useState(0);
   const [ qty, setQty ] = useState(1);
-  
-  const dispatch = useDispatch();
-  const getProducts = useSelector(state => state.getProducts);
-  const { products, loading, error } = getProducts;
+  const [ cartOpen, setCartOpen ] = useState(false);
+  const [ cart, setCart ] = useState([]);
+  const [ products, setProducts ] = useState([]);
+  const [ product, setProduct ] = useState('');
+  const [ itemOpen, setItemOpen ] = useState(false);
 
+  
   const handleChange = (event, newValue) => {
     setValue(newValue);
   }
-
+  
   useEffect(() => {
-    dispatch(listProducts());
-  },[dispatch])
+    async function fetchData() {
+      const config = {
+        header: {
+          "Content-Type": "application/json"
+        }
+      }
+      
+      const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/menu/allmenu`, config);
+      setProducts(data);
+      setDataLoaded(true);
+    }
+    fetchData();
+  },[])
+  
+  // button handlers
+  
+  const cartOpenHandler = () => {
+    setCartOpen(true);
+  }
+  const cartCloseHandler = () => {
+    setCartOpen(false)
+  }
 
-  // const addToCartHandler = () => {
-  //   dispatch(addToCart(product._id, qty));
-  //   history.push(`/cart`);
-  // }
+  const cartClearHandler = (e) => {
+    e.preventDefault();
 
-  console.log(products.menu, 'wtf')
+    setCart([]);
+  }
+
+  const favButtonHandler = () => {
+    alert('currently under constrtuction')
+  }
+
+  const modalOpener = (e) => {
+    e.preventDefault();
+    setItemOpen(true);
+    setProduct(e.target.value)
+  }
+
+  const modalCloser = (e) => {
+    setItemOpen(false);
+  }
+
+  const cartViewer = (e) => {
+    e.preventDefault();
+    console.log(cart, 'cartview clicked')
+  }
+
+  itemOpen ? disableBodyScroll(document) : enableBodyScroll(document)
 
   return (
     <ThemeProvider theme={theme}>
       <div className="orderContainer">
-        { loading ? (
+        { !dataLoaded ? (
           <h2>Loading...</h2>
-        ) : error ? (
-          <h2>{error}</h2>
-        ) : 
+        ) : (
           <div className='order_left'>
+            { itemOpen? <OrderItem modalCloser={modalCloser} product={product} cart={cart} setCart={setCart}/> : <></>}
             <Box
               sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex'}}
             >
               <Tabs
-                orientation='vertical'
+                orientation='horizontal'
                 variant='scrollable'
+                scrollButtons
+                allowScrollButtonsMobile
                 value={value}
                 onChange={handleChange}
-                sx={{ borderRight: 1, borderColor: 'divider', minWidth: '220px'}}
+                sx={{ borderBottom: 1, borderColor: 'divider'}}
               >
                 <Tab label="Special Rolls" {...allyProps} />
                 <Tab label="Regular Rolls" {...allyProps} />
@@ -101,52 +144,70 @@ const Order = (props) => {
                 <Tab label="Sushi & Sashimi" {...allyProps} />
                 <Tab label="A La Carte" {...allyProps} />
                 <Tab label="Party Platter" {...allyProps} />
-                <Tab label="Your Favorite" {...allyProps} />
               </Tabs>
+            </Box>
               <TabPanel value={value} index={0} sx={{ minWidth: '250px'}}>
                 <p className='order_panel_title'>Special Rolls</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.category === 'Special Rolls') {
-                    return (
-                      <Card
-                        sx={{ maxWidth: 600, minWidth: 250, marginBottom: '1em'}}
-                      >
-                        <CardContent>
-                          <Typography gutterBottom variant='h5' component='div'>
-                            {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                          </Typography>
-                          <Typography variant='body2'>
-                            {menu.description}
-                          </Typography>
-                          <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                            ${menu.price}
-                          </Typography>
-                        </CardContent>
-                        <CardActions>
-                          <Button variant='contained' size='small'><ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart</Button>
-                          <Button size='small'><FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite</Button>
-                        </CardActions>
-
-                      </Card>
-                      // <div className='order_card'>
-                      //   <div className='order_card_left'>
-                      //     <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                      //     <p className='order_card_description'>{menu.description}</p>
-                      //     <p className='order_card_price'>${menu.price}</p>
-                      //   </div>
-                      //   <div className='order_card_right'>
-                      //     { menu.stock_availability ? 
-                      //       <button onClick={(e) => {}} className='order_card_button'>Add to Cart</button>
-                      //     :
-                      //       <p className='order_card_outstock'>Out of Stock</p>
-                      //     }
-                      //   </div>
-                      // </div>
-                    )
-                  }
-                } )}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.category === 'Special Rolls') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              <Button
+                                variant='outlined'
+                                size='small'
+                                onClick={cartClearHandler}
+                              >
+                                Clear Cart
+                              </Button>
+                              <Button
+                                variant='outlined'
+                                size='small'
+                                onClick={cartViewer}
+                              >
+                                View Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  } )}
+                </div>
               </TabPanel>
-              <TabPanel value={value} index={1}>
+              {/* <TabPanel value={value} index={1}>
                 <p className='order_panel_title'>Regular Rolls</p>
                 {products.menu.map((menu, i) => {
                   if(menu.category === "Regular Rolls") {
@@ -626,14 +687,12 @@ const Order = (props) => {
                       </div>
                     )
                   }
-                })}
-              </TabPanel>
-            </Box>
+                })} */}
+              {/* </TabPanel> */}
           </div>
+        )
         }
-        {/* <div className='order_right'>
-          <p>right container</p>
-        </div> */}
+      {/* TODO: add a modal trigger button here */}
       </div>
     </ThemeProvider>
   );

@@ -431,20 +431,28 @@ a {
 }
 /* -------------------- Order ---------------------- */
 .orderContainer {
-  background-color: lightslategray;
   display: flex;
   flex-direction: row;
+  background-color: rgba(255, 240, 174, 0.75);
 }
 
 .order_left {
-  /* width: 66%; */
-  background-color: #999999;
+  width: 100%;
+  margin-top: 6.5em;
 }
 
-.order_right {
-  width: 24%;
-  background-color: #dc5a41;
-  color: #fff;
+.order_cardHolder {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.MuiTabPanel-root {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .order_card {
@@ -504,6 +512,7 @@ a {
   padding-top: 0;
   margin-top: 0;
   color: darkgreen;
+  text-align: center;
 }
 
 .order_panel_title2 {
@@ -522,6 +531,54 @@ a {
   min-width: 100%;
 }
 
+.order_action {
+  height: 30%;
+}
+
+
+/* --------------------- Item Page --------------------- */
+.OrderItem_Container {
+  background-color: rgba(255,255,0255,.75);
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+  position: fixed;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.badgeGroups ul {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.badgeGroups ul li {
+  background-color: darkgreen;
+  padding: .75em .75em;
+  border-radius: 20px;
+  color: white;
+  font-size: .75em;
+  margin-right: .5em;
+}
+
+.Quantity_Container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.Quantity_Number {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.QTY_lable {
+  padding-top: 8px;
+}
 /* --------------------- Reservation ------------------- */
 .reservationContainer {
   margin-top: 5em;
@@ -836,6 +893,11 @@ input {
   width: 28%;
 }
 
+/* MUi direct CSS */
+
+.MuiTabs-scrollButtons.Mui-disabled {
+  opacity: 1;
+}
 
 /* TODO: design for responsive */
 
