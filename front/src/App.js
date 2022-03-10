@@ -18,6 +18,7 @@ import MenuManagement from './pages/admin/MenuManagement';
 import EditMenu from './pages/admin/MenuMgmt/EditMenu';
 import RegisterMenu from './pages/admin/MenuMgmt/RegisterMenu';
 import Account from './pages/account/Account';
+import Confirmation from './pages/order/Confirmation';
 
 
 function App() {
@@ -65,7 +66,8 @@ function App() {
         {/* private route */}
         <Route element={<UserRoute />}>
           <Route path='account' element={<Account />} />
-          <Route path='order' element={<Order />} />
+          <Route path='order' element={<Order />}>
+          </Route>
           <Route path='reservation' element={<Reservation />} />
           <Route path='cart' element={<Cart />} />
         </Route>
@@ -77,6 +79,7 @@ function App() {
             <Route path='registermenu' element={<RegisterMenu />} />
           </Route>
         </Route>
+        {/* TODO: add not found page */}
       </Routes>
       <Footer />
     </Router>

@@ -15,6 +15,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import theme from '../../theme/theme';
 
 import OrderItem from './OrderItem';
+import Cart from './Cart';
+import Confirmation from './Confirmation';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,7 +55,7 @@ const Order = (props) => {
   const [ dataLoaded, setDataLoaded ] = useState(false);
   const [ value, setValue ] = useState(0);
   const [ qty, setQty ] = useState(1);
-  const [ cartOpen, setCartOpen ] = useState(false);
+  const [ cartOpened, setCartOpened ] = useState(false);
   const [ cart, setCart ] = useState([]);
   const [ products, setProducts ] = useState([]);
   const [ product, setProduct ] = useState('');
@@ -80,13 +82,6 @@ const Order = (props) => {
   },[])
   
   // button handlers
-  
-  const cartOpenHandler = () => {
-    setCartOpen(true);
-  }
-  const cartCloseHandler = () => {
-    setCartOpen(false)
-  }
 
   const cartClearHandler = (e) => {
     e.preventDefault();
@@ -108,13 +103,9 @@ const Order = (props) => {
     setItemOpen(false);
   }
 
-  const cartViewer = (e) => {
-    e.preventDefault();
-    console.log(cart, 'cartview clicked')
-  }
-
-  itemOpen ? disableBodyScroll(document) : enableBodyScroll(document)
-
+  itemOpen ? disableBodyScroll(document) : enableBodyScroll(document);
+  cartOpened ? disableBodyScroll(document) : enableBodyScroll(document);
+  
   return (
     <ThemeProvider theme={theme}>
       <div className="orderContainer">
@@ -178,19 +169,52 @@ const Order = (props) => {
                               >
                                 <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
                               </Button>
-                              <Button
-                                variant='outlined'
-                                size='small'
-                                onClick={cartClearHandler}
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
                               >
-                                Clear Cart
-                              </Button>
-                              <Button
-                                variant='outlined'
-                                size='small'
-                                onClick={cartViewer}
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <p className='order_panel_title'>Regular Rolls</p>
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.category === 'Regular Rolls') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
                               >
-                                View Cart
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
                               </Button>
                               {/* <Button 
                                 size='small' 
@@ -204,98 +228,148 @@ const Order = (props) => {
                         </Card>
                       )
                     }
-                  } )}
+                  })}
                 </div>
-              </TabPanel>
-              {/* <TabPanel value={value} index={1}>
-                <p className='order_panel_title'>Regular Rolls</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.category === "Regular Rolls") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
                 <p className='order_panel_title2'>Vegetable Rolls</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.category === "Vegetable Rolls") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.category === 'Vegetable Rolls') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
               </TabPanel>
               <TabPanel value={value} index={2}>
                 <p className='order_panel_title'>Lunch Special</p>
                 <p className='order_panel_subtitle'>Bento Lunch</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Bento Lunch") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Bento Lunch') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
                 <p className='order_panel_subtitle'>Sushi & Sashimi Lunch</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Bento Lunch") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Sushi & Sashimi Lunch') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
                 <div className='menuCardLunchContainerOrder'>
+                  {/* TODO: add selection for adding to cart */}
                   <h3>Roll Selections</h3>
                   <ul>
                     <li>California Roll</li>
@@ -316,383 +390,792 @@ const Order = (props) => {
                     <li>AAC Roll</li>
                   </ul>
                 </div>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Lunch Roll Combo") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Lunch Roll Combo') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
                 <p className='order_panel_subtitle'>Udon Lunch</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Udon Lunch") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Udon Lunch') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
               </TabPanel>
               <TabPanel value={value} index={3}>
                 <p className='order_panel_title'>Appetizer</p>
                 <p className='order_panel_subtitle'>Cold Appetizer</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Cold") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Cold') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
                 <p className='order_panel_subtitle'>Hot Appetizer</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Hot") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Hot') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
               </TabPanel>
               <TabPanel value={value} index={4}>
                 <p className='order_panel_title'>Soup & Salad</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.category === "Soup & Salad") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.category === 'Soup & Salad') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
               </TabPanel>
               <TabPanel value={value} index={5}>
                 <p className='order_panel_title'>Kitchen Entree</p>
                 <p className='order_panel_subtitle'>Noodles</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Noodles") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Noodles') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
                 <p className='order_panel_subtitle'>Fried Rice</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Fried Rice") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Fried Rice') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
                 <p className='order_panel_subtitle'>Bento</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Bento") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Bento') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
                 <p className='order_panel_subtitle'>Teriyaki</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Teriyaki") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Teriyaki') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
                 <p className='order_panel_subtitle'>Katsu</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Katsu") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Katsu') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
                 <p className='order_panel_subtitle'>Rice Bowl</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Rice Bowl") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Rice Bowl') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
               </TabPanel>
               <TabPanel value={value} index={6}>
                 <p className='order_panel_title'>Sushi & Sashimi</p>
                 <p className='order_panel_subtitle'>Sushi Sets</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Sushi Sets") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Sushi Sets') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
                 <p className='order_panel_subtitle'>Sushi & Sashimi Sets</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Sushi & Sashimi Sets") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Sushi & Sashimi Sets') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
                 <p className='order_panel_subtitle'>Special Seared Sushi</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Special Seared Sushi") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Special Seared Sushi') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
               </TabPanel>
               <TabPanel value={value} index={7}>
                 <p className='order_panel_title'>A La Carte</p>
                 <p className='order_panel_subtitle'>Nigiri</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Nigiri") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Nigiri') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
                 <p className='order_panel_subtitle'>Sashimi</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.Sub_Category === "Sashimi") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.Sub_Category === 'Sashimi') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
               </TabPanel>
               <TabPanel value={value} index={8}>
                 <p className='order_panel_title'>Party Platter</p>
-                {products.menu.map((menu, i) => {
-                  if(menu.category === "Party Platter") {
-                    return (
-                      <div className='order_card'>
-                        <div className='order_card_left'>
-                          <p className='order_card_name'>{menu.name} <span className='order_card_caption'>{menu.caption}</span></p>
-                          <p className='order_card_description'>{menu.description}</p>
-                          <p className='order_card_price'>${menu.price}</p>
-                        </div>
-                        <div className='order_card_right'>
-                          { menu.stock_availability ? 
-                            <button className='order_card_button'>Add to Cart</button>
-                          :
-                            <p className='order_card_outstock'>Out of Stock</p>
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                })} */}
-              {/* </TabPanel> */}
+                <div className='order_cardHolder'>
+                  {products.menu.map((menu, i) => {
+                    if(menu.category === 'Party Platter') {
+                      return (
+                        <Card
+                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
+                          key={i}
+                        >
+                          <CardContent>
+                            <Typography gutterBottom variant='h5' component='div'>
+                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
+                            </Typography>
+                            <Typography variant='body2'>
+                              {menu.description}
+                            </Typography>
+                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
+                              ${menu.price}
+                            </Typography>
+                          </CardContent>
+                          <div className='order_action'>
+                            <CardActions>
+                              <Button 
+                                variant='contained' 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                value={menu._id}
+                                onClick={modalOpener}
+                              >
+                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                              </Button>
+                              {/* <Button 
+                                size='small' 
+                                sx={{marginBottom: '1em'}}
+                                onClick={favButtonHandler}
+                              >
+                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
+                              </Button> */}                       
+                            </CardActions>
+                          </div>
+                        </Card>
+                      )
+                    }
+                  })}
+                </div>
+              </TabPanel>
           </div>
         )
         }
       {/* TODO: add a modal trigger button here */}
+      <Cart cart={cart} setCart={setCart} setCartOpened={setCartOpened} cartOpened={cartOpened}/>
       </div>
     </ThemeProvider>
   );

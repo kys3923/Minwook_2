@@ -21,7 +21,7 @@ const IntroAndOrder = (props) => {
             width: '26em',
             justifyContent: 'space-between',
           }}>
-            <Link to='/Order'><Button className='IO_buttons' variant='contained'><SetMealIcon/>&nbsp;Order Take Out</Button></Link>
+            <Link to='/order'><Button className='IO_buttons' variant='contained'><SetMealIcon/>&nbsp;Order Take Out</Button></Link>
             <Link to='/Reservation'><Button className='IO_buttons' variant='contained'><EventAvailableIcon />&nbsp;Make Reservation</Button></Link>
           </Box>
           <DeliveryOrder />

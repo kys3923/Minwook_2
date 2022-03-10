@@ -25,7 +25,7 @@ const MenuManagement = (props) => {
     fetchData();
   },[])
 
-  console.log(receivedData, 'from parent page')
+  console.log(receivedData, 'from menumgmt page')
   
   const buttonHandler = (e) => {
     setRegister(!register)

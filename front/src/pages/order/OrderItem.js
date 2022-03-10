@@ -65,6 +65,13 @@ const OrderItem = (props) => {
     props.setCart([{
       id: id,
       qty: qty,
+      name: item.menu.name,
+      price: item.menu.price,
+      caption: item.menu.caption,
+      category: item.menu.category,
+      Sub_Category: item.menu.Sub_Category,
+      stock_availability: item.menu.stock_availability,
+      description: item.menu.description,
     },...props.cart])
     props.modalCloser();
   }

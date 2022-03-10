@@ -73,7 +73,6 @@ const Header = (props) => {
               {localStorage.role == "user" &&
                 <Link to='account'><Button className={classes.navItems}><AccountBoxIcon />&nbsp;Account</Button></Link>
               }
-              <Link to='cart'><Button className={classes.navItems}><ShoppingCartIcon />&nbsp;Cart</Button></Link>
             </Stack>
             {localStorage.role == "admin" && <>
               <Link to='dashboard'><Button className={classes.navItems}><DashboardIcon /> Dashboard</Button></Link>
