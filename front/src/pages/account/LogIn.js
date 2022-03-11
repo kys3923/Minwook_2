@@ -55,11 +55,12 @@ const LogIn = (props) => {
       <Grid container 
         sx={{
           display: "flex",
+          flexDirection: 'row',
           justifyContent: "center",
           width: '100vw',
           minHeight: '65vh',
           marginBottom: '10em',
-          marginTop: '3em'
+          paddingTop: '6em'
         }}
       >
         <Paper elevation={2}
@@ -68,6 +69,7 @@ const LogIn = (props) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            marginTop: '3.5em',
             paddingTop: '1em'
           }}
         >

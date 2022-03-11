@@ -27,7 +27,7 @@ const Header = (props) => {
       alignItems: 'center',
       flexDirection: 'row',
       justifyContent: 'center',
-      minHeight: '80px',
+      minHeight: '50px',
       paddingTop: '0'
     },
     navItems: {
@@ -53,12 +53,12 @@ const Header = (props) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ width: '100vw', position: 'fixed', backgroundColor: 'rgba(255,255,255)', zIndex: '1'}}>
+      <Box sx={{ width: '100vw', position: 'fixed', backgroundColor: 'rgba(255,255,255)', zIndex: '2'}}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} lg={6} xl={6}>
             <Container className={classes.logoContainer}>
               <div className="logo-imagebox">
-                <Link to="/"><img src='/images/logo_sushivill.png' style={{ "maxWidth": "200px" }}/></Link>
+                <Link to="/"><img src='/images/logo_sushivill.png' style={{ "maxWidth": "180px" }}/></Link>
               </div>
             </Container>
           </Grid>

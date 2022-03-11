@@ -60,6 +60,7 @@ const Order = (props) => {
   const [ products, setProducts ] = useState([]);
   const [ product, setProduct ] = useState('');
   const [ itemOpen, setItemOpen ] = useState(false);
+  const [ confirmationOpen, setConfirmationOpen ] = useState(false);
 
   
   const handleChange = (event, newValue) => {
@@ -105,6 +106,7 @@ const Order = (props) => {
 
   itemOpen ? disableBodyScroll(document) : enableBodyScroll(document);
   cartOpened ? disableBodyScroll(document) : enableBodyScroll(document);
+  confirmationOpen ? disableBodyScroll(document) : enableBodyScroll(document);
   
   return (
     <ThemeProvider theme={theme}>

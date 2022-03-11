@@ -2,15 +2,15 @@ import { useNavigate, Navigate, Outlet } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// MUI
+import { TextField, Grid, Paper, Typography, Button } from "@mui/material";
+
 
 const Account = (props) => {
 
   const [ id, setId ] = useState('');
   const [ userData, setUserData ] = useState(null);
   
-  // useEffect(()=> {
-  //   setId(localStorage.userId);
-  // }, [])
 
   useEffect(() => {
     async function fetchData() {

@@ -3,13 +3,12 @@ const ErrorResponse = require('../utils/errorResponse');
 const User = require('../models/User');
 
 exports.registerReservation = async ( req, res, next ) => {
-
+  
   try {
-
+    
     const reservation = new Reservation(req.body);
-    reservation.customer = req.user._id;
     await reservation.save();
-    const user = await User.findById({_id: req.user._id})
+    const user = await User.findById({_id: req.body.customer})
     user.Reservations.push(reservation);
     await user.save();
 
@@ -18,7 +17,7 @@ exports.registerReservation = async ( req, res, next ) => {
       reservation,
       user
     })
-
+    // TODO: send email to customer and the request email
   } catch (error) {
     next(error)
   }

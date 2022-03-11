@@ -3,10 +3,12 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 // MUI
-import { TextField } from '@mui/material';
+import { TextField, Paper, Grid, Button, Typography } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
+import theme from '../theme/theme';
 
 
 const Reservation = (props) => {
@@ -41,98 +43,142 @@ const Reservation = (props) => {
     const formattedPhoneNumber = formatPhoneNumber(e.target.value);
     setContact(formattedPhoneNumber);
   };
-  console.log(localStorage)
 
   const reservationHandler = async (e) => {
     e.preventDefault();
 
-    setUserId(localStorage.userId)
-    console.log (
-      username,
-      reserveDate,
-      userId,
+    await setUserId(localStorage.userId);
+
+    const config = {
+      header: { 
+        header: { 
+          "Content-Type": "application/json"
+        }
+      }
+    }
+
+    const request = {
+      body: {
+        "customer": `${userId}`,
+        "email": `${email}`,
+        "contact": `${contact}`,
+        "totalParty": `${totalParty}`,
+        "comments": `${comments}`,
+        "reserveDate": `${reserveDate}`
+      }
+    }
+
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/api/reservation/create`, request.body, config
+      )
+    } catch (error) {
+      setError('A problem occured during resigter you reservation');
+      setTimeout(() => {
+        setError('');
+      }, 10000);
+    }
+    console.table (
+      request.body,
       "in useEffect, checking submit"
     )
   }
 
   return (
-    <div className="reservationContainer">
-      <form onSubmit={reservationHandler} className='register_form'>
-        <h3 className="register_title">Make a Reservation</h3>
-        {error && <span className="error_message">{error}</span>}
-        <div className='form-group'>
-          <label htmlFor='email'>Email Address:</label>
-          <input 
-            type='email'
-            required
-            id='email'
-            placeholder='Enter contact email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div className='form-group'>
-          <label htmlFor='contact'>Contact Number:</label>
-          <input 
-            type='tel'
-            required
-            id='contact'
-            placeholder='Enter contact number'
-            value={contact}
-            onChange={(e) => phoneNumberHandler(e)}
-          />
-        </div>
-
-        <div className='form-group'>
-          <label htmlFor='totalParty'>Number of party:</label>
-          <input 
-            type='number'
-            required
-            id='totalParty'
-            placeholder='Enter number of your party'
-            value={totalParty}
-            onChange={(e) => setTotalParty(e.target.value)}
-          />
-        </div>
-
-        <div className='form-group'>
-          <label htmlFor='reserveDate'>Reservation Date and Time:</label>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DateTimePicker 
-              renderInput={(props) => <TextField {...props} />}
-              value={reserveDate}
-              onChange={(newValue) => {setReserveDate(newValue)}}
-            />
-          </LocalizationProvider>
-        </div>
-
-        <div className='form-group'>
-          <label htmlFor='comments'>Comments:</label>
-          <input 
-            type='text'
-            id='comments'
-            overflow='visible'
-            value={comments}
-            onChange={(e) => setComments(e.target.value)}
-          />
-        </div>
-
-        <div className='form-group'>
-          <input 
-            type='hidden'
-            required
-            id='username'
-            hidden
-            value={username}
-            onChange={(e) => phoneNumberHandler(e)}
-          />
-        </div>
-
-        <button className='form_button_primary'>Confirm Reservation</button>
-        
-      </form>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Grid container sx={{ 
+        paddingTop: '6em', 
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(255, 240, 174, 0.75)'
+      }}>
+        <Grid item sx={{ marginTop: '3em'}}>
+          <Paper sx={{ 
+            marginBottom: '2em',
+            borderRadius: '10px'
+            }} elevation={2}>
+            <Typography variant='h5' sx={{ fontWeight: 'bold', color: 'darkgreen', textAlign: 'center', paddingTop: '1.5em', marginBottom: '1em'}}>
+              Make a Reservation
+            </Typography>
+            {error && <span className="error_message">{error}</span>}
+            <form onSubmit={reservationHandler} className='register_form'>
+              <TextField 
+                type='email'
+                required
+                id='email'
+                label='Enter your email'
+                value={email}
+                variant='outlined'
+                autoComplete='on'
+                onChange={(e) => setEmail(e.target.value)}
+                sx={{
+                  marginBottom: '2em',
+                }}
+              />
+              <TextField 
+                type='tel'
+                required
+                id='contact'
+                value={contact}
+                variant='outlined'
+                autoComplete='on'
+                label='Enter contact number'
+                onChange={(e) => phoneNumberHandler(e)}
+                sx={{
+                  marginBottom: '2em',
+                }}
+              />
+              <TextField 
+                type='number'
+                required
+                id='totalParty'
+                value={totalParty}
+                variant='outlined'
+                label="Number of your party"
+                autoComplete='on'
+                onChange={(e) => setTotalParty(e.target.value)}
+                sx={{
+                  marginBottom: '2em',
+                }}
+              />
+              <TextField 
+                type='text'
+                multiline
+                maxRows={3}
+                id='comments'
+                value={comments}
+                variant='outlined'
+                label='Comments on your reservation'
+                autoComplete='on'
+                onChange={(e) => setComments(e.target.value)}
+                sx={{
+                  marginBottom: '2em',
+                }}
+              />
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DateTimePicker 
+                  renderInput={(props) => <TextField {...props} />}
+                  value={reserveDate}
+                  onChange={(newValue) => {setReserveDate(newValue)}}
+                  label="Set Date and Time"
+                />
+              </LocalizationProvider>
+              <TextField 
+                type='hidden'
+                required
+                id='username'
+                value={username}
+                variant='filled'
+                autoComplete='on'
+                onChange={(e) => setComments(e.target.value)}
+              />
+              <Button variant='contained' type='submit' sx={{ marginTop: '2em'}}>Confirm Reservation</Button>
+            </form>
+          </Paper>              
+        </Grid>
+      </Grid>
+    </ThemeProvider>
   );
 }
 export default Reservation;

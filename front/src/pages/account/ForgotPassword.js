@@ -49,7 +49,7 @@ const ForgotPassword = (props) => {
           width: '100vw',
           minHeight: '60vh',
           marginBottom: '10em',
-          marginTop: '3em'
+          paddingTop: '3em'
         }}
       >
         <Paper elevation={2}
@@ -58,7 +58,9 @@ const ForgotPassword = (props) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            paddingTop: '1em'
+            paddingTop: '1em',
+            marginTop: '5em',
+            paddingBottom: '5em'
           }}
         >
           <h3 className='login_title'>Forgot Password</h3>

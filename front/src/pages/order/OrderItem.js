@@ -4,7 +4,7 @@ import axios from 'axios';
 // MUI
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
-import { Box, Card, CardContent, Typography, CardActions, Button, TextField } from '@mui/material';
+import { Box, Card, CardContent, Typography, CardActions, Button } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
