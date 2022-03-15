@@ -1,5 +1,9 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
+import Confirmation from './Confirmation';
+
 
 // MUI
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -9,7 +13,7 @@ import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
-import { Card, CardContent, Typography, CardActions, Button, IconButton, Grid } from '@mui/material';
+import { Card, CardContent, Typography, CardActions, Button, IconButton, Grid, Modal } from '@mui/material';
 
 
 // Badge style
@@ -24,7 +28,6 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-
 const Cart = (props) => {
 
   // states
@@ -33,6 +36,7 @@ const Cart = (props) => {
   const [ cartItems, setCartItems ] = useState([]);
   const [ subTotal, setSubTotal ] = useState();
   const [ removeItem, setRemoveItem ] = useState('')
+  const [ confirmationOpen, setConfirmationOpen ] = useState(false);
 
   
   useEffect(() => {
@@ -43,6 +47,7 @@ const Cart = (props) => {
     }
     setItemCount();
   },[props.cart])
+
   
   // handlers
   const cartClickHandler = (e) => {
@@ -141,6 +146,11 @@ const Cart = (props) => {
         :
         <></>    
       }
+      <Modal open={confirmationOpen} sx={{overflow: 'scroll'}}>
+        <Bar>
+          <Confirmation allItem={props.allitem} cart={cartItems}/>
+        </Bar>
+      </Modal>
       <div className="cartContainer" onClick={cartClickHandler}>
         <StyledBadge badgeContent={cartItemCount} color='primary'>
           <ShoppingCartIcon sx={{ fontSize: '1.75em'}}/>
@@ -149,4 +159,11 @@ const Cart = (props) => {
     </ThemeProvider>
   );
 }
+
+const Bar = React.forwardRef((props, ref) => (
+  <span {...props} ref={ref}>
+    {props.children}
+  </span>
+))
+
 export default Cart;

@@ -8,7 +8,7 @@ import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 //TODO: ADD MODAL FOR CART SECTION
 
 import PropTypes from 'prop-types';
-import { Tabs, Tab, Box, Card, CardContent, Typography, CardActions, Button } from '@mui/material';
+import { Tabs, Tab, Box, Card, CardContent, Typography, CardActions, Button, Grid, Modal } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -16,7 +16,6 @@ import theme from '../../theme/theme';
 
 import OrderItem from './OrderItem';
 import Cart from './Cart';
-import Confirmation from './Confirmation';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -60,7 +59,6 @@ const Order = (props) => {
   const [ products, setProducts ] = useState([]);
   const [ product, setProduct ] = useState('');
   const [ itemOpen, setItemOpen ] = useState(false);
-  const [ confirmationOpen, setConfirmationOpen ] = useState(false);
 
   
   const handleChange = (event, newValue) => {
@@ -106,7 +104,6 @@ const Order = (props) => {
 
   itemOpen ? disableBodyScroll(document) : enableBodyScroll(document);
   cartOpened ? disableBodyScroll(document) : enableBodyScroll(document);
-  confirmationOpen ? disableBodyScroll(document) : enableBodyScroll(document);
   
   return (
     <ThemeProvider theme={theme}>
@@ -115,7 +112,6 @@ const Order = (props) => {
           <h2>Loading...</h2>
         ) : (
           <div className='order_left'>
-            { itemOpen? <OrderItem modalCloser={modalCloser} product={product} cart={cart} setCart={setCart}/> : <></>}
             <Box
               sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex'}}
             >
@@ -1176,10 +1172,21 @@ const Order = (props) => {
           </div>
         )
         }
-      {/* TODO: add a modal trigger button here */}
-      <Cart cart={cart} setCart={setCart} setCartOpened={setCartOpened} cartOpened={cartOpened}/>
+      <Cart allitem={products} cart={cart} setCart={setCart} setCartOpened={setCartOpened} cartOpened={cartOpened}/>
       </div>
+      <Modal open={itemOpen} sx={{overflow: 'scroll'}}>
+        <Bar>
+          <OrderItem modalCloser={modalCloser} product={product} cart={cart} setCart={setCart}/>
+        </Bar>
+      </Modal>
     </ThemeProvider>
   );
 }
+
+const Bar = React.forwardRef((props, ref) => (
+  <span {...props} ref={ref}>
+    {props.children}
+  </span>
+))
+
 export default Order;

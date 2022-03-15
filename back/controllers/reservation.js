@@ -67,7 +67,7 @@ exports.updateRerservations = async ( req, res, next ) => {
 exports.deleteReservation = async ( req, res, next ) => {
 
   const id = req.params.id;
-  const { totalParty, comments, customer, isShowedUp, reserveDate } = req.body;
+  const { name, totalParty, comments, customer, isShowedUp, reserveDate } = req.body;
   
   try {
     const user = await User.findById({_id: req.user._id});
@@ -80,6 +80,7 @@ exports.deleteReservation = async ( req, res, next ) => {
     await user.save();
     
     const reservation = await Reservation.findByIdAndRemove(id, {
+      name,
       totalParty,
       comments,
       customer,

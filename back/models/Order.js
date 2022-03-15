@@ -2,10 +2,17 @@ const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
   totalPrice: Number,
-  orderedItem: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Menu'
-  }],
+  orderedItem: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Menu'
+    },
+    { instructions: String },
+    { addOn: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Menu'
+    }}
+  ],
   comments: String,
   isDelivery: {
     type: Boolean,

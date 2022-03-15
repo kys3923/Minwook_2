@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const reserveSchema = new mongoose.Schema({
+  name: String,
   totalParty: Number,
   comments: String,
   email: String,

@@ -3,17 +3,19 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 // MUI
-import { TextField, Paper, Grid, Button, Typography } from '@mui/material';
+import { TextField, Paper, Grid, Button, Typography, Modal } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
+import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import theme from '../theme/theme';
 
 
 const Reservation = (props) => {
   
   const [ username, setUsername ] = useState('');
+  const [ name, setName ] = useState('');
   const [ email, setEmail ] = useState('');
   const [ contact, setContact ] = useState ('');
   const [ totalParty, setTotalParty] = useState(0);
@@ -22,6 +24,7 @@ const Reservation = (props) => {
   const [ userId, setUserId ] = useState('');
   const [ reserveDate, setReserveDate ] = useState(new Date());
   const [ isConfirmed, setIdConfirmed ] = useState(false);
+  const [ modalOpen, setModalOpen ] = useState(false);
   const navigate = useNavigate();
   
   function formatPhoneNumber(telNum) {
@@ -46,9 +49,7 @@ const Reservation = (props) => {
 
   const reservationHandler = async (e) => {
     e.preventDefault();
-
-    await setUserId(localStorage.userId);
-
+    
     const config = {
       header: { 
         header: { 
@@ -56,9 +57,10 @@ const Reservation = (props) => {
         }
       }
     }
-
+    
     const request = {
       body: {
+        "name": `${name}`,
         "customer": `${userId}`,
         "email": `${email}`,
         "contact": `${contact}`,
@@ -67,7 +69,7 @@ const Reservation = (props) => {
         "reserveDate": `${reserveDate}`
       }
     }
-
+    
     try {
       const { data } = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/api/reservation/create`, request.body, config
@@ -82,6 +84,19 @@ const Reservation = (props) => {
       request.body,
       "in useEffect, checking submit"
     )
+
+    setModalOpen(true);
+  }
+
+  // Handlers
+  const modalHandler = (e) => {
+    e.preventDefault();
+    setModalOpen(!modalOpen);
+  }
+
+  const backToHomeHandler = () => {
+    setModalOpen(false);
+    navigate('/');
   }
 
   return (
@@ -104,12 +119,23 @@ const Reservation = (props) => {
             {error && <span className="error_message">{error}</span>}
             <form onSubmit={reservationHandler} className='register_form'>
               <TextField 
+                type='text'
+                required
+                id='name'
+                label='Enter your name'
+                value={name}
+                variant='standard'
+                autoComplete='on'
+                onChange={(e) => setName(e.target.value)}
+                sx={{ marginBottom: '2em'}}
+              />
+              <TextField 
                 type='email'
                 required
                 id='email'
                 label='Enter your email'
                 value={email}
-                variant='outlined'
+                variant='standard'
                 autoComplete='on'
                 onChange={(e) => setEmail(e.target.value)}
                 sx={{
@@ -121,7 +147,7 @@ const Reservation = (props) => {
                 required
                 id='contact'
                 value={contact}
-                variant='outlined'
+                variant='standard'
                 autoComplete='on'
                 label='Enter contact number'
                 onChange={(e) => phoneNumberHandler(e)}
@@ -134,7 +160,7 @@ const Reservation = (props) => {
                 required
                 id='totalParty'
                 value={totalParty}
-                variant='outlined'
+                variant='standard'
                 label="Number of your party"
                 autoComplete='on'
                 onChange={(e) => setTotalParty(e.target.value)}
@@ -173,11 +199,39 @@ const Reservation = (props) => {
                 autoComplete='on'
                 onChange={(e) => setComments(e.target.value)}
               />
-              <Button variant='contained' type='submit' sx={{ marginTop: '2em'}}>Confirm Reservation</Button>
+              <Button variant='contained' type='submit' sx={{ marginTop: '2em'}} onClick={(e) => setUserId(localStorage.userId)}>Confirm Reservation</Button>
             </form>
           </Paper>              
         </Grid>
       </Grid>
+      <Modal
+        open={modalOpen}
+      >
+        <Paper 
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            border: '2px solid white',
+            boxShadow: 24,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '3em 2em'
+          }}
+        >
+          <Typography>
+            <CheckCircleOutlineRoundedIcon sx={{ color: 'darkgreen', fontWeight: 'bold', fontSize: '8em'}}/>
+          </Typography>
+          <Typography sx={{paddingTop: '1em', marginBottom: '2em'}}>
+            Your reservation has been successfully registered!
+          </Typography>
+          <Button variant='contained' onClick={backToHomeHandler}>back to home</Button>
+        </Paper>
+      </Modal>
     </ThemeProvider>
   );
 }
