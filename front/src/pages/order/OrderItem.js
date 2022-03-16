@@ -4,7 +4,7 @@ import axios from 'axios';
 // MUI
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
-import { Card, Typography, Button, Chip, Stack, Grid, ToggleButtonGroup, ToggleButton, FormGroup, FormControlLabel, TextField, Collapse, List, ListItemButton, ListItemText, Switch, Checkbox, RadioGroup, Radio } from '@mui/material';
+import { Card, Typography, Button, Chip, Stack, Grid, ToggleButtonGroup, ToggleButton, FormGroup, FormControlLabel, TextField, Collapse, List, ListItemButton, ListItemText, Switch, RadioGroup, Radio, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
@@ -18,16 +18,17 @@ const OrderItem = (props) => {
   const [ dataLoaded, setDataLoaded ] = useState(false);
   const [ optionOpen, setOptionOpen ] = useState(false);
   const [ itemQty, setItemQty ] = useState(1);
-  const [ subTotal, setSubTotal ] = useState(0);
+  const [ subTotal, setSubTotal   ] = useState(0);
   const [ brownRice, setBrownRice ] = useState(false);
   const [ soyPaper, setSoyPaper ] = useState(false);
   const [ spicyMayo, setSpicyMayo ] = useState(false);
   const [ eelSauce, setEelSauce ] = useState(false);
   const [ crunch, setCrunch ] = useState(false);
-  const [ tunaOrSalmon, setTunaOrSalmon ] = useState('Not selected');
-  const [ spicyOrSweet, setSpicyOrSweet ] = useState('Not selected');
+  const [ tunaOrSalmon, setTunaOrSalmon ] = useState('Not Selected');
+  const [ spicyOrSweet, setSpicyOrSweet ] = useState('Not Selected');
+  const [ porkOrVeg, setPorkOrVeg ] = useState('Not Selected');
   const [ caliOrSpTuna, setCaliOrSpTuna ] = useState('Not Selected');
-  const [ SalGoneOrRain, setSalGoneOrRain ] = useState('Not Selected');
+  const [ salGoneOrRain, setSalGoneOrRain ] = useState('Not Selected');
   const [ instruction, setInstruction ] = useState('');
   const [ roll1, setRoll1 ] = useState('');
   const [ roll2, setRoll2 ] = useState('');
@@ -43,23 +44,41 @@ const OrderItem = (props) => {
       
       const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/menu/${props.product}`, config);
       
-      setItem(data);
-      setDataLoaded(true);
+      await setItem(data);
+      await setDataLoaded(true);
     }
     fetchData();
   },[props.product]);
 
-  // Handlers
+  // Lunch Roll choices
+  const lunchRollChoices = [
+    'California Roll',
+    'Tuna Avocado Roll',
+    'Tuna Roll',
+    'Smoked Salmon Roll',
+    'Mango Roll',
+    'Mango avocado Roll',
+    'Spicy Tuna Roll',
+    'Salmon Avocado Roll',
+    'Salmon Roll',
+    'Avocado Roll',
+    'Cucumber Avocado Roll',
+    'Spicy Salmon Roll',
+    'Alaska Roll',
+    'Yellowtail Roll',
+    'Cucumber Roll',
+    'AAC Roll',
+  ]
 
+  // Handlers
   const addNum = (e) => {
-    e.preventDefault();
     setItemQty(
       itemQty+1
     )
+    totalPriceCalc()
   };
 
   const subNum = (e) => {
-    e.preventDefault();
     if (itemQty > 1) {
       setItemQty(
         itemQty-1
@@ -67,7 +86,38 @@ const OrderItem = (props) => {
     } else {
       setItemQty(1)
     }
+    totalPriceCalc()
   };
+  
+  // subTotal Calculator
+
+  const totalPriceCalc = () => {
+    let priceQty = (item.menu.price*itemQty)
+    let brownRicePrice = (1*itemQty)
+    let crunchPrice = (.5*itemQty)
+    let soyPrice = (1*itemQty);
+    let calculateForm = [
+      {
+        value: priceQty,
+        status: true
+      },
+      {
+        value: brownRicePrice,
+        status: brownRice
+      },
+      {
+        value: crunchPrice,
+        status: crunch
+      },
+      { 
+        value: soyPrice,
+        status: soyPaper
+      }
+    ];
+    const totalNumberArray = calculateForm.filter(({status}) => status === true)
+    const totalNumber2 = totalNumberArray.reduce(function (prev, next) { return prev+next.value}, 0)
+    setSubTotal(totalNumber2.toFixed(2));
+  }
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -76,7 +126,7 @@ const OrderItem = (props) => {
 
   const optionOpenHandler = (e) => {
     setOptionOpen(!optionOpen);
-  }
+  };
 
   const brownRiceHandler = (e) => {
     if (e.target.checked) {
@@ -84,7 +134,8 @@ const OrderItem = (props) => {
     } else {
       setBrownRice(false)
     }
-  }
+    totalPriceCalc()
+  };
 
   const soyPaperHandler = (e) => {
     if (e.target.checked) {
@@ -92,7 +143,8 @@ const OrderItem = (props) => {
     } else {
       setSoyPaper(false)
     }
-  }
+    totalPriceCalc()
+  };
 
   const spicyMayoHandler = (e) => {
     if (e.target.checked) {
@@ -100,7 +152,7 @@ const OrderItem = (props) => {
     } else {
       setSpicyMayo(false)
     }
-  }
+  };
 
   const eelSauceHandler = (e) => {
     if (e.target.checked) {
@@ -108,7 +160,7 @@ const OrderItem = (props) => {
     } else {
       setEelSauce(false)
     }
-  }
+  };
 
   const crunchHandler = (e) => {
     if (e.target.checked) {
@@ -116,14 +168,43 @@ const OrderItem = (props) => {
     } else {
       setCrunch(false)
     }
-  }
+    totalPriceCalc()
+  };
 
   const tunaSalHandler = (e) => {
     setTunaOrSalmon(e.target.value);
-  }
+  };
 
   const instructionHandler = (e) => {
     setInstruction(e.target.value);
+  };
+
+  const lunchRoll1Handler = (e) => {
+    setRoll1(e.target.value);
+  };
+
+  const lunchRoll2Handler = (e) => {
+    setRoll2(e.target.value);
+  };
+
+  const lunchRoll3Handler = (e) => {
+    setRoll3(e.target.value);
+  };
+
+  const spicySweetHandler = (e) => {
+    setSpicyOrSweet(e.target.value);
+  };
+
+  const porkVegHandler = (e) => {
+    setPorkOrVeg(e.target.value);
+  }
+
+  const caliOrSpTunaHandler = (e) => {
+    setCaliOrSpTuna(e.target.value);
+  }
+
+  const salGoneOrRainHandler = (e) => {
+    setSalGoneOrRain(e.target.value);
   }
 
   const eventChecker = (e) => {
@@ -134,41 +215,252 @@ const OrderItem = (props) => {
       eelSauce, '-eelS',
       crunch, '-cr',
       tunaOrSalmon, '-TunaSal',
-      instruction, '-instruct'
+      instruction, '-instruct',
+      roll1, '-roll1',
+      roll2, '-roll2',
+      roll3, '-roll3',
+      spicyOrSweet, 'SpOrSweet',
+      porkOrVeg, 'pOrV',
+      caliOrSpTuna, '-caliSPtuna',
+      salGoneOrRain, '-salgone',
+      item
     )
-    console.log(item)
+    totalPriceCalc()
   }
 
   const AddToCartHandler = (e) => {
-    e.preventDefault();
     let id = props.product
     let qty = itemQty
-    // ------ add on order
-    // brown rice
-    // soy paper
-    // crunch
-    // ------ options
-    // sp mayo
-    // eel sauce
-    // ------ special selections
-    // tuna salmon (caption 'Tuna or Salmon')
-    props.setCart([{
-      id: id,
-      qty: qty,
-      name: item.menu.name,
-      price: item.menu.price,
-      caption: item.menu.caption,
-      category: item.menu.category,
-      Sub_Category: item.menu.Sub_Category,
-      stock_availability: item.menu.stock_availability,
-      description: item.menu.description,
-    },...props.cart])
+    if (item.menu.category == 'Special Rolls' || item.menu.category == 'Regular Rolls' || item.menu.category == 'Vegetable Rolls') {
+      if (item.menu.name == 'Naruto') {
+        props.setCart([{
+          id: id,
+          qty: qty,
+          name: item.menu.name,
+          price: item.menu.price,
+          caption: item.menu.caption,
+          category: item.menu.category,
+          Sub_Category: item.menu.Sub_Category,
+          stock_availability: item.menu.stock_availability,
+          description: item.menu.description,
+          options: [
+            {
+              name: 'Spicy Mayo',
+              selected: spicyMayo
+            },
+            {
+              name: 'Eel Sauce',
+              selected: eelSauce,
+            },
+            {
+              name: 'Crunch',
+              selected: crunch,
+              price: 0.5
+            }],
+          comments: instruction
+        },...props.cart])
+      } else if (item.menu.caption == 'Soy Paper') {
+        props.setCart([{
+          id: id,
+          qty: qty,
+          name: item.menu.name,
+          price: item.menu.price,
+          caption: item.menu.caption,
+          category: item.menu.category,
+          Sub_Category: item.menu.Sub_Category,
+          stock_availability: item.menu.stock_availability,
+          description: item.menu.description,
+          options: [
+            {
+              name: 'Brown Rice',
+              selected: brownRice,
+              price: 1,
+            },
+            {
+              name: 'Spicy Mayo',
+              selected: spicyMayo
+            },
+            {
+              name: 'Eel Sauce',
+              selected: eelSauce
+            },
+            {
+              name: 'Crunch',
+              selected: crunch,
+              price: 0.5
+            }],
+          comments: instruction
+        },...props.cart])
+      } else if (item.menu.caption == 'Tuna or Salmon') {
+        props.setCart([{
+          id: id,
+          qty: qty,
+          name: item.menu.name,
+          price: item.menu.price,
+          caption: item.menu.caption,
+          category: item.menu.category,
+          Sub_Category: item.menu.Sub_Category,
+          stock_availability: item.menu.stock_availability,
+          description: item.menu.description,
+          options: [
+            {
+              name: 'Brown Rice',
+              selected: brownRice,
+              price: 1,
+            },
+            {
+              name: 'Soy Paper',
+              selected: soyPaper,
+              price: 1,
+            },
+            {
+              name: 'Spicy Mayo',
+              selected: spicyMayo,
+            },
+            {
+              name: 'Eel Sauce',
+              selected: eelSauce,
+            },
+            {
+              name: 'Crunch',
+              selected: crunch,
+              price: 0.5,
+            }],
+          tunaOrSalmon: tunaOrSalmon,
+          comments: instruction
+        },...props.cart])
+      } else {
+        props.setCart([{
+          id: id,
+          qty: qty,
+          name: item.menu.name,
+          price: item.menu.price,
+          caption: item.menu.caption,
+          category: item.menu.category,
+          Sub_Category: item.menu.Sub_Category,
+          stock_availability: item.menu.stock_availability,
+          description: item.menu.description,
+          options: [
+            {
+              name: 'Brown Rice',
+              selected: brownRice,
+              price: 1,
+            },
+            {
+              name: 'Soy Paper',
+              selected: soyPaper,
+              price: 1,
+            },
+            {
+              name: 'Spicy Mayo',
+              selected: spicyMayo,
+            },
+            {
+              name: 'Eel Sauce',
+              selected: eelSauce,
+            },
+            {
+              name: 'Crunch',
+              selected: crunch,
+              price: 0.5,
+            }],
+          comments: instruction
+        },...props.cart])
+      }
+    } else if (item.menu.Sub_Category == 'Lunch Roll Combo') {
+      props.setCart([{
+        id: id,
+        qty: qty,
+        name: item.menu.name,
+        price: item.menu.price,
+        caption: item.menu.caption,
+        category: item.menu.category,
+        Sub_Category: item.menu.Sub_Category,
+        stock_availability: item.menu.stock_availability,
+        description: item.menu.description,
+        rollChoices: [{
+          roll1: roll1,
+          roll2: roll2,
+          roll3: roll3
+        }],
+        comments: instruction
+      },...props.cart])
+    } else if (item.menu.caption == 'Spicy or Sweet') {
+      props.setCart([{
+        id: id,
+        qty: qty,
+        name: item.menu.name,
+        price: item.menu.price,
+        caption: item.menu.caption,
+        category: item.menu.category,
+        Sub_Category: item.menu.Sub_Category,
+        stock_availability: item.menu.stock_availability,
+        description: item.menu.description,
+        spicyOrSweet: spicyOrSweet,
+        comments: instruction
+      },...props.cart])
+    } else if (item.menu.name == 'Gyoza') {
+      props.setCart([{
+        id: id,
+        qty: qty,
+        name: item.menu.name,
+        price: item.menu.price,
+        caption: item.menu.caption,
+        category: item.menu.category,
+        Sub_Category: item.menu.Sub_Category,
+        stock_availability: item.menu.stock_availability,
+        description: item.menu.description,
+        porkOrVeg: porkOrVeg,
+        comments: instruction
+      },...props.cart])
+    } else if (item.menu.name == 'Sushi Regular' || item.menu.name == 'Sushi & Sashimi Regular Sets' || item.menu.name == 'Sushi Lunch') {
+      props.setCart([{
+        id: id,
+        qty: qty,
+        name: item.menu.name,
+        price: item.menu.price,
+        caption: item.menu.caption,
+        category: item.menu.category,
+        Sub_Category: item.menu.Sub_Category,
+        stock_availability: item.menu.stock_availability,
+        description: item.menu.description,
+        caliOrSpTuna: caliOrSpTuna,
+        comments: instruction
+      },...props.cart])
+    } else if (item.menu.name == 'Sushi Deluxe' || item.menu.name == "Sushi & Sashimi Deluxe Sets") {
+      props.setCart([{
+        id: id,
+        qty: qty,
+        name: item.menu.name,
+        price: item.menu.price,
+        caption: item.menu.caption,
+        category: item.menu.category,
+        Sub_Category: item.menu.Sub_Category,
+        stock_availability: item.menu.stock_availability,
+        description: item.menu.description,
+        salGoneOrRain: salGoneOrRain,
+        comments: instruction
+      },...props.cart])
+    } else {
+      props.setCart([{
+        id: id,
+        qty: qty,
+        name: item.menu.name,
+        price: item.menu.price,
+        caption: item.menu.caption,
+        category: item.menu.category,
+        Sub_Category: item.menu.Sub_Category,
+        stock_availability: item.menu.stock_availability,
+        description: item.menu.description,
+        comments: instruction
+      },...props.cart])
+    }
     props.modalCloser();
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Card sx={{ width: 450, padding: '3em 3em', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+      <Card sx={{ width: 450, padding: '3em 3em', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
         { dataLoaded ? (
           <Grid container>
             {/* item name */}
@@ -222,6 +514,250 @@ const OrderItem = (props) => {
                 </Grid>
               </Grid>
             </Grid>
+            {/* default options */}
+            <Grid item xs={12}>
+              <FormGroup>
+                {/* Tuna/salmon */}
+                { item.menu.caption == 'Tuna or Salmon' ?
+                  <Grid container>
+                    <Grid item xs={3}>
+                      <Typography sx={{ paddingTop: '5px', fontStyle: 'italic', color: 'gray'}}>Choice:</Typography>
+                    </Grid>
+                    <Grid item xs={9}>
+                      <RadioGroup
+                        row
+                        name='tunaOrSalmon'
+                        value={tunaOrSalmon}
+                        onChange={tunaSalHandler}
+                        sx={{ justifyContent: 'flex-start'}}
+                      >
+                        <FormControlLabel value='Tuna' control={<Radio />} label='Tuna' />
+                        <FormControlLabel value='Salmon' control={<Radio />} label='Salmon' />
+                      </RadioGroup>
+                    </Grid>
+                  </Grid>
+                  :
+                  <></>
+                }
+                {/* pick 2 lunch */}
+                { item.menu.name == 'Pick 2 Rolls Lunch' ? 
+                  <Grid container sx={{ marginTop: '.5em', marginBottom: '1em'}}>
+                    <Grid item xs={3}>
+                      <Typography sx={{ fontStyle: 'italic', color: 'gray', lineHeight: '3em' }}>Select: </Typography>
+                    </Grid>
+                    <Grid item xs={9}>
+                      <FormControl>
+                        <InputLabel>Pick Roll 1</InputLabel>
+                        <Select
+                          id='pickrolls1'
+                          value={roll1}
+                          onChange={lunchRoll1Handler}
+                          label='Pick roll 1'
+                          sx={{ width: '20em', marginBottom: '.5em' }}
+                          variant='outlined'
+                        >
+                          {
+                            lunchRollChoices.map((item) => (
+                              <MenuItem
+                                key={item}
+                                value={item}
+                              >
+                                {item}
+                              </MenuItem>
+                            ))
+                          }
+                        </Select>
+                      </FormControl>
+                      <FormControl>
+                        <InputLabel>Pick Roll 2</InputLabel>
+                        <Select
+                          id='pickrolls2'
+                          value={roll2}
+                          onChange={lunchRoll2Handler}
+                          label='Pick roll 2'
+                          sx={{ width: '20em' }}
+                          variant='outlined'
+                        >
+                          {
+                            lunchRollChoices.map((item) => (
+                              <MenuItem
+                                key={item}
+                                value={item}
+                              >
+                                {item}
+                              </MenuItem>
+                            ))
+                          }
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  </Grid> 
+                  : 
+                  <></>
+                }
+                {/* pick 3 lunch */}
+                { item.menu.name == 'Pick 3 Rolls Lunch' ? 
+                  <Grid container sx={{ marginTop: '.5em', marginBottom: '1em'}}>
+                    <Grid item xs={3}>
+                      <Typography sx={{ fontStyle: 'italic', color: 'gray', lineHeight: '3em' }}>Select: </Typography>
+                    </Grid>
+                    <Grid item xs={9}>
+                      <FormControl>
+                        <InputLabel>Pick Roll 1</InputLabel>
+                        <Select
+                          id='pickrolls1'
+                          value={roll1}
+                          onChange={lunchRoll1Handler}
+                          label='Pick roll 1'
+                          sx={{ width: '20em', marginBottom: '.5em' }}
+                          variant='outlined'
+                        >
+                          {
+                            lunchRollChoices.map((item) => (
+                              <MenuItem
+                                key={item}
+                                value={item}
+                              >
+                                {item}
+                              </MenuItem>
+                            ))
+                          }
+                        </Select>
+                      </FormControl>
+                      <FormControl>
+                        <InputLabel>Pick Roll 2</InputLabel>
+                        <Select
+                          id='pickrolls2'
+                          value={roll2}
+                          onChange={lunchRoll2Handler}
+                          label='Pick roll 2'
+                          sx={{ width: '20em', marginBottom: '.5em' }}
+                          variant='outlined'
+                        >
+                          {
+                            lunchRollChoices.map((item) => (
+                              <MenuItem
+                                key={item}
+                                value={item}
+                              >
+                                {item}
+                              </MenuItem>
+                            ))
+                          }
+                        </Select>
+                      </FormControl>
+                      <FormControl>
+                        <InputLabel>Pick Roll 3</InputLabel>
+                        <Select
+                          id='pickrolls3'
+                          value={roll3}
+                          onChange={lunchRoll3Handler}
+                          label='Pick roll 3'
+                          sx={{ width: '20em' }}
+                          variant='outlined'
+                        >
+                          {
+                            lunchRollChoices.map((item) => (
+                              <MenuItem
+                                key={item}
+                                value={item}
+                              >
+                                {item}
+                              </MenuItem>
+                            ))
+                          }
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  </Grid> 
+                  : 
+                  <></>
+                }
+                {/* spicy or sweet */}
+                { item.menu.caption == 'Spicy or Sweet' ?
+                  <Grid container>
+                    <Grid item xs={3}>
+                      <Typography sx={{ paddingTop: '5px', fontStyle: 'italic', color: 'gray'}}>Choice:</Typography>
+                    </Grid>
+                    <Grid item xs={9}>
+                      <RadioGroup
+                        row
+                        name='spicyOrSweet'
+                        value={spicyOrSweet}
+                        onChange={spicySweetHandler}
+                        sx={{ justifyContent: 'flex-start'}}
+                      >
+                        <FormControlLabel value='Spicy' control={<Radio />} label='Spicy' />
+                        <FormControlLabel value='Sweet' control={<Radio />} label='Sweet' />
+                      </RadioGroup>
+                    </Grid>
+                  </Grid>
+                  :
+                  <></>
+                }
+                {/* Gyoza */}
+                { item.menu.name == 'Gyoza' ?
+                  <Grid container>
+                    <Grid item xs={3}>
+                      <Typography sx={{ paddingTop: '5px', fontStyle: 'italic', color: 'gray'}}>Choice:</Typography>
+                    </Grid>
+                    <Grid item xs={9}>
+                        <RadioGroup
+                          row
+                          name='porkOrVeg'
+                          value={porkOrVeg}
+                          onChange={porkVegHandler}
+                          sx={{ justifyContent: 'flex-start'}}
+                        >
+                          <FormControlLabel value='Pork' control={<Radio />} label='Pork' />
+                          <FormControlLabel value='Vegetable' control={<Radio />} label='Vegetable' />
+                        </RadioGroup>
+                      </Grid>
+                    </Grid>
+                  : <></>
+                }
+                {/* cali or sp tuna */}
+                { item.menu.name == 'Sushi Regular' || item.menu.name == "Sushi & Sashimi Regular Sets" || item.menu.name == 'Sushi Lunch' ?
+                  <Grid container>
+                    <Grid item xs={3}>
+                      <Typography sx={{ paddingTop: '5px', fontStyle: 'italic', color: 'gray'}}>Choice:</Typography>                      
+                    </Grid>
+                    <Grid item xs={9}>
+                      <RadioGroup
+                        row
+                        name='caliOrSpTuna'
+                        value={caliOrSpTuna}
+                        onChange={caliOrSpTunaHandler}
+                        sx={{ justifyContent: 'flex-start'}}
+                      >
+                        <FormControlLabel value='California Roll' control={<Radio />} label='California Roll' />
+                        <FormControlLabel value='Spicy Tuna Roll' control={<Radio />} label='Spicy Tuna Roll' />
+                      </RadioGroup>
+                    </Grid>
+                  </Grid> : <></>
+                }
+                {/* salGone or rain */}
+                { item.menu.name == 'Sushi Deluxe' || item.menu.name == "Sushi & Sashimi Deluxe Sets" ?
+                  <Grid container>
+                    <Grid item xs={3}>
+                      <Typography sx={{ paddingTop: '5px', fontStyle: 'italic', color: 'gray'}}>Choice:</Typography>                      
+                    </Grid>
+                    <Grid item xs={9}>
+                      <RadioGroup
+                        row
+                        name='salgoneOrRain'
+                        value={salGoneOrRain}
+                        onChange={salGoneOrRainHandler}
+                        sx={{ justifyContent: 'flex-start'}}
+                      >
+                        <FormControlLabel value='Salmon Gone Wild Roll' control={<Radio />} label='Salmon Gone Wild Roll' />
+                        <FormControlLabel value='Rainbow Roll' control={<Radio />} label='Rainbow Roll' />
+                      </RadioGroup>
+                    </Grid>
+                  </Grid> : <></>
+                }
+              </FormGroup>
+            </Grid>
             {/* options */}
             <Grid item xs={12}>
               <List>
@@ -231,56 +767,48 @@ const OrderItem = (props) => {
                 </ListItemButton>
                 <Collapse in={optionOpen} timeout='auto' unmountOnExit>
                   <FormGroup>
-                    <Grid container>
-                      {/* Naruto */}
-                      { item.menu.name == 'Naruto' ? <></> :
+                    <Grid container sx={{ paddingLeft: '5px', paddingRight: '3px'}}>
+                      {/* Rolls */}
+                      { item.menu.category == 'Special Rolls' || item.menu.category == 'Regular Rolls' || item.menu.category == 'Vegetable Rolls' ? 
                         <>
-                          {/* Tuna/salmon */}
-                          { item.menu.caption == 'Tuna or Salmon' ? 
-                            <Grid item xs={12}>
-                              <RadioGroup
-                                row
-                                name='tunaOrSalmon'
-                                value={tunaOrSalmon}
-                                onChange={tunaSalHandler}
-                                sx={{ justifyContent: 'center' }}
-                              >
-                                <FormControlLabel value='Tuna' control={<Radio />} label='Tuna' />
-                                <FormControlLabel value='Salmon' control={<Radio />} label='Salmon' />
-                              </RadioGroup>
-                            </Grid>
-                            :
-                            <></>
+                          {/* Naruto */}
+                          { item.menu.name == 'Naruto' ? <></> :
+                            <>
+                              {/* brown rice */}
+                              <Grid item xs={6}>
+                                <FormControlLabel control={<Switch onChange={brownRiceHandler} />} label='Brown Rice +$1.00' />
+                              </Grid>
+                              {/* Soy paper */}
+                              { item.menu.caption !== 'Soy Paper' ? 
+                                <Grid item xs={6}>
+                                  <FormControlLabel control={<Switch onChange={soyPaperHandler} />} label='Soy Paper +$1.00' />
+                                </Grid>
+                                :
+                                <></>
+                              }
+                            </>
                           }
-                          {/* brown rice */}
+                          {/* crunch */}
                           <Grid item xs={6}>
-                            <FormControlLabel control={<Switch onChange={brownRiceHandler} />} label='Brown Rice +$1.00' />
+                            <FormControlLabel control={<Switch onChange={crunchHandler} />} label='Crunch topping +$0.50' />
                           </Grid>
-                          {/* Soy paper */}
-                          { item.menu.caption !== 'Soy Paper' ? 
-                            <Grid item xs={6}>
-                              <FormControlLabel control={<Switch onChange={soyPaperHandler} />} label='Soy Paper +$1.00' />
-                            </Grid>
-                            :
-                            <></>
-                          }
+                          {/* spicy mayo */}
+                          <Grid item xs={6}>
+                            <FormControlLabel control={<Switch onChange={spicyMayoHandler} />} label='Spicy Mayo topping' />
+                          </Grid>
+                          {/* eel sauce */}
+                          <Grid item xs={6}>
+                            <FormControlLabel control={<Switch onChange={eelSauceHandler} />} label='Eel Sauce topping' />
+                          </Grid>
                         </>
+                        :
+                        <></>
                       }
-                      {/* crunch */}
-                      <Grid item xs={6}>
-                        <FormControlLabel control={<Switch onChange={crunchHandler} />} label='Crunch topping +$0.50' />
-                      </Grid>
-                      {/* spicy mayo */}
-                      <Grid item xs={6}>
-                        <FormControlLabel control={<Switch onChange={spicyMayoHandler} />} label='Spicy Mayo topping' />
-                      </Grid>
-                      {/* eel sauce */}
-                      <Grid item xs={6}>
-                        <FormControlLabel control={<Switch onChange={eelSauceHandler} />} label='Eel Sauce topping' />
-                      </Grid>
-                      <Grid item xs={12}>
+                      {/* Instructions */}
+                      <Grid item xs={12} sx={{ paddingTop: '1em'}}>
                         <TextField multiline maxRows={4} value={instruction} onChange={instructionHandler} variant='outlined' placeholder='Special Instructions' sx={{ width: '100%' }} />
                       </Grid>
+                      {/* Checking state */}
                       <Grid item xs={12}>
                         <Button onClick={eventChecker}>Check</Button>
                       </Grid>
@@ -288,17 +816,6 @@ const OrderItem = (props) => {
                   </FormGroup>
                 </Collapse>
               </List>
-            </Grid>
-            {/* sub total */}
-            <Grid item xs={12}>
-              <Grid container>
-                <Grid item xs={3}>
-                  <Typography sx={{ lineHeight: '2em', fontStyle: 'italic', color: 'gray' }}>Total:</Typography>
-                </Grid>
-                <Grid item xs={9}>
-                  <Typography variant='h5' color='primary'>${(item.menu.price*itemQty).toFixed(2)}</Typography>
-                </Grid>
-              </Grid>
             </Grid>
             {/* buttons */}
             <Grid item xs={12}>

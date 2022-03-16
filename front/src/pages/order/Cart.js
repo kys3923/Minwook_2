@@ -1,7 +1,5 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-
 import Confirmation from './Confirmation';
 
 
@@ -17,7 +15,6 @@ import { Card, CardContent, Typography, CardActions, Button, IconButton, Grid, M
 
 
 // Badge style
-
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
     right: -10,
@@ -37,6 +34,7 @@ const Cart = (props) => {
   const [ subTotal, setSubTotal ] = useState();
   const [ removeItem, setRemoveItem ] = useState('')
   const [ confirmationOpen, setConfirmationOpen ] = useState(false);
+  const [ cartModalOpen, setCartModalOpen ] = useState(false);
 
   
   useEffect(() => {
@@ -53,6 +51,7 @@ const Cart = (props) => {
   const cartClickHandler = (e) => {
     let cartOpening = props.setCartOpened;
     cartOpening(!props.cartOpened);
+    setCartModalOpen(!cartItemOpen);
     setCartItemOpen(!cartItemOpen);
     let initialValue = 0
     let totalValue = cartItems.reduce(function (prevValue, currentValue) {
@@ -76,76 +75,221 @@ const Cart = (props) => {
     console.log(props.cart, "props", cartItems, "cart page");
   }
 
-  // console.table(cartItems)
+  const checkingHandler = (e) => {
+    console.log(cartItems)
+  }
   
   return (
     <ThemeProvider theme={theme}>
-      { cartItemOpen ? 
-        <div className='cartItemWrapper'>
-          <div className='cartItemDetail'>
-            { cartItemCount == 0 ? 
-              <Card
-                sx={{ padding: '.75em .75em' }}
-              >
-                <CardContent>
+      <Modal open={cartModalOpen} sx={{overflow: 'scroll'}}>
+        <Bar>
+          <Card sx={{ width: 400, padding: '2em 2em', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+            { cartItemCount == 0 ?
+              <Grid container>
+                <Grid item xs={12}>
                   <Typography gutterBottom variant='h5' sx={{ borderBottom: '2px solid #dc5a41', paddingBottom: '.25em'}}>
                     Shopping Cart
                   </Typography>
+                </Grid>
+                <Grid item xs={12}>
                   <Typography variant='body2' sx={{ marginTop: '2em', marginBottom: '2em'}}>
                     Your cart is currently empty.
                   </Typography>
-                  <Button onClick={cartClickHandler} variant='contained'>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button onClick={cartClickHandler} variant='contained' sx={{ width: '100%' }}>
                     <ShoppingCartIcon /> Continue Order
                   </Button>
-                </CardContent>
-              </Card>
+                </Grid>
+              </Grid>
               :
-              <Card
-                sx={{ padding: '.75em .75em' }}
-              >
-                <CardContent>
-                  <Typography gutterBottom variant='h5' sx={{ borderBottom: '2px solid #dc5a41', paddingBottom: '.25em'}}>
+              <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <Typography gutterBottom variant='h5' sx={{ borderBottom: '2px solid #dc5a41', paddingBottom: '.25em', color: 'darkgreen', fontWeight: 'bold'}}>
                     Shopping Cart
                   </Typography>
-                  {cartItems.map((item, i) => (
-                    <Card key={i} elevation={0} sx={{ borderBottom: '1px solid gray', padding: '5px 0', borderRadius: '0'}}>
-                      <Grid container direction='row' justifyContent='center' alignItems='center'>
-                        <Grid item xs={6}>
-                          <Typography>{item.name}</Typography>
-                        </Grid>
-                        <Grid item xs={2}>
-                          <Typography sx={{ fontStyle: 'italic'}}>x{item.qty}</Typography>
-                        </Grid>
-                        <Grid item xs={2}>
-                          <Typography sx={{ color: 'darkgreen'}}>${item.price}</Typography>
-                        </Grid>
-                        <Grid item xs={2}>
-                          <IconButton onClick={removeItemhandler} className='cart_remove_button' value={item.id} sx={{ marginLeft : '10px'}}>
-                            <RemoveCircleOutlineIcon sx={{ color: 'gray'}} />
-                          </IconButton>                       
-                        </Grid>
+                </Grid>
+                {cartItems.map((item, i) => (
+                  <Grid item xs={12} key={i} sx={{ borderBottom: '1px solid gray', paddingBottom: '1em'}}>
+                    <Grid container direction='row' justifyContent='center' alignItems='center'>
+                      <Grid item xs={6}>
+                        <Typography sx={{ fontSize: '1.125em' }}>{item.name}</Typography>
                       </Grid>
-                    </Card>
-                  ))}
-                  <Typography sx={{ marginTop: '1em', fontSize: '1em'}}>
-                    Sub Total: <span className='subTotal_text'>$&nbsp;{subTotal}</span>
-                  </Typography>
-                </CardContent>
-                <CardActions sx={{ flexDirection: 'row', }}>
-                  <Button onClick={cartClickHandler} variant='contained'>
-                    <ShoppingCartCheckoutIcon />&nbsp;CheckOut Order
+                      <Grid item xs={2}>
+                        <Typography sx={{ fontSize: '1.125em', fontStyle: 'italic' }}>x{item.qty}</Typography>
+                      </Grid>
+                      <Grid item xs={2}>
+                        <Typography sx={{ fontSize: '1.125em', color: 'darkgreen' }}>${(item.price.toFixed(2))}</Typography>
+                      </Grid>
+                      <Grid item xs={2}>
+                        <IconButton onClick={removeItemhandler} value={item.id} sx={{ marginLeft: '10px' }}>
+                          <RemoveCircleOutlineIcon sx={{ color: 'gray' }} />
+                        </IconButton>
+                      </Grid>
+                      {item.options ? 
+                        <>
+                          { item.options.map((option, i) => (
+                            <Grid container direction='row' justifyContent='center' alignItems='center' key={i}>
+                              <Grid item xs={6}>
+                                {option.selected ? <Typography sx={{ color: 'gray', paddingLeft: '1em' }}>-&nbsp;{option.name}</Typography> : <></>}
+                              </Grid>
+                              <Grid item xs={2}>
+                                {option.selected ? <Typography sx={{ color: 'gray', fontStyle: 'italic'}}>x{item.qty}</Typography> : <></>}
+                              </Grid>
+                              <Grid item xs={2}>
+                                {option.selected ? 
+                                  <>
+                                    {option.name == 'Brown Rice' || option.name == 'Soy Paper' || option.name == 'Crunch' ? 
+                                    <Typography sx={{ color: 'gray' }}>${(option.price.toFixed(2))}</Typography> 
+                                    : 
+                                    <></>
+                                    }
+                                  </> 
+                                  : <></> }
+                              </Grid>
+                              <Grid item xs={2} />
+                            </Grid>
+                          ))}
+                        </>
+                        :
+                        <></>
+                      }
+                      {item.caliOrSpTuna ?
+                        <Grid container>
+                          <Grid item xs={4}>
+                            <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Choice:</Typography>
+                          </Grid>
+                          <Grid item xs={8}>
+                            <Typography>{item.caliOrSpTuna}</Typography>
+                          </Grid>
+                        </Grid>
+                        :
+                        <></>
+                      }
+                      {item.salGoneOrRain ?
+                        <Grid container>
+                          <Grid item xs={4}>
+                            <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Choice:</Typography>
+                          </Grid>
+                          <Grid item xs={8}>
+                            <Typography>{item.salGoneOrRain}</Typography>
+                          </Grid>
+                        </Grid>
+                        :
+                        <></>
+                      }
+                      { item.name == 'Pick 3 Rolls Lunch' ?
+                        <>
+                        {item.rollChoices.map((choice, i) =>(
+                          <Grid container>
+                            <Grid item xs={4}>
+                              <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Roll 1:</Typography>
+                            </Grid>
+                            <Grid item xs={8}>
+                              <Typography>{choice.roll1}</Typography>
+                            </Grid>
+                            <Grid item xs={4}>
+                              <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Roll 2:</Typography>
+                            </Grid>
+                            <Grid item xs={8}>
+                              <Typography>{choice.roll2}</Typography>
+                            </Grid>
+                            <Grid item xs={4}>
+                              <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Roll 3:</Typography>
+                            </Grid>
+                            <Grid item xs={8}>
+                              <Typography>{choice.roll3}</Typography>
+                            </Grid>
+                          </Grid>
+                        ))}
+                        </> : <></>
+                      }
+                      { item.name == 'Pick 2 Rolls Lunch' ?
+                        <>
+                        {item.rollChoices.map((choice, i) =>(
+                          <Grid container>
+                            <Grid item xs={4}>
+                              <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Roll 1:</Typography>
+                            </Grid>
+                            <Grid item xs={8}>
+                              <Typography>{choice.roll1}</Typography>
+                            </Grid>
+                            <Grid item xs={4}>
+                              <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Roll 2:</Typography>
+                            </Grid>
+                            <Grid item xs={8}>
+                              <Typography>{choice.roll2}</Typography>
+                            </Grid>
+                          </Grid>
+                        ))}
+                        </> : <></>
+                      }
+                      {item.spicyOrSweet ? 
+                        <Grid container>
+                          <Grid item xs={4}>
+                            <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Choice:</Typography>
+                          </Grid>
+                          <Grid item xs={8}>
+                            <Typography>{item.spicyOrSweet}</Typography>
+                          </Grid>
+                        </Grid> 
+                        : 
+                        <></>
+                      }
+                      {item.porkOrVeg ? 
+                        <Grid container>
+                          <Grid item xs={4}>
+                            <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Choice:</Typography>
+                          </Grid>
+                          <Grid item xs={8}>
+                            <Typography>{item.porkOrVeg}</Typography>
+                          </Grid>
+                        </Grid> 
+                        : 
+                        <></>
+                      }
+                      {item.comments ?
+                        <Grid container>
+                          <Grid item xs={4}>
+                            <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Instructions:</Typography>
+                          </Grid>
+                          <Grid item xs={8}>
+                            <Typography>{item.comments}</Typography>
+                          </Grid>
+                        </Grid>
+                        :
+                        <></>
+                      }
+                    </Grid>
+                    <Grid container direction='row'>
+                      <Grid item xs={6}>
+
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                ))}
+                <Grid item xs={6}>
+                  <Button onClick={cartClickHandler} variant='contained' sx={{ width: '100%' }}>
+                    <ShoppingCartCheckoutIcon />&nbsp;Check-Out Order
                   </Button>
-                  <Button onClick={cartClickHandler} variant='outlined'>
-                    <ShoppingCartIcon /> &nbsp;Continue Order
+                </Grid>
+                <Grid item xs={6}>
+                  <Button onClick={cartClickHandler} variant='outlined' sx={{ width: '100%' }}>
+                    <ShoppingCartIcon />&nbsp;Continue Order
                   </Button>
-                </CardActions>
-              </Card>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button onClick={checkingHandler} sx={{ width: '100%' }}>
+                    Check
+                  </Button>
+                </Grid>
+
+              </Grid>
             }
-          </div>  
-        </div>
-        :
-        <></>    
-      }
+          
+          </Card>
+        </Bar>
+      </Modal>
       <Modal open={confirmationOpen} sx={{overflow: 'scroll'}}>
         <Bar>
           <Confirmation allItem={props.allitem} cart={cartItems}/>

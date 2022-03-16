@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-// body scroll lock
-
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
-
 //TODO: ADD MODAL FOR CART SECTION
 
 import PropTypes from 'prop-types';
@@ -101,9 +96,6 @@ const Order = (props) => {
   const modalCloser = (e) => {
     setItemOpen(false);
   }
-
-  itemOpen ? disableBodyScroll(document) : enableBodyScroll(document);
-  cartOpened ? disableBodyScroll(document) : enableBodyScroll(document);
   
   return (
     <ThemeProvider theme={theme}>
