@@ -102,7 +102,7 @@ const Reservation = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <Grid container sx={{ 
-        paddingTop: '6em', 
+        paddingTop: '2.5em', 
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',

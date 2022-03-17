@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-//TODO: ADD MODAL FOR CART SECTION
 
+// import page components
+import OrderItem from './OrderItem';
+import Cart from './Cart';
+
+// MUI stuff
 import PropTypes from 'prop-types';
 import { Tabs, Tab, Box, Card, CardContent, Typography, CardActions, Button, Grid, Modal } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import theme from '../../theme/theme';
 
-import OrderItem from './OrderItem';
-import Cart from './Cart';
-
+// MUI Tabs
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
   return (
@@ -44,18 +45,42 @@ function allyProps(index) {
   }
 }
 
+// lunch roll choices
+const LunchRollChoices = [
+  { name: 'California Roll' },
+  { name: 'Tuna Avocado Roll' },
+  { name: 'Tuna Roll' },
+  { name: 'Smoked Salmon Roll' },
+  { name: 'Mango Roll' },
+  { name: 'Mango Avocado Roll' },
+  { name: 'Spicy Tuna Roll' },
+  { name: 'Salmon Avocado Roll' },
+  { name: 'Salmon Roll' },
+  { name: 'Avocado Roll' },
+  { name: 'Cucumber Avocado Roll' },
+  { name: 'Spicy Salmon Roll' },
+  { name: 'Alaska Roll' },
+  { name: 'Yellowtail Roll' },
+  { name: 'Cucumber Roll' },
+  { name: 'AAC Roll' },
+]
+
+// TODO: business hours, lunch hours
 
 const Order = (props) => {
+
+  // States
   const [ dataLoaded, setDataLoaded ] = useState(false);
   const [ value, setValue ] = useState(0);
-  const [ qty, setQty ] = useState(1);
   const [ cartOpened, setCartOpened ] = useState(false);
   const [ cart, setCart ] = useState([]);
   const [ products, setProducts ] = useState([]);
   const [ product, setProduct ] = useState('');
   const [ itemOpen, setItemOpen ] = useState(false);
+  const [ storeOpen, setStoreOpen ] = useState(true);
+  const [ lunchHour, setLunchHour ] = useState(false);
 
-  
+  // MUI tab
   const handleChange = (event, newValue) => {
     setValue(newValue);
   }
@@ -77,14 +102,17 @@ const Order = (props) => {
   
   // button handlers
 
-  const cartClearHandler = (e) => {
-    e.preventDefault();
-
-    setCart([]);
+  const storeHourHandler = (e) => {
+    alert('Restaurant is currently closed')
   }
 
-  const favButtonHandler = () => {
-    alert('currently under constrtuction')
+  const lunchHourHandler = (e) => {
+    alert('Lunch special is 12pm - 3pm only')
+  }
+
+  const cartClearHandler = (e) => {
+    e.preventDefault();
+    setCart([]);
   }
 
   const modalOpener = (e) => {
@@ -114,7 +142,7 @@ const Order = (props) => {
                 allowScrollButtonsMobile
                 value={value}
                 onChange={handleChange}
-                sx={{ borderBottom: 1, borderColor: 'divider'}}
+                sx={{ borderBottom: 1, borderColor: 'divider', margin: '0 auto', position: 'fixed', zIndex: 1, backgroundColor: 'white', width: '100%'}}
               >
                 <Tab label="Special Rolls" {...allyProps} />
                 <Tab label="Regular Rolls" {...allyProps} />
@@ -127,1044 +155,898 @@ const Order = (props) => {
                 <Tab label="Party Platter" {...allyProps} />
               </Tabs>
             </Box>
-              <TabPanel value={value} index={0} sx={{ minWidth: '250px'}}>
-                <p className='order_panel_title'>Special Rolls</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.category === 'Special Rolls') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-              </TabPanel>
-              <TabPanel value={value} index={1}>
-                <p className='order_panel_title'>Regular Rolls</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.category === 'Regular Rolls') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-                <p className='order_panel_title2'>Vegetable Rolls</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.category === 'Vegetable Rolls') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-              </TabPanel>
-              <TabPanel value={value} index={2}>
-                <p className='order_panel_title'>Lunch Special</p>
-                <p className='order_panel_subtitle'>Bento Lunch</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Bento Lunch') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-                <p className='order_panel_subtitle'>Sushi & Sashimi Lunch</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Sushi & Sashimi Lunch') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-                <div className='menuCardLunchContainerOrder'>
-                  {/* TODO: add selection for adding to cart */}
-                  <h3>Roll Selections</h3>
-                  <ul>
-                    <li>California Roll</li>
-                    <li>Tuna Avocado Roll</li>
-                    <li>Tuna Roll</li>
-                    <li>Smoked Salmon Roll</li>
-                    <li>Mango Roll</li>
-                    <li>Mango Avocado Roll</li>
-                    <li>Spicy Tuna Roll</li>
-                    <li>Salmon Avocado Roll</li>
-                    <li>Salmon Roll</li>
-                    <li>Avocado Roll</li>
-                    <li>Cucumber Avocado Roll</li>
-                    <li>Spicy Salmon Roll</li>
-                    <li>Alaska Roll</li>
-                    <li>Yellowtail Roll</li>
-                    <li>Cucumber Roll</li>
-                    <li>AAC Roll</li>
-                  </ul>
-                </div>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Lunch Roll Combo') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-                <p className='order_panel_subtitle'>Udon Lunch</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Udon Lunch') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-              </TabPanel>
-              <TabPanel value={value} index={3}>
-                <p className='order_panel_title'>Appetizer</p>
-                <p className='order_panel_subtitle'>Cold Appetizer</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Cold') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-                <p className='order_panel_subtitle'>Hot Appetizer</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Hot') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-              </TabPanel>
-              <TabPanel value={value} index={4}>
-                <p className='order_panel_title'>Soup & Salad</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.category === 'Soup & Salad') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-              </TabPanel>
-              <TabPanel value={value} index={5}>
-                <p className='order_panel_title'>Kitchen Entree</p>
-                <p className='order_panel_subtitle'>Noodles</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Noodles') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-                <p className='order_panel_subtitle'>Fried Rice</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Fried Rice') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-                <p className='order_panel_subtitle'>Bento</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Bento') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-                <p className='order_panel_subtitle'>Teriyaki</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Teriyaki') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-                <p className='order_panel_subtitle'>Katsu</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Katsu') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-                <p className='order_panel_subtitle'>Rice Bowl</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Rice Bowl') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-              </TabPanel>
-              <TabPanel value={value} index={6}>
-                <p className='order_panel_title'>Sushi & Sashimi</p>
-                <p className='order_panel_subtitle'>Sushi Sets</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Sushi Sets') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-                <p className='order_panel_subtitle'>Sushi & Sashimi Sets</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Sushi & Sashimi Sets') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-                <p className='order_panel_subtitle'>Special Seared Sushi</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Special Seared Sushi') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-              </TabPanel>
-              <TabPanel value={value} index={7}>
-                <p className='order_panel_title'>A La Carte</p>
-                <p className='order_panel_subtitle'>Nigiri</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Nigiri') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-                <p className='order_panel_subtitle'>Sashimi</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.Sub_Category === 'Sashimi') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-              </TabPanel>
-              <TabPanel value={value} index={8}>
-                <p className='order_panel_title'>Party Platter</p>
-                <div className='order_cardHolder'>
-                  {products.menu.map((menu, i) => {
-                    if(menu.category === 'Party Platter') {
-                      return (
-                        <Card
-                          sx={{ minWidth: 250, width: '400px',  marginBottom: '1em', marginRight: '1em', marginLeft: '1em'}}
-                          key={i}
-                        >
-                          <CardContent>
-                            <Typography gutterBottom variant='h5' component='div'>
-                              {menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span>
-                            </Typography>
-                            <Typography variant='body2'>
-                              {menu.description}
-                            </Typography>
-                            <Typography variant='body1' componenet='div' sx={{ marginTop: '.75em', fontSize: '1.25em', color: 'darkgreen'}}>
-                              ${menu.price}
-                            </Typography>
-                          </CardContent>
-                          <div className='order_action'>
-                            <CardActions>
-                              <Button 
-                                variant='contained' 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                value={menu._id}
-                                onClick={modalOpener}
-                              >
-                                <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                              </Button>
-                              {/* <Button 
-                                size='small' 
-                                sx={{marginBottom: '1em'}}
-                                onClick={favButtonHandler}
-                              >
-                                <FavoriteIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Favorite
-                              </Button> */}                       
-                            </CardActions>
-                          </div>
-                        </Card>
-                      )
-                    }
-                  })}
-                </div>
-              </TabPanel>
+            {/* Special Rolls */}
+            <TabPanel value={value} index={0} sx={{ minWidth: '250px' }}>
+              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Chef Special Rolls</Typography>
+                </Grid>
+                {/* Fresh Rolls */}
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Fresh Rolls</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.category === 'Special Rolls' && menu.Sub_Category === 'Fresh Rolls' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+                {/* Baked Rolls */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Baked Rolls</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.category === 'Special Rolls' && menu.Sub_Category === 'Baked Rolls' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+                {/* Tempura Rolls */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Tempura Rolls</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.category === 'Special Rolls' && menu.Sub_Category === 'Tempura Rolls' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+              </Grid>
+            </TabPanel>
+            {/* Regular Rolls */}
+            <TabPanel value={value} index={1} sx={{ minWidth: '250px' }}>
+              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Regular Rolls</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.category === 'Regular Rolls' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  : null
+                ))}
+                {/* Veg Rolls */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Vegetable Rolls</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.category === 'Vegetable Rolls' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  : null
+                ))}
+              </Grid>
+            </TabPanel>
+            {/* Lunch Special */}
+            <TabPanel value={value} index={2} sx={{ minWidth: '250px' }}>
+              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Lunch Special<span className='order_card_caption_1'>12pm - 3pm, Served with miso soup</span></Typography>
+                </Grid>
+                {/* bento lunch */}
+                <Grid item xs={12} sx={{ marginBottom: '1em' }}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Bento Lunch<span className='order_card_caption_2'>Served with soup, salad, gyoza & california roll</span></Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Bento Lunch' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  : null
+                ))}
+                {/* Su & SA lunch */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Sushi & Sashimi Lunch</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Sushi & Sashimi Lunch' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  : null
+                ))}
+                {/* pick rolls lunch */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Lunch Roll Combo</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Grid container spacing={1.5} sx={{ justifyContent: 'center', alignContent: 'center', backgroundColor: 'white', padding: '1em 1.5em', paddingBottom: '2em', color: '#dc5a41', borderRadius: '10px', marginBottom: '2em'}}>
+                    <Grid item xs={12}>
+                      <Typography sx={{ color: 'darkgreen', fontWeight: 'bold', borderBottom: '1px solid gray', paddingBottom: '.5em', marginBottom: '.5em'}}>Lunch Roll Combo Choices</Typography>
+                    </Grid>
+                    {LunchRollChoices.map((choice, i) => (
+                      <Grid item xs={6} sm={4} md={3} key={i}>
+                        <Typography>{choice.name}</Typography>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Lunch Roll Combo' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  : null
+                ))}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Udon Lunch</Typography>
+                </Grid>
+                {/* Udon Lunch */}
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Udon Lunch' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  : null
+                ))}
+              </Grid>
+            </TabPanel>
+            {/* Apps */}
+            <TabPanel value={value} index={3} sx={{ minWidth: '250px' }}>
+              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Appetizer</Typography>
+                </Grid>
+                {/* Cold App */}
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Cold Appetizer</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Cold' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+                {/* Hot App */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Hot Appetizer</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Hot' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+              </Grid>
+            </TabPanel>
+            {/* Soup Salad */}
+            <TabPanel value={value} index={4} sx={{ minWidth: '250px' }}>
+              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Soup & Salad</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.category === 'Soup & Salad' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+              </Grid>
+            </TabPanel>
+            {/* Kitchen Entree */}
+            <TabPanel value={value} index={5} sx={{ minWidth: '250px' }}>
+              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Kitchen Entree</Typography>
+                </Grid>
+                {/* Noodles */}
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Noodles</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Noodles' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+                {/* Fried Rice */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Fried Rice<span className='order_card_caption_2'>Served with miso soup</span></Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Fried Rice' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+                {/* Bento */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Bento<span className='order_card_caption_2'>Served with soup, salad, mixed tempura, california roll</span></Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Bento' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+                {/* Teriyaki */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Teriyaki<span className='order_card_caption_2'>Served with soup, salad, vegetable & rice</span></Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Teriyaki' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+                {/* Katsu */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Katsu<span className='order_card_caption_2'>Served with soup, salad, vegetable & rice</span></Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Katsu' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+                {/* Rice Bowl */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Rice Bowl</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Rice Bowl' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+              </Grid>
+            </TabPanel>
+            {/* Su & SA */}
+            <TabPanel value={value} index={6} sx={{ minWidth: '250px' }}>
+              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Sushi & Sashimi</Typography>
+                </Grid>
+                {/* SU sets */}
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Sushi Sets</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Sushi Sets' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+                {/* SU SA sets */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Sushi & Sashimi Sets</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Sushi & Sashimi Sets' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+              </Grid>
+            </TabPanel>
+            {/* A La Carte */}
+            <TabPanel value={value} index={7} sx={{ minWidth: '250px' }}>
+              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>A La Carte</Typography>
+                </Grid>
+                {/* Nigiri */}
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Nigiri</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Nigiri' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+                {/* Sashimi */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Sashimi</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Sashimi' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+                {/* seared SU */}
+                <Grid item xs={12} sx={{ marginBottom: '1em', marginTop: '1.5em'}}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41' }}>Special Seared Sushi</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.Sub_Category === 'Special Seared Sushi' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+              </Grid>
+            </TabPanel>
+            {/* Platter */}
+            <TabPanel value={value} index={8} sx={{ minWidth: '250px' }}>
+              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+                <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+                  <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Party Platter</Typography>
+                </Grid>
+                {products.menu.map((menu, i) => (
+                  menu.category === 'Party Platter' ?
+                    <Grid item xs={12} sm={6} md={4} key={i}>
+                      <Card sx={{ padding: '1em 1em'}}>
+                        <Grid container>
+                          <Grid item xs={12} sx={{ borderBottom: '1.5px solid darkgreen', marginBottom: '1em'}}>
+                            <Typography variant='h6' sx={{ fontFamily: 'Raleway', color: '#dc5a41' }}>{menu.name}&nbsp;&nbsp;<span className='order_card_caption'>{menu.caption}</span></Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
+                            <Typography>{menu.description}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button 
+                              variant='outlined' 
+                              sx={{ width: '100%'}}
+                              size='small'
+                              value={menu._id}
+                              onClick={modalOpener}
+                            >
+                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                    </Grid>
+                  :  null
+                ))}
+              </Grid>
+            </TabPanel>
           </div>
         )
         }
-      <Cart allitem={products} cart={cart} setCart={setCart} setCartOpened={setCartOpened} cartOpened={cartOpened}/>
+        <Cart allitem={products} cart={cart} setCart={setCart} setCartOpened={setCartOpened} cartOpened={cartOpened}/>
       </div>
       <Modal open={itemOpen} sx={{overflow: 'scroll'}}>
         <Bar>

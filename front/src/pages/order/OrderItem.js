@@ -18,7 +18,6 @@ const OrderItem = (props) => {
   const [ dataLoaded, setDataLoaded ] = useState(false);
   const [ optionOpen, setOptionOpen ] = useState(false);
   const [ itemQty, setItemQty ] = useState(1);
-  const [ subTotal, setSubTotal   ] = useState(0);
   const [ brownRice, setBrownRice ] = useState(false);
   const [ soyPaper, setSoyPaper ] = useState(false);
   const [ spicyMayo, setSpicyMayo ] = useState(false);
@@ -75,7 +74,6 @@ const OrderItem = (props) => {
     setItemQty(
       itemQty+1
     )
-    totalPriceCalc()
   };
 
   const subNum = (e) => {
@@ -86,38 +84,37 @@ const OrderItem = (props) => {
     } else {
       setItemQty(1)
     }
-    totalPriceCalc()
   };
   
   // subTotal Calculator
 
-  const totalPriceCalc = () => {
-    let priceQty = (item.menu.price*itemQty)
-    let brownRicePrice = (1*itemQty)
-    let crunchPrice = (.5*itemQty)
-    let soyPrice = (1*itemQty);
-    let calculateForm = [
-      {
-        value: priceQty,
-        status: true
-      },
-      {
-        value: brownRicePrice,
-        status: brownRice
-      },
-      {
-        value: crunchPrice,
-        status: crunch
-      },
-      { 
-        value: soyPrice,
-        status: soyPaper
-      }
-    ];
-    const totalNumberArray = calculateForm.filter(({status}) => status === true)
-    const totalNumber2 = totalNumberArray.reduce(function (prev, next) { return prev+next.value}, 0)
-    setSubTotal(totalNumber2.toFixed(2));
-  }
+  // const totalPriceCalc = () => {
+  //   let priceQty = (item.menu.price*itemQty)
+  //   let brownRicePrice = (1*itemQty)
+  //   let crunchPrice = (.5*itemQty)
+  //   let soyPrice = (1*itemQty);
+  //   let calculateForm = [
+  //     {
+  //       value: priceQty,
+  //       status: true
+  //     },
+  //     {
+  //       value: brownRicePrice,
+  //       status: brownRice
+  //     },
+  //     {
+  //       value: crunchPrice,
+  //       status: crunch
+  //     },
+  //     { 
+  //       value: soyPrice,
+  //       status: soyPaper
+  //     }
+  //   ];
+  //   // const totalNumberArray = calculateForm.filter(({status}) => status === true)
+  //   // const totalNumber2 = totalNumberArray.reduce(function (prev, next) { return prev+next.value}, 0)
+  //   // setSubTotal(totalNumber2.toFixed(2));
+  // }
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -134,7 +131,6 @@ const OrderItem = (props) => {
     } else {
       setBrownRice(false)
     }
-    totalPriceCalc()
   };
 
   const soyPaperHandler = (e) => {
@@ -143,7 +139,6 @@ const OrderItem = (props) => {
     } else {
       setSoyPaper(false)
     }
-    totalPriceCalc()
   };
 
   const spicyMayoHandler = (e) => {
@@ -168,7 +163,6 @@ const OrderItem = (props) => {
     } else {
       setCrunch(false)
     }
-    totalPriceCalc()
   };
 
   const tunaSalHandler = (e) => {
@@ -225,14 +219,13 @@ const OrderItem = (props) => {
       salGoneOrRain, '-salgone',
       item
     )
-    totalPriceCalc()
   }
 
   const AddToCartHandler = (e) => {
     let id = props.product
     let qty = itemQty
-    if (item.menu.category == 'Special Rolls' || item.menu.category == 'Regular Rolls' || item.menu.category == 'Vegetable Rolls') {
-      if (item.menu.name == 'Naruto') {
+    if (item.menu.category === 'Special Rolls' || item.menu.category === 'Regular Rolls' || item.menu.category === 'Vegetable Rolls') {
+      if (item.menu.name === 'Naruto') {
         props.setCart([{
           id: id,
           qty: qty,
@@ -259,7 +252,7 @@ const OrderItem = (props) => {
             }],
           comments: instruction
         },...props.cart])
-      } else if (item.menu.caption == 'Soy Paper') {
+      } else if (item.menu.caption === 'Soy Paper') {
         props.setCart([{
           id: id,
           qty: qty,
@@ -291,7 +284,7 @@ const OrderItem = (props) => {
             }],
           comments: instruction
         },...props.cart])
-      } else if (item.menu.caption == 'Tuna or Salmon') {
+      } else if (item.menu.caption === 'Tuna or Salmon') {
         props.setCart([{
           id: id,
           qty: qty,
@@ -367,7 +360,7 @@ const OrderItem = (props) => {
           comments: instruction
         },...props.cart])
       }
-    } else if (item.menu.Sub_Category == 'Lunch Roll Combo') {
+    } else if (item.menu.Sub_Category === 'Lunch Roll Combo') {
       props.setCart([{
         id: id,
         qty: qty,
@@ -385,7 +378,7 @@ const OrderItem = (props) => {
         }],
         comments: instruction
       },...props.cart])
-    } else if (item.menu.caption == 'Spicy or Sweet') {
+    } else if (item.menu.caption === 'Spicy or Sweet') {
       props.setCart([{
         id: id,
         qty: qty,
@@ -399,7 +392,7 @@ const OrderItem = (props) => {
         spicyOrSweet: spicyOrSweet,
         comments: instruction
       },...props.cart])
-    } else if (item.menu.name == 'Gyoza') {
+    } else if (item.menu.name === 'Gyoza') {
       props.setCart([{
         id: id,
         qty: qty,
@@ -413,7 +406,7 @@ const OrderItem = (props) => {
         porkOrVeg: porkOrVeg,
         comments: instruction
       },...props.cart])
-    } else if (item.menu.name == 'Sushi Regular' || item.menu.name == 'Sushi & Sashimi Regular Sets' || item.menu.name == 'Sushi Lunch') {
+    } else if (item.menu.name === 'Sushi Regular' || item.menu.name === 'Sushi & Sashimi Regular Sets' || item.menu.name === 'Sushi Lunch') {
       props.setCart([{
         id: id,
         qty: qty,
@@ -427,7 +420,7 @@ const OrderItem = (props) => {
         caliOrSpTuna: caliOrSpTuna,
         comments: instruction
       },...props.cart])
-    } else if (item.menu.name == 'Sushi Deluxe' || item.menu.name == "Sushi & Sashimi Deluxe Sets") {
+    } else if (item.menu.name === 'Sushi Deluxe' || item.menu.name === "Sushi & Sashimi Deluxe Sets") {
       props.setCart([{
         id: id,
         qty: qty,
@@ -472,9 +465,9 @@ const OrderItem = (props) => {
             {/* item captions */}
             <Grid item xs={12}>
               <Stack direction='row' spacing={1} sx={{ paddingBottom: '.5em', marginBottom: '1em'}}>
-                {item.menu.caption == "" ? <></> : <Chip label={item.menu.caption} size="small" variant='outlined' color='primary' sx={{ color: '#dc5a41' }}/>}
-                {item.menu.category == "" ? <></> : <Chip label={item.menu.category} size="small" variant='outlined' color='primary' sx={{ color: '#dc5a41' }}/>}
-                {item.menu.Sub_Category == "" ? <></> : <Chip label={item.menu.Sub_Category} size="small" variant='outlined' color='primary' sx={{ color: '#dc5a41' }}/>}
+                {item.menu.caption === "" ? <></> : <Chip label={item.menu.caption} size="small" variant='outlined' color='primary' sx={{ color: '#dc5a41' }}/>}
+                {item.menu.category === "" ? <></> : <Chip label={item.menu.category} size="small" variant='outlined' color='primary' sx={{ color: '#dc5a41' }}/>}
+                {item.menu.Sub_Category === "" ? <></> : <Chip label={item.menu.Sub_Category} size="small" variant='outlined' color='primary' sx={{ color: '#dc5a41' }}/>}
                 {item.menu.stock_availability ? <Chip label='In-Stock' size='small' variant='outlined' color='primary' /> : <Chip label='Out of Stock' size="small" variant='filled' color='warning' />}
               </Stack>
             </Grid>
@@ -518,7 +511,7 @@ const OrderItem = (props) => {
             <Grid item xs={12}>
               <FormGroup>
                 {/* Tuna/salmon */}
-                { item.menu.caption == 'Tuna or Salmon' ?
+                { item.menu.caption === 'Tuna or Salmon' ?
                   <Grid container>
                     <Grid item xs={3}>
                       <Typography sx={{ paddingTop: '5px', fontStyle: 'italic', color: 'gray'}}>Choice:</Typography>
@@ -540,7 +533,7 @@ const OrderItem = (props) => {
                   <></>
                 }
                 {/* pick 2 lunch */}
-                { item.menu.name == 'Pick 2 Rolls Lunch' ? 
+                { item.menu.name === 'Pick 2 Rolls Lunch' ? 
                   <Grid container sx={{ marginTop: '.5em', marginBottom: '1em'}}>
                     <Grid item xs={3}>
                       <Typography sx={{ fontStyle: 'italic', color: 'gray', lineHeight: '3em' }}>Select: </Typography>
@@ -596,7 +589,7 @@ const OrderItem = (props) => {
                   <></>
                 }
                 {/* pick 3 lunch */}
-                { item.menu.name == 'Pick 3 Rolls Lunch' ? 
+                { item.menu.name === 'Pick 3 Rolls Lunch' ? 
                   <Grid container sx={{ marginTop: '.5em', marginBottom: '1em'}}>
                     <Grid item xs={3}>
                       <Typography sx={{ fontStyle: 'italic', color: 'gray', lineHeight: '3em' }}>Select: </Typography>
@@ -674,7 +667,7 @@ const OrderItem = (props) => {
                   <></>
                 }
                 {/* spicy or sweet */}
-                { item.menu.caption == 'Spicy or Sweet' ?
+                { item.menu.caption === 'Spicy or Sweet' ?
                   <Grid container>
                     <Grid item xs={3}>
                       <Typography sx={{ paddingTop: '5px', fontStyle: 'italic', color: 'gray'}}>Choice:</Typography>
@@ -696,7 +689,7 @@ const OrderItem = (props) => {
                   <></>
                 }
                 {/* Gyoza */}
-                { item.menu.name == 'Gyoza' ?
+                { item.menu.name === 'Gyoza' ?
                   <Grid container>
                     <Grid item xs={3}>
                       <Typography sx={{ paddingTop: '5px', fontStyle: 'italic', color: 'gray'}}>Choice:</Typography>
@@ -717,7 +710,7 @@ const OrderItem = (props) => {
                   : <></>
                 }
                 {/* cali or sp tuna */}
-                { item.menu.name == 'Sushi Regular' || item.menu.name == "Sushi & Sashimi Regular Sets" || item.menu.name == 'Sushi Lunch' ?
+                { item.menu.name === 'Sushi Regular' || item.menu.name === "Sushi & Sashimi Regular Sets" || item.menu.name === 'Sushi Lunch' ?
                   <Grid container>
                     <Grid item xs={3}>
                       <Typography sx={{ paddingTop: '5px', fontStyle: 'italic', color: 'gray'}}>Choice:</Typography>                      
@@ -737,7 +730,7 @@ const OrderItem = (props) => {
                   </Grid> : <></>
                 }
                 {/* salGone or rain */}
-                { item.menu.name == 'Sushi Deluxe' || item.menu.name == "Sushi & Sashimi Deluxe Sets" ?
+                { item.menu.name === 'Sushi Deluxe' || item.menu.name === "Sushi & Sashimi Deluxe Sets" ?
                   <Grid container>
                     <Grid item xs={3}>
                       <Typography sx={{ paddingTop: '5px', fontStyle: 'italic', color: 'gray'}}>Choice:</Typography>                      
@@ -769,10 +762,10 @@ const OrderItem = (props) => {
                   <FormGroup>
                     <Grid container sx={{ paddingLeft: '5px', paddingRight: '3px'}}>
                       {/* Rolls */}
-                      { item.menu.category == 'Special Rolls' || item.menu.category == 'Regular Rolls' || item.menu.category == 'Vegetable Rolls' ? 
+                      { item.menu.category === 'Special Rolls' || item.menu.category === 'Regular Rolls' || item.menu.category === 'Vegetable Rolls' ? 
                         <>
                           {/* Naruto */}
-                          { item.menu.name == 'Naruto' ? <></> :
+                          { item.menu.name === 'Naruto' ? <></> :
                             <>
                               {/* brown rice */}
                               <Grid item xs={6}>

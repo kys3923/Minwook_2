@@ -1,6 +1,4 @@
 *{
-  transition: all .75s ease;
-
 }
 
 html, body {
@@ -15,7 +13,7 @@ a {
 }
 
 .mainContainer {
-  padding-top: 6.5em;
+  padding-top: 4.5em;
 }
 
 .total-container {
@@ -33,8 +31,8 @@ a {
 }
 
 .logo-imagebox img {
-  padding-top: 2em;
-  padding-bottom: 2em;
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 
 .nav-links{
@@ -429,7 +427,7 @@ a {
 
 .order_left {
   width: 100%;
-  margin-top: 6.5em;
+  margin-top: 4em;
 }
 
 .order_cardHolder {
@@ -461,9 +459,26 @@ a {
   font-size: 1em;
 }
 
+.order_card_caption_1 {
+  font-size: .5em;
+  color: black;
+  font-style: italic;
+  padding-left: 1em;
+  font-weight: normal;
+}
 .order_card_caption {
   font-size: .75em;
-  color: #dc5a41;
+  color: darkgreen;
+  padding-left: 1em;
+  font-weight: normal;
+}
+
+.order_card_caption_2 {
+  font-size: .7em;
+  color: black;
+  font-style: italic;
+  padding-left: 1em;
+  font-weight: normal;
 }
 
 .order_card_description {

@@ -11,7 +11,7 @@ import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
-import { Card, CardContent, Typography, CardActions, Button, IconButton, Grid, Modal } from '@mui/material';
+import { Card, Typography, Button, IconButton, Grid, Modal } from '@mui/material';
 
 
 // Badge style
@@ -31,7 +31,7 @@ const Cart = (props) => {
   const [ cartItemCount, setCartItemCount ] = useState(0);
   const [ cartItemOpen, setCartItemOpen ] = useState(false);
   const [ cartItems, setCartItems ] = useState([]);
-  const [ subTotal, setSubTotal ] = useState();
+  const [ subTotal, setSubTotal] = useState(0);
   const [ removeItem, setRemoveItem ] = useState('')
   const [ confirmationOpen, setConfirmationOpen ] = useState(false);
   const [ cartModalOpen, setCartModalOpen ] = useState(false);
@@ -66,13 +66,12 @@ const Cart = (props) => {
     async function removeItemFromState() {
       await setRemoveItem(e.currentTarget.value);
       if (removeItem) {
-        const filteredCartItems = props.cart.filter(item => item.id != removeItem)
+        const filteredCartItems = props.cart.filter(item => item.id !== removeItem)
         props.setCart(filteredCartItems);
         setRemoveItem('');
       }
     }
     removeItemFromState();
-    console.log(props.cart, "props", cartItems, "cart page");
   }
 
   const checkingHandler = (e) => {
@@ -84,7 +83,7 @@ const Cart = (props) => {
       <Modal open={cartModalOpen} sx={{overflow: 'scroll'}}>
         <Bar>
           <Card sx={{ width: 400, padding: '2em 2em', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-            { cartItemCount == 0 ?
+            { cartItemCount === 0 ?
               <Grid container>
                 <Grid item xs={12}>
                   <Typography gutterBottom variant='h5' sx={{ borderBottom: '2px solid #dc5a41', paddingBottom: '.25em'}}>
@@ -139,7 +138,7 @@ const Cart = (props) => {
                               <Grid item xs={2}>
                                 {option.selected ? 
                                   <>
-                                    {option.name == 'Brown Rice' || option.name == 'Soy Paper' || option.name == 'Crunch' ? 
+                                    {option.name === 'Brown Rice' || option.name === 'Soy Paper' || option.name === 'Crunch' ? 
                                     <Typography sx={{ color: 'gray' }}>${(option.price.toFixed(2))}</Typography> 
                                     : 
                                     <></>
@@ -178,7 +177,7 @@ const Cart = (props) => {
                         :
                         <></>
                       }
-                      { item.name == 'Pick 3 Rolls Lunch' ?
+                      { item.name === 'Pick 3 Rolls Lunch' ?
                         <>
                         {item.rollChoices.map((choice, i) =>(
                           <Grid container>
@@ -204,7 +203,7 @@ const Cart = (props) => {
                         ))}
                         </> : <></>
                       }
-                      { item.name == 'Pick 2 Rolls Lunch' ?
+                      { item.name === 'Pick 2 Rolls Lunch' ?
                         <>
                         {item.rollChoices.map((choice, i) =>(
                           <Grid container>

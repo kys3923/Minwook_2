@@ -8,7 +8,6 @@ import SetMealIcon from '@mui/icons-material/SetMeal';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LoginIcon from '@mui/icons-material/Login';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 
 import theme from '../../theme/theme';
@@ -55,14 +54,14 @@ const Header = (props) => {
     <ThemeProvider theme={theme}>
       <Box sx={{ width: '100vw', position: 'fixed', backgroundColor: 'rgba(255,255,255)', zIndex: '2'}}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={6} lg={6} xl={6}>
+          <Grid item xs={6}>
             <Container className={classes.logoContainer}>
               <div className="logo-imagebox">
                 <Link to="/"><img src='/images/logo_sushivill.png' style={{ "maxWidth": "180px" }}/></Link>
               </div>
             </Container>
           </Grid>
-          <Grid className={classes.navContainer} item xs={12} md={6} lg={6} xl={6}>
+          <Grid className={classes.navContainer} item xs={6}>
             <Stack direction='row' spacing={2}>
               <Link to='order'><Button className={classes.navItems}><SetMealIcon />&nbsp;Order</Button></Link>
               <Link to='reservation'><Button className={classes.navItems}><EventAvailableIcon />&nbsp;Reservation</Button></Link>
