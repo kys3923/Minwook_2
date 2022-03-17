@@ -142,7 +142,7 @@ const Order = (props) => {
                 allowScrollButtonsMobile
                 value={value}
                 onChange={handleChange}
-                sx={{ borderBottom: 1, borderColor: 'divider', margin: '0 auto', position: 'fixed', zIndex: 1, backgroundColor: 'white', width: '100%'}}
+                sx={{ borderBottom: 1, borderColor: 'divider', position: 'fixed', zIndex: 1, backgroundColor: 'white', width: '100%' }}
               >
                 <Tab label="Special Rolls" {...allyProps} />
                 <Tab label="Regular Rolls" {...allyProps} />
@@ -176,10 +176,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -210,10 +210,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -244,10 +244,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -282,10 +282,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -316,10 +316,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -358,10 +358,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -392,10 +392,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -438,10 +438,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -472,10 +472,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -514,10 +514,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -548,10 +548,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -586,10 +586,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -628,10 +628,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -662,10 +662,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -696,10 +696,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -730,10 +730,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -764,10 +764,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -798,10 +798,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -840,10 +840,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -874,10 +874,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -916,10 +916,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -950,10 +950,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -984,10 +984,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}
@@ -1022,10 +1022,10 @@ const Order = (props) => {
                           <Grid item xs={12} sx={{ marginBottom: '1.5em'}}>
                             <Typography>{menu.description}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <Button 
                               variant='outlined' 
                               sx={{ width: '100%'}}

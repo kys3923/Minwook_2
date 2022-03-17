@@ -44,27 +44,64 @@ const Cart = (props) => {
       await setCartItemCount((cartTotal).length);
     }
     setItemCount();
-  },[props.cart])
+    calcTotal();
+  },[props.cart, subTotal])
+
+  // calculate
+  const calcTotal = () => {
+    if (cartItems.length > 0) {
+      let cartItemsMainTotal = cartItems.reduce(function (prev, next) { return prev+(next.price*next.qty)}, 0)
+      let CartOptionsTotalArray = [];
+      let arrySum = 0;
+      const pushToArray = cartItems.map((item) => {
+        if (item.options) {
+          if (item.options.length > 0) {
+            let tempOptionArry = [];
+            let tempNumArry = [];
+            let tempNumArrySum = 0;
+            for (let i = 0; i < item.options.length; i++) {
+              tempOptionArry = item.options.filter(({selected}) => selected === true)
+            }
+            for (let i = 0; i < tempOptionArry.length; i++) {
+              if (tempOptionArry[i].name === 'Brown Rice') {
+                tempNumArry.push(1*item.qty);
+              } else if (tempOptionArry[i].name === 'Soy Paper') {
+                tempNumArry.push(1*item.qty);
+              } else if (tempOptionArry[i].name === 'Crunch') {
+                tempNumArry.push(0.5*item.qty);
+              }
+            }
+            tempNumArrySum = tempNumArry.reduce((a, b) => a + b, 0);
+            CartOptionsTotalArray.push(tempNumArrySum);
+          }
+        }
+      })
+      arrySum = CartOptionsTotalArray.reduce((a, b) => a + b, 0);
+      let GrandTotal = cartItemsMainTotal + arrySum
+      setSubTotal(GrandTotal.toFixed(2));
+    }
+  }
 
   
   // handlers
-  const cartClickHandler = (e) => {
-    let cartOpening = props.setCartOpened;
-    cartOpening(!props.cartOpened);
-    setCartModalOpen(!cartItemOpen);
-    setCartItemOpen(!cartItemOpen);
-    let initialValue = 0
-    let totalValue = cartItems.reduce(function (prevValue, currentValue) {
-      return prevValue + (currentValue.price * currentValue.qty)
-    }, initialValue);
-    setSubTotal((totalValue).toFixed(2));
+  const continueOrderHandler = (e) => {
+    calcTotal();
+    setCartModalOpen(!cartModalOpen);
+  }
+
+  const checkOutHandler = (e) => {
+    calcTotal();
+    setCartModalOpen(!cartModalOpen);
+    setConfirmationOpen(!confirmationOpen);
+  }
+
+  const closeConfirmation = (e) => {
+    setConfirmationOpen(!confirmationOpen);
   }
 
   const removeItemhandler = (e) => {
-    e.preventDefault();
-    setCartItemOpen(false);
-    async function removeItemFromState() {
-      await setRemoveItem(e.currentTarget.value);
+    function removeItemFromState() {
+      setRemoveItem(e.currentTarget.value);
       if (removeItem) {
         const filteredCartItems = props.cart.filter(item => item.id !== removeItem)
         props.setCart(filteredCartItems);
@@ -72,10 +109,12 @@ const Cart = (props) => {
       }
     }
     removeItemFromState();
+    calcTotal();
   }
 
   const checkingHandler = (e) => {
-    console.log(cartItems)
+    console.table(cartItems)
+    console.log(subTotal)
   }
   
   return (
@@ -96,7 +135,7 @@ const Cart = (props) => {
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                  <Button onClick={cartClickHandler} variant='contained' sx={{ width: '100%' }}>
+                  <Button onClick={continueOrderHandler} variant='contained' sx={{ width: '100%' }}>
                     <ShoppingCartIcon /> Continue Order
                   </Button>
                 </Grid>
@@ -130,7 +169,7 @@ const Cart = (props) => {
                           { item.options.map((option, i) => (
                             <Grid container direction='row' justifyContent='center' alignItems='center' key={i}>
                               <Grid item xs={6}>
-                                {option.selected ? <Typography sx={{ color: 'gray', paddingLeft: '1em' }}>-&nbsp;{option.name}</Typography> : <></>}
+                                {option.selected ? <Typography sx={{ color: 'gray', paddingLeft: '1em', fontStyle: 'italic' }}>-&nbsp;{option.name}</Typography> : <></>}
                               </Grid>
                               <Grid item xs={2}>
                                 {option.selected ? <Typography sx={{ color: 'gray', fontStyle: 'italic'}}>x{item.qty}</Typography> : <></>}
@@ -159,7 +198,7 @@ const Cart = (props) => {
                             <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Choice:</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Typography>{item.caliOrSpTuna}</Typography>
+                            <Typography sx={{ color: 'gray' }}>{item.caliOrSpTuna}</Typography>
                           </Grid>
                         </Grid>
                         :
@@ -171,7 +210,7 @@ const Cart = (props) => {
                             <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Choice:</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Typography>{item.salGoneOrRain}</Typography>
+                            <Typography sx={{ color: 'gray' }}>{item.salGoneOrRain}</Typography>
                           </Grid>
                         </Grid>
                         :
@@ -185,19 +224,19 @@ const Cart = (props) => {
                               <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Roll 1:</Typography>
                             </Grid>
                             <Grid item xs={8}>
-                              <Typography>{choice.roll1}</Typography>
+                              <Typography sx={{ color: 'gray' }}>{choice.roll1}</Typography>
                             </Grid>
                             <Grid item xs={4}>
                               <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Roll 2:</Typography>
                             </Grid>
                             <Grid item xs={8}>
-                              <Typography>{choice.roll2}</Typography>
+                              <Typography sx={{ color: 'gray' }}>{choice.roll2}</Typography>
                             </Grid>
                             <Grid item xs={4}>
                               <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Roll 3:</Typography>
                             </Grid>
                             <Grid item xs={8}>
-                              <Typography>{choice.roll3}</Typography>
+                              <Typography sx={{ color: 'gray' }}>{choice.roll3}</Typography>
                             </Grid>
                           </Grid>
                         ))}
@@ -211,13 +250,13 @@ const Cart = (props) => {
                               <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Roll 1:</Typography>
                             </Grid>
                             <Grid item xs={8}>
-                              <Typography>{choice.roll1}</Typography>
+                              <Typography sx={{ color: 'gray' }}>{choice.roll1}</Typography>
                             </Grid>
                             <Grid item xs={4}>
                               <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Roll 2:</Typography>
                             </Grid>
                             <Grid item xs={8}>
-                              <Typography>{choice.roll2}</Typography>
+                              <Typography sx={{ color: 'gray' }}>{choice.roll2}</Typography>
                             </Grid>
                           </Grid>
                         ))}
@@ -229,7 +268,7 @@ const Cart = (props) => {
                             <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Choice:</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Typography>{item.spicyOrSweet}</Typography>
+                            <Typography sx={{ color: 'gray' }}>{item.spicyOrSweet}</Typography>
                           </Grid>
                         </Grid> 
                         : 
@@ -241,7 +280,7 @@ const Cart = (props) => {
                             <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Choice:</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Typography>{item.porkOrVeg}</Typography>
+                            <Typography sx={{ color: 'gray' }}>{item.porkOrVeg}</Typography>
                           </Grid>
                         </Grid> 
                         : 
@@ -253,27 +292,27 @@ const Cart = (props) => {
                             <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Instructions:</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Typography>{item.comments}</Typography>
+                            <Typography sx={{ color: 'gray' }}>{item.comments}</Typography>
                           </Grid>
                         </Grid>
                         :
                         <></>
                       }
                     </Grid>
-                    <Grid container direction='row'>
-                      <Grid item xs={6}>
-
-                      </Grid>
-                    </Grid>
                   </Grid>
                 ))}
+                {/* Add subtotal */}
+                <Grid item xs={12} sx={{ padding: '1em 1em'}}>
+                  <Typography>Total:{subTotal}</Typography>
+                </Grid>
+                {/* Buttons */}
                 <Grid item xs={6}>
-                  <Button onClick={cartClickHandler} variant='contained' sx={{ width: '100%' }}>
+                  <Button onClick={checkOutHandler} variant='contained' sx={{ width: '100%' }}>
                     <ShoppingCartCheckoutIcon />&nbsp;Check-Out Order
                   </Button>
                 </Grid>
                 <Grid item xs={6}>
-                  <Button onClick={cartClickHandler} variant='outlined' sx={{ width: '100%' }}>
+                  <Button onClick={continueOrderHandler} variant='outlined' sx={{ width: '100%' }}>
                     <ShoppingCartIcon />&nbsp;Continue Order
                   </Button>
                 </Grid>
@@ -282,19 +321,17 @@ const Cart = (props) => {
                     Check
                   </Button>
                 </Grid>
-
               </Grid>
             }
-          
           </Card>
         </Bar>
       </Modal>
       <Modal open={confirmationOpen} sx={{overflow: 'scroll'}}>
         <Bar>
-          <Confirmation allItem={props.allitem} cart={cartItems}/>
+          <Confirmation allItem={props.allitem} cart={cartItems} subTotal={subTotal} closeConfirmation={closeConfirmation}/>
         </Bar>
       </Modal>
-      <div className="cartContainer" onClick={cartClickHandler}>
+      <div className="cartContainer" onClick={continueOrderHandler}>
         <StyledBadge badgeContent={cartItemCount} color='primary'>
           <ShoppingCartIcon sx={{ fontSize: '1.75em'}}/>
         </StyledBadge>

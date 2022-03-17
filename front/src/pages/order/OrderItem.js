@@ -85,36 +85,6 @@ const OrderItem = (props) => {
       setItemQty(1)
     }
   };
-  
-  // subTotal Calculator
-
-  // const totalPriceCalc = () => {
-  //   let priceQty = (item.menu.price*itemQty)
-  //   let brownRicePrice = (1*itemQty)
-  //   let crunchPrice = (.5*itemQty)
-  //   let soyPrice = (1*itemQty);
-  //   let calculateForm = [
-  //     {
-  //       value: priceQty,
-  //       status: true
-  //     },
-  //     {
-  //       value: brownRicePrice,
-  //       status: brownRice
-  //     },
-  //     {
-  //       value: crunchPrice,
-  //       status: crunch
-  //     },
-  //     { 
-  //       value: soyPrice,
-  //       status: soyPaper
-  //     }
-  //   ];
-  //   // const totalNumberArray = calculateForm.filter(({status}) => status === true)
-  //   // const totalNumber2 = totalNumberArray.reduce(function (prev, next) { return prev+next.value}, 0)
-  //   // setSubTotal(totalNumber2.toFixed(2));
-  // }
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -199,26 +169,6 @@ const OrderItem = (props) => {
 
   const salGoneOrRainHandler = (e) => {
     setSalGoneOrRain(e.target.value);
-  }
-
-  const eventChecker = (e) => {
-    console.log(
-      brownRice, '-brownRice', 
-      soyPaper, '-soy', 
-      spicyMayo, '-spmayo', 
-      eelSauce, '-eelS',
-      crunch, '-cr',
-      tunaOrSalmon, '-TunaSal',
-      instruction, '-instruct',
-      roll1, '-roll1',
-      roll2, '-roll2',
-      roll3, '-roll3',
-      spicyOrSweet, 'SpOrSweet',
-      porkOrVeg, 'pOrV',
-      caliOrSpTuna, '-caliSPtuna',
-      salGoneOrRain, '-salgone',
-      item
-    )
   }
 
   const AddToCartHandler = (e) => {
@@ -800,10 +750,6 @@ const OrderItem = (props) => {
                       {/* Instructions */}
                       <Grid item xs={12} sx={{ paddingTop: '1em'}}>
                         <TextField multiline maxRows={4} value={instruction} onChange={instructionHandler} variant='outlined' placeholder='Special Instructions' sx={{ width: '100%' }} />
-                      </Grid>
-                      {/* Checking state */}
-                      <Grid item xs={12}>
-                        <Button onClick={eventChecker}>Check</Button>
                       </Grid>
                     </Grid>
                   </FormGroup>
