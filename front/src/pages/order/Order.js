@@ -138,9 +138,6 @@ const Order = (props) => {
               <Tabs
                 orientation='horizontal'
                 variant='scrollable'
-                scrollButtons
-                centered
-                allowScrollButtonsMobile
                 value={value}
                 onChange={handleChange}
                 sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}

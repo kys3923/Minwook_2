@@ -1,13 +1,16 @@
 import { useNavigate, Navigate, Outlet } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 
 // MUI
-import { TextField, Grid, Typography, Button, Tabs, Tab, Box } from "@mui/material";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { TextField, Grid, Typography, Button, Tabs, Tab, Box, List, ListItemButton, ListItemText, Collapse, Card } from "@mui/material";
+import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@mui/styles';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
 // MUI Tabs
 function TabPanel(props) {
@@ -65,6 +68,10 @@ const Account = (props) => {
   const [ id, setId ] = useState('');
   const [ userData, setUserData ] = useState(null);
   const [ value, setValue ] = useState(0);
+  const [ currentOrderOpen, setCurrentOrderOpen ] = useState(false);
+  const [ fulfilledOrderOpen, setFulfilledOrderOpen ] = useState(false);
+  const [ currentReserveOpen, setCurrentReserveOpen ] = useState(false);
+  const [ pastReserveOpen, setPastReserveOpen ] = useState(false);
 
   // MUI tab
   const handleChange = (event, newValue) => {
@@ -91,6 +98,8 @@ const Account = (props) => {
 
   const navigate = useNavigate();
 
+  // Handlers
+
   const logoutHandler = async (e) => {
     e.preventDefault();
 
@@ -103,11 +112,21 @@ const Account = (props) => {
     }
   }
 
+  const currentOrderHandler = (e) => {
+    setCurrentOrderOpen(!currentOrderOpen);
+  }
+  
+  const fulfilledOrderHandler = (e) => {
+    setFulfilledOrderOpen(!fulfilledOrderOpen);
+  }
 
-  // Reservation History
+  const currentReserveHandler = (e) => {
+    setCurrentReserveOpen(!currentReserveOpen);
+  }
 
-  // Order History
-
+  const pastReserveHandler = (e) => {
+    setPastReserveOpen(!pastReserveOpen);
+  }
   // Log Out
 
   // edit user ( username, contact, password, address1, email )
@@ -119,12 +138,11 @@ const Account = (props) => {
   
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100vh' }}>
+      <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}>
         <Tabs
           classes={{ root: classes.root, scroller: classes.scroller }}
           variant="scrollable"
           value={value}
-          allowScrollButtonsMobile='true'
           onChange={handleChange}
           sx={{ borderBottom: 1, borderColor: 'divider', marginTop: '4em', position: 'fixed', zIndex: 1, bgcolor: 'white', marginLeft: 'auto', marginRight: 'auto', 'root': {'&.Mui-selected': { color: 'white'}}, }}
         >
@@ -150,47 +168,271 @@ const Account = (props) => {
                   <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen'}}>Dashbord</Typography>
                   <Typography>Welcome! {userData.username}</Typography>
                 </Grid>
+                {/* Current Orders */}
                 <Grid item xs={12} >
-                  <Grid container sx={{ width: '100%', bgcolor: 'lightpink'}}>
+                  <Grid container sx={{ width: '100%', padding: '1em 1em'}}>
                     <Grid item xs={12}>
-                      <Typography variant='h6' sx={{ color: '#dc5a41'}}>
-                        Current Orders
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography>Order</Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography>Date</Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography>Order Status</Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography>Total</Typography>
+                      <List>
+                        <Card sx={{ padding: '1em 1em'}}>
+                          <ListItemButton onClick={currentOrderHandler} sx={{ borderBottom: '1px solid #dc5a41'}}>
+                            <ListItemText sx={{ color: 'darkgreen' }} primary="Current Orders" />
+                            { currentOrderOpen ? <ExpandLess /> : <ExpandMore />}
+                          </ListItemButton>
+                          <Collapse in={currentOrderOpen} timeout='auto' unmountOnExit>
+                            <Grid container sx={{ marginTop: '1em', marginBottom: '1em', borderBottom: '1px solid gray', paddingBottom: '.5em', paddingLeft: '1em', paddingRight: '1em'}}>
+                              <Grid item xs={6} sm={2}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Order</Typography>
+                              </Grid>
+                              <Grid item xs={6} sm={4}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Date</Typography>
+                              </Grid>
+                              <Grid item xs={6} sm={3}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Order Status</Typography>
+                              </Grid>
+                              <Grid item xs={6} sm={3}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Total</Typography>
+                              </Grid>
+                            </Grid>
+                              {userData.Orders.map((order, i) => {
+                                // received (paid) -> confirmed(confirmed) -> ready(ready)
+                                if (order.isPaid) {
+                                  return (
+                                    <div key={i} style={{width: '100%'}}>
+                                      {order.isConfirmed ?
+                                        <Grid container sx={{ marginBottom: '.5em', borderBottom: '1px solid lightgray', paddingBottom: '.5em', paddingLeft: '1em', paddingRight: '1em'}}>
+                                          <Grid item xs={6} sm={2} sx={{paddingRight: '.5em'}}>
+                                            <Typography>
+                                              {order.OrderNumber}
+                                            </Typography>
+                                          </Grid>
+                                          <Grid item xs={6} sm={4} sx={{paddingRight: '.5em'}}>
+                                            <Typography>
+                                              {moment(order.updatedAt).format('LL')}
+                                            </Typography>
+                                          </Grid>
+                                          <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                            <Typography>
+                                              Order confirmed
+                                            </Typography>
+                                          </Grid>
+                                          <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                            <Typography>
+                                              ${order.grandTotal}
+                                            </Typography>
+                                          </Grid>
+                                        </Grid>
+                                      : order.isReady ?
+                                        <Grid container sx={{ marginBottom: '.5em', borderBottom: '1px solid lightgray', paddingBottom: '.5em' , paddingLeft: '1em', paddingRight: '1em'}}>
+                                          <Grid item xs={6} sm={2} sx={{paddingRight: '.5em'}}>
+                                            <Typography>
+                                              {order.OrderNumber}
+                                            </Typography>
+                                          </Grid>
+                                          <Grid item xs={6} sm={4} sx={{paddingRight: '.5em'}}>
+                                            <Typography>
+                                              {moment(order.updatedAt).format('LL')}
+                                            </Typography>
+                                          </Grid>
+                                          <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                            <Typography>
+                                              Ready to pick up
+                                            </Typography>
+                                          </Grid>
+                                          <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                            <Typography>
+                                              ${order.grandTotal}
+                                            </Typography>
+                                          </Grid>
+                                        </Grid>
+                                      : null
+                                      }                            
+                                    </div>
+                                  )
+                                }
+                              })}
+                          </Collapse>
+                        </Card>
+                      </List>
                     </Grid>
                   </Grid>
-                  {userData.Orders.map((order, i) => (
-                    <Grid item xs={3} key={i}>
-                      {order.OrderNumber}
+                </Grid>
+                {/* Fulfilled Orders */}
+                <Grid item xs={12} >
+                  <Grid container sx={{ width: '100%', padding: '1em 1em'}}>
+                    <Grid item xs={12}>
+                      <List>
+                        <Card sx={{ padding: '1em 1em'}}>
+                          <ListItemButton onClick={fulfilledOrderHandler} sx={{ borderBottom: '1px solid #dc5a41'}}>
+                            <ListItemText sx={{ color: 'darkgreen' }} primary="Fulfilled Orders" />
+                            { fulfilledOrderOpen ? <ExpandLess /> : <ExpandMore />}
+                          </ListItemButton>
+                          <Collapse in={fulfilledOrderOpen} timeout='auto' unmountOnExit>
+                            <Grid container sx={{ marginTop: '1em', marginBottom: '1em', borderBottom: '1px solid gray', paddingBottom: '.5em', paddingLeft: '1em', paddingRight: '1em'}}>
+                              <Grid item xs={6} sm={2} sx={{paddingRight: '.5em'}}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Order</Typography>
+                              </Grid>
+                              <Grid item xs={6} sm={4} sx={{paddingRight: '.5em'}}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Date</Typography>
+                              </Grid>
+                              <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Order Status</Typography>
+                              </Grid>
+                              <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Total</Typography>
+                              </Grid>
+                            </Grid>
+                              {userData.Orders.map((order, i) => {
+                                // received (paid) -> confirmed(confirmed) -> ready(ready)
+                                if (order.isFinished) {
+                                  return (
+                                    <Grid container sx={{ marginBottom: '.5em', borderBottom: '1px solid lightgray', paddingBottom: '.5em', paddingLeft: '1em', paddingRight: '1em'}} key={i}>
+                                      <Grid item xs={6} sm={2} sx={{paddingRight: '.5em'}}>
+                                        <Typography>
+                                          {order.OrderNumber}
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={6} sm={4} sx={{paddingRight: '.5em'}}>
+                                        <Typography>
+                                          {moment(order.updatedAt).format('LL')}
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                        <Typography>
+                                          Order fulfilled
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                        <Typography>
+                                          ${order.grandTotal}
+                                        </Typography>
+                                      </Grid>
+                                    </Grid>
+                                  )
+                                }
+                              })}
+                          </Collapse>
+                        </Card>
+                      </List>
                     </Grid>
-                    // <Typography>{order.OrderNumber}</Typography>
-                  ))}
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <Typography variant='h6' sx={{ color: '#dc5a41'}}>
-                    Fulfilled Orders
-                  </Typography>
+                {/* Current Reservations */}
+                <Grid item xs={12} >
+                  <Grid container sx={{ width: '100%', padding: '1em 1em'}}>
+                    <Grid item xs={12}>
+                      <List>
+                        <Card sx={{ padding: '1em 1em' }}>
+                          <ListItemButton onClick={currentReserveHandler} sx={{ borderBottom: '1px solid #dc5a41'}}>
+                            <ListItemText sx={{ color: 'darkgreen' }} primary="Current Reservations" />
+                            { currentReserveOpen ? <ExpandLess /> : <ExpandMore />}
+                          </ListItemButton>
+                          <Collapse in={currentReserveOpen} timeout='auto' unmountOnExit>
+                            <Grid container sx={{ marginTop: '1em', marginBottom: '1em', borderBottom: '1px solid gray', paddingBottom: '.5em', paddingLeft: '1em', paddingRight: '1em' }}>
+                              <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Reserve Date</Typography>
+                              </Grid>
+                              <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Contact Number</Typography>
+                              </Grid>
+                              <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Reservation Status</Typography>
+                              </Grid>
+                              <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Number of Party</Typography>
+                              </Grid>
+                            </Grid>
+                              {userData.Reservations.map((reservation, i) => {
+                                if (!reservation.isShowedUp) {
+                                  return (
+                                    <Grid container sx={{ marginBottom: '.5em', borderBottom: '1px solid lightgray', paddingBottom: '.5em', paddingLeft: '1em', paddingRight: '1em' }} key={i}>
+                                      <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                        <Typography>
+                                          {moment(reservation.reserveDate).format('LLL')}
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                        <Typography>
+                                          {reservation.contact}
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                        <Typography>
+                                          Reservation confirmed
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                        <Typography>
+                                          {reservation.totalParty}&nbsp;ppl
+                                        </Typography>
+                                      </Grid>
+                                    </Grid>
+                                  )
+                                }
+                              })}
+                          </Collapse>
+                        </Card>
+                      </List>
+                    </Grid>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <Typography variant='h6' sx={{ color: '#dc5a41'}}>
-                    Current Reservations
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant='h6' sx={{ color: '#dc5a41'}}>
-                    Fulfilled Reservations
-                  </Typography>
+                {/* Past Reservations */}
+                <Grid item xs={12} >
+                  <Grid container sx={{ width: '100%', padding: '1em 1em'}}>
+                    <Grid item xs={12}>
+                      <List>
+                        <Card sx={{ padding: '1em 1em' }}>
+                          <ListItemButton onClick={pastReserveHandler} sx={{ borderBottom: '1px solid #dc5a41'}}>
+                            <ListItemText sx={{ color: 'darkgreen' }} primary="Past Reservations" />
+                            { pastReserveOpen ? <ExpandLess /> : <ExpandMore />}
+                          </ListItemButton>
+                          <Collapse in={pastReserveOpen} timeout='auto' unmountOnExit>
+                            <Grid container sx={{ marginTop: '1em', marginBottom: '1em', borderBottom: '1px solid gray', paddingBottom: '.5em', paddingLeft: '1em', paddingRight: '1em' }}>
+                              <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Reserve Date</Typography>
+                              </Grid>
+                              <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Contact Number</Typography>
+                              </Grid>
+                              <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Reservation Status</Typography>
+                              </Grid>
+                              <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                <Typography sx={{ fontWeight: 'bold', color: 'gray'}}>Number of Party</Typography>
+                              </Grid>
+                            </Grid>
+                              {userData.Reservations.map((reservation, i) => {
+                                if (reservation.isShowedUp) {
+                                  return (
+                                    <Grid container sx={{ marginBottom: '.5em', borderBottom: '1px solid lightgray', paddingBottom: '.5em', paddingLeft: '1em', paddingRight: '1em' }} key={i}>
+                                      <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                        <Typography>
+                                          {moment(reservation.reserveDate).format('LLL')}
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                        <Typography>
+                                          {reservation.contact}
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                        <Typography>
+                                          Reservation confirmed
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
+                                        <Typography>
+                                          {reservation.totalParty}&nbsp;ppl
+                                        </Typography>
+                                      </Grid>
+                                    </Grid>
+                                  )
+                                }
+                              })}
+                          </Collapse>
+                        </Card>
+                      </List>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
             </TabPanel>
@@ -217,36 +459,7 @@ const Account = (props) => {
         }
       </Box>
       <div className="loginContainer">
-        { !userData ? 
-          <div className="error_account">
-            <h3>Error getting your data. Please logout and login again.</h3>
-            <button onClick={logoutHandler}>Logout</button>
-          </div>
-        :
-          <div className="accountContainer">
-            <h1>Welcome! {userData.username}</h1>
-            <p>Order History</p>
-            <ul>
-              { userData.Orders.map((order, i) => {
-                return <li key={i}>{order.updatedAt}, total price <button>click to view detail</button></li>
-              })}
-            </ul>
-            <p>personal info</p>
-              <ul>
-                <li>Name: {userData.username}</li>
-                <li>Contact Number: {userData.contact}</li>
-                <li>Contact email: {userData.email}</li>
-              </ul>
-              <button>update personal information</button>
-            <p>Reservation History</p>
-            <ul>
-              { userData.Reservations.map((reserve, i) => {
-                return <li key={i}>{reserve.reserveDate}, totalParty, </li>
-              })}
-            </ul>
-            <button onClick={logoutHandler}>Logout</button>
-          </div>
-        }
+        <button onClick={logoutHandler}>Logout</button>
         {userData ? console.log(userData) : <p>userData not found</p>}
         <Outlet />
       </div>  

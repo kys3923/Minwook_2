@@ -1,6 +1,3 @@
-*{
-}
-
 html, body {
   padding: 0;
   margin: 0;
@@ -894,7 +891,9 @@ input {
   padding-top: 12px;
   margin-top: 10px;
 }
-
+.css-zbmdrx-MuiButtonBase-root-MuiTab-root {
+  margin-top: 10px;
+}
 /* TODO: design for responsive */
 
 /* Chrome, Safari, Edge, Opera */

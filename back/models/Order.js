@@ -6,17 +6,18 @@ let connection = mongoose.createConnection(process.env.MONGODB_URI)
 autoIncrement.initialize(connection);
 
 const OrderSchema = new mongoose.Schema({
-  totalPrice: Number,
   orderedItem: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Menu'
+      item: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Menu'
+      },
+      instructions: String,
+      addOn: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Menu'
+      }
     },
-    { instructions: String },
-    { addOn: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Menu'
-    }}
   ],
   comments: String,
   isDelivery: {
@@ -43,6 +44,7 @@ const OrderSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  grandTotal: Number,
   willReadyBy: Date
 }, {timestamps: true});
 
