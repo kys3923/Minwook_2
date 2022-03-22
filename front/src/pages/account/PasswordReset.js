@@ -88,7 +88,8 @@ const PasswordReset = ({ match }) => {
                 marginBottom: '1.5em',
                 width: '23em'
               }}
-              variant='filled'
+              label='Enter New Password'
+              variant='outlined'
             />
             <TextField
               required
@@ -101,13 +102,14 @@ const PasswordReset = ({ match }) => {
                 marginBottom: '2em',
                 width: '23em'
               }}
-              variant='filled'
+              label='Confirm New Password'
+              variant='outlined'
             />
             <Button type='submit' className='IO_buttons' variant='contained'>Reset Password</Button>
           </form>
         </Paper>
       </Grid>
-
+{/* TODO: Check below stuff */}
     <div className='resetpassword_container'>
       <form
         onSubmit={resetPasswordHandler}

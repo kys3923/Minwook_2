@@ -2,14 +2,17 @@ import { useState, useEffect } from 'react';
 // TODO: import use navigate to home
 
 // Mui
-import { Button, TextField, Card, Grid, Typography, FormGroup, FormControlLabel, Checkbox, List, ListItemButton, ListItemText, Collapse } from '@mui/material';
+import { Button, TextField, Card, Grid, Typography, FormGroup, FormControlLabel, Checkbox, List, ListItemButton, ListItemText, Collapse, ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
 import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MessageIcon from '@mui/icons-material/Message';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
 const Confirmation = (props) => {
   // States
@@ -19,10 +22,15 @@ const Confirmation = (props) => {
   const [ removeItem, setRemoveItem ] = useState('');
   const [ sauceOpen, SetSauceOpen ] = useState(false);
   const [ drinkOpen, SetDrinkOpen ] = useState(false);
-  const [ addOnSauce, setAddOnSauce ] = useState([]);
-  const [ addOnDrink, setAddOnDrink ] = useState([]);
+
+  // Add on states
+  const [ spMayo, setSpMayo ] = useState([]);
+  const [ spMayoQty, setSpMayoQty ] = useState(0);
+
+  // Calc Total
   const [ tax, setTax ] = useState(8.875);
   const [ creditCardFee, setCreditCardFee ] = useState(0.03);
+
 
   // Handlers
 
@@ -40,6 +48,7 @@ const Confirmation = (props) => {
 
   const checkHandler = (e) => {
     console.table(finalCart);
+    console.log(props.allItem.menu)
   }
 
   useEffect(() => {
@@ -101,7 +110,7 @@ const Confirmation = (props) => {
                         ))}
                       </> : null}
                       {item.caliOrSpTuna ? 
-                      <Grid container direction='row' justifiyContent='center' alignItems='center'>
+                      <Grid container direction='row' justifyContent='center' alignItems='center'>
                         <Grid item xs={7}>
                           <Typography sx={{ color: 'gray', paddingLeft: '1em', fontStyle: 'italic' }}>-&nbsp;Choice:</Typography>
                         </Grid>
@@ -110,7 +119,7 @@ const Confirmation = (props) => {
                         </Grid>
                       </Grid> : null}
                       {item.salGoneOrRain ? 
-                      <Grid container direction='row' justifiyContent='center' alignItems='center'>
+                      <Grid container direction='row' justifyContent='center' alignItems='center'>
                         <Grid item xs={7}>
                           <Typography sx={{ color: 'gray', paddingLeft: '1em', fontStyle: 'italic' }}>-&nbsp;Choice:</Typography>
                         </Grid>
@@ -163,7 +172,7 @@ const Confirmation = (props) => {
                         ))}
                       </> : null }
                       {item.spicyOrSweet ? 
-                      <Grid container direction='row' justifiyContent='center' alignItems='center'>
+                      <Grid container direction='row' justifyContent='center' alignItems='center'>
                         <Grid item xs={7}>
                           <Typography sx={{ color: 'gray', paddingLeft: '1em', fontStyle: 'italic' }}>-&nbsp;Choice:</Typography>
                         </Grid>
@@ -172,7 +181,7 @@ const Confirmation = (props) => {
                         </Grid>
                       </Grid> : null}
                       {item.porkOrVeg ? 
-                      <Grid container direction='row' justifiyContent='center' alignItems='center'>
+                      <Grid container direction='row' justifyContent='center' alignItems='center'>
                         <Grid item xs={7}>
                           <Typography sx={{ color: 'gray', paddingLeft: '1em', fontStyle: 'italic' }}>-&nbsp;Choice:</Typography>
                         </Grid>
@@ -181,7 +190,7 @@ const Confirmation = (props) => {
                         </Grid>
                       </Grid> : null}
                       {item.comments ? 
-                      <Grid container direction='row' justifiyContent='center' alignItems='center'>
+                      <Grid container direction='row' justifyContent='center' alignItems='center'>
                         <Grid item xs={7}>
                           <Typography sx={{ color: 'gray', paddingLeft: '1em', fontStyle: 'italic' }}>-&nbsp;Instructions:</Typography>
                         </Grid>
@@ -208,10 +217,36 @@ const Confirmation = (props) => {
                       <ListItemText sx={{ color: 'darkgreen' }} primary='Sauces' />
                       { sauceOpen ? <ExpandLess /> : <ExpandMore />}
                     </ListItemButton>
-                    <Collapse>
-                      <FormGroup>
-                        
-                      </FormGroup>
+                    <Collapse in={sauceOpen} timeout='auto' unmountOnExit>
+                      <form>
+                        <Grid container direction='row'>
+                          {/* Sp mayo */}
+                          {props.allItem.menu.map((item, i) => {
+                            if (item.category === 'Sauce') {
+                              return (
+                                <>
+                                  <Grid item xs={6} key={i}>
+                                    <Typography>{item.name}</Typography>
+                                  </Grid>
+                                  <Grid item xs={2}>
+                                    <Typography>${item.price.toFixed(2)}</Typography>
+                                  </Grid>
+                                  <Grid item xs={4}>
+                                    <input type='number' style={{ width: '1.5em'}} />
+                                    asdf
+                                  </Grid>
+                                </>
+                              )
+                            }
+                          })}
+                          {/* Eel Sauce */}
+                          {/* Ginger Dressing */}
+                          {/* Soy Sauce */}
+                          <Grid item xs={12}>
+                            <Button variant='contained' size='small'><AddIcon />Add to the order</Button>
+                          </Grid>
+                        </Grid>
+                      </form>
                     </Collapse>
                   </Card>
                 </List>

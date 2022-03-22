@@ -467,7 +467,7 @@ a {
   font-weight: normal;
 }
 .order_card_caption {
-  font-size: .75em;
+  font-size: .65em;
   color: darkgreen;
   padding-left: 1em;
   font-weight: normal;
@@ -882,6 +882,17 @@ input {
 
 .MuiTabs-scrollButtons.Mui-disabled {
   opacity: 1;
+}
+
+.MuiTabs-flexContainer.css-heg063-MuiTabs-flexContainer{
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.css-zbmdrx-MuiButtonBase-root-MuiTab-root.Mui-selected{
+  border-radius: 5px;
+  border: 2px solid #dc5a41;
+  padding-top: 12px;
+  margin-top: 10px;
 }
 
 /* TODO: design for responsive */

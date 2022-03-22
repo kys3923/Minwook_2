@@ -116,7 +116,8 @@ const Register = (props) => {
               placeholder='Enter your name'
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              variant='filled'
+              variant='outlined'
+              label='Enter your name'
               autoComplete='on'
               sx={{
                 marginBottom: '2em',
@@ -130,7 +131,8 @@ const Register = (props) => {
               placeholder='Enter email address'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              variant='filled'
+              variant='outlined'
+              label='Enter email address'
               autoComplete='on'
               sx={{
                 marginBottom: '2em',
@@ -145,7 +147,8 @@ const Register = (props) => {
               value={password}
               autoComplete='on'
               onChange={(e) => setPassword(e.target.value)}
-              variant='filled'
+              variant='outlined'
+              label='Enter password'
               sx={{
                 marginBottom: '2em',
                 width: '23em'
@@ -159,7 +162,8 @@ const Register = (props) => {
               value={confirmpassword}
               autoComplete='on'
               onChange={(e) => setConfirmPassword(e.target.value)}
-              variant='filled'
+              variant='outlined'
+              label='Confirm password'
               sx={{
                 marginBottom: '2em',
                 width: '23em'
@@ -173,7 +177,8 @@ const Register = (props) => {
               value={contact}
               autoComplete='on'
               onChange={(e) => phoneNumberHandler(e)}
-              variant='filled'
+              variant='outlined'
+              label='Enter contact number'
               sx={{
                 marginBottom: '2em',
                 width: '23em'

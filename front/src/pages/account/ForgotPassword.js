@@ -76,13 +76,14 @@ const ForgotPassword = (props) => {
               placeholder='Enter email address'
               id='email'
               type='email'
+              label='Enter email address'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               sx={{
                 marginBottom: '2em',
                 width: '23em'
               }}
-              variant='filled'
+              variant='outlined'
             />
             <Button type='submit' className='IO_buttons' variant='contained'>Send Eamil</Button>
           </form>

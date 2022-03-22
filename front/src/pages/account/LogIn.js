@@ -84,7 +84,8 @@ const LogIn = (props) => {
               helperText='Check email and passward again'
               id='email'
               type='email'
-              variant="filled"
+              label='Enter email address'
+              variant="outlined"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
               tabIndex={1}
@@ -99,7 +100,8 @@ const LogIn = (props) => {
             placeholder='Enter email address'
             id='email'
             type='email'
-            variant="filled"
+            label='Enter email address'
+            variant="outlined"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             tabIndex={1}
@@ -115,7 +117,8 @@ const LogIn = (props) => {
               placeholder='Enter Password'
               autoComplete='true'
               id='password'
-              variant="filled"
+              label='Enter Password'
+              variant="outlined"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
               tabIndex={2}

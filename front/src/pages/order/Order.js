@@ -139,10 +139,11 @@ const Order = (props) => {
                 orientation='horizontal'
                 variant='scrollable'
                 scrollButtons
+                centered
                 allowScrollButtonsMobile
                 value={value}
                 onChange={handleChange}
-                sx={{ borderBottom: 1, borderColor: 'divider', position: 'fixed', zIndex: 1, backgroundColor: 'white', width: '100%' }}
+                sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}
               >
                 <Tab label="Special Rolls" {...allyProps} />
                 <Tab label="Regular Rolls" {...allyProps} />
@@ -157,7 +158,7 @@ const Order = (props) => {
             </Box>
             {/* Special Rolls */}
             <TabPanel value={value} index={0} sx={{ minWidth: '250px' }}>
-              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+              <Grid container spacing={2} sx={{ marginTop: '2em', padding: '0 2em', marginBottom: '2em' }}>
                 <Grid item xs={12} sx={{ marginBottom: '1em'}}>
                   <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Chef Special Rolls</Typography>
                 </Grid>
@@ -267,7 +268,7 @@ const Order = (props) => {
             </TabPanel>
             {/* Regular Rolls */}
             <TabPanel value={value} index={1} sx={{ minWidth: '250px' }}>
-              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+              <Grid container spacing={2} sx={{ marginTop: '2em', padding: '0 2em', marginBottom: '2em' }}>
                 <Grid item xs={12} sx={{ marginBottom: '1em'}}>
                   <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Regular Rolls</Typography>
                 </Grid>
@@ -339,7 +340,7 @@ const Order = (props) => {
             </TabPanel>
             {/* Lunch Special */}
             <TabPanel value={value} index={2} sx={{ minWidth: '250px' }}>
-              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+              <Grid container spacing={2} sx={{ marginTop: '2em', padding: '0 2em', marginBottom: '2em' }}>
                 <Grid item xs={12} sx={{ marginBottom: '1em'}}>
                   <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Lunch Special<span className='order_card_caption_1'>12pm - 3pm, Served with miso soup</span></Typography>
                 </Grid>
@@ -495,7 +496,7 @@ const Order = (props) => {
             </TabPanel>
             {/* Apps */}
             <TabPanel value={value} index={3} sx={{ minWidth: '250px' }}>
-              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+              <Grid container spacing={2} sx={{ marginTop: '2em', padding: '0 2em', marginBottom: '2em' }}>
                 <Grid item xs={12} sx={{ marginBottom: '1em'}}>
                   <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Appetizer</Typography>
                 </Grid>
@@ -571,7 +572,7 @@ const Order = (props) => {
             </TabPanel>
             {/* Soup Salad */}
             <TabPanel value={value} index={4} sx={{ minWidth: '250px' }}>
-              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+              <Grid container spacing={2} sx={{ marginTop: '2em', padding: '0 2em', marginBottom: '2em' }}>
                 <Grid item xs={12} sx={{ marginBottom: '1em'}}>
                   <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Soup & Salad</Typography>
                 </Grid>
@@ -609,7 +610,7 @@ const Order = (props) => {
             </TabPanel>
             {/* Kitchen Entree */}
             <TabPanel value={value} index={5} sx={{ minWidth: '250px' }}>
-              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+              <Grid container spacing={2} sx={{ marginTop: '2em', padding: '0 2em', marginBottom: '2em' }}>
                 <Grid item xs={12} sx={{ marginBottom: '1em'}}>
                   <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Kitchen Entree</Typography>
                 </Grid>
@@ -821,7 +822,7 @@ const Order = (props) => {
             </TabPanel>
             {/* Su & SA */}
             <TabPanel value={value} index={6} sx={{ minWidth: '250px' }}>
-              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+              <Grid container spacing={2} sx={{ marginTop: '2em', padding: '0 2em', marginBottom: '2em' }}>
                 <Grid item xs={12} sx={{ marginBottom: '1em'}}>
                   <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Sushi & Sashimi</Typography>
                 </Grid>
@@ -897,7 +898,7 @@ const Order = (props) => {
             </TabPanel>
             {/* A La Carte */}
             <TabPanel value={value} index={7} sx={{ minWidth: '250px' }}>
-              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+              <Grid container spacing={2} sx={{ marginTop: '2em', padding: '0 2em', marginBottom: '2em' }}>
                 <Grid item xs={12} sx={{ marginBottom: '1em'}}>
                   <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>A La Carte</Typography>
                 </Grid>
@@ -1007,7 +1008,7 @@ const Order = (props) => {
             </TabPanel>
             {/* Platter */}
             <TabPanel value={value} index={8} sx={{ minWidth: '250px' }}>
-              <Grid container spacing={2} sx={{ marginTop: '4em', padding: '0 2em', marginBottom: '2em' }}>
+              <Grid container spacing={2} sx={{ marginTop: '2em', padding: '0 2em', marginBottom: '2em' }}>
                 <Grid item xs={12} sx={{ marginBottom: '1em'}}>
                   <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '2px solid #dc5a41' }}>Party Platter</Typography>
                 </Grid>

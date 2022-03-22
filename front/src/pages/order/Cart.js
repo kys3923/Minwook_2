@@ -303,7 +303,14 @@ const Cart = (props) => {
                 ))}
                 {/* Add subtotal */}
                 <Grid item xs={12} sx={{ padding: '1em 1em'}}>
-                  <Typography>Total:{subTotal}</Typography>
+                  <Grid container>
+                    <Grid item xs={8}>
+                      <Typography sx={{ paddingTop: '4px', color: 'gray', fontStyle: 'italic' }}>Total:</Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Typography sx={{ fontSize: '1.25em', color: '#dc5a41'}}>${subTotal}</Typography>
+                    </Grid>
+                  </Grid>
                 </Grid>
                 {/* Buttons */}
                 <Grid item xs={6}>
