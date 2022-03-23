@@ -4,7 +4,7 @@ import axios from 'axios';
 import moment from 'moment';
 
 // MUI
-import { TextField, Grid, Typography, Button, Tabs, Tab, Box, List, ListItemButton, ListItemText, Collapse, Card } from "@mui/material";
+import { TextField, Grid, Typography, Button, Tabs, Tab, Box, List, ListItemButton, ListItemText, Collapse, Card, Modal, ListItem } from "@mui/material";
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
 import PropTypes from 'prop-types';
@@ -63,15 +63,44 @@ const useTabStyles = makeStyles({
   }
 });
 
+// phoneNum
+
+function formatPhoneNumber(telNum) {
+  if (!telNum) return telNum;
+
+  const telPhoneNum = telNum.replace(/[^\d]/g, "");
+  const phoneNumberLength = telPhoneNum.length;
+  if (phoneNumberLength < 4) return telPhoneNum;
+  if (phoneNumberLength < 7) {
+    return `(${telPhoneNum.slice(0, 3)}) ${telPhoneNum.slice(3)}`;
+  }
+  return `(${telPhoneNum.slice(0, 3)}) ${telPhoneNum.slice(
+    3,
+    6
+  )}-${telPhoneNum.slice(6, 10)}`;
+}
+
 const Account = (props) => {
 
   const [ id, setId ] = useState('');
   const [ userData, setUserData ] = useState(null);
   const [ value, setValue ] = useState(0);
+  // state for dashboard
   const [ currentOrderOpen, setCurrentOrderOpen ] = useState(false);
   const [ fulfilledOrderOpen, setFulfilledOrderOpen ] = useState(false);
   const [ currentReserveOpen, setCurrentReserveOpen ] = useState(false);
   const [ pastReserveOpen, setPastReserveOpen ] = useState(false);
+  // state for accout detail
+  const [ username, setUsername ] = useState('');
+  const [ contact, setContact ] = useState('');
+  const [ password, setPassword ] = useState('');
+  const [ email, setEmail] = useState('');
+  const [ address1, setAddress1 ] = useState('');
+  const [ acctModalOpen, setAcctModalOpen] = useState(false);
+  const [ pwModalOpen, setPwModalOpen ] = useState(false);
+  const [ updateModalOpen, setUpdateModalOpen ] = useState(false);
+  const [ error, setError ] = useState('');
+  const [ success, setSuccess] = useState('');
 
   // MUI tab
   const handleChange = (event, newValue) => {
@@ -81,8 +110,6 @@ const Account = (props) => {
   const classes = useTabStyles();
 
   useEffect(() => {
-
-
     async function fetchData() {
       const config = {
         header: {
@@ -94,12 +121,30 @@ const Account = (props) => {
       return request
     }
     fetchData();
-  }, [])
+  }, [acctModalOpen])
 
   const navigate = useNavigate();
 
   // Handlers
+  // -- Dashboard
+  
+  const currentOrderHandler = (e) => {
+    setCurrentOrderOpen(!currentOrderOpen);
+  }
+  
+  const fulfilledOrderHandler = (e) => {
+    setFulfilledOrderOpen(!fulfilledOrderOpen);
+  }
+  
+  const currentReserveHandler = (e) => {
+    setCurrentReserveOpen(!currentReserveOpen);
+  }
+  
+  const pastReserveHandler = (e) => {
+    setPastReserveOpen(!pastReserveOpen);
+  }
 
+  // -- Acct Details
   const logoutHandler = async (e) => {
     e.preventDefault();
 
@@ -112,22 +157,58 @@ const Account = (props) => {
     }
   }
 
-  const currentOrderHandler = (e) => {
-    setCurrentOrderOpen(!currentOrderOpen);
-  }
-  
-  const fulfilledOrderHandler = (e) => {
-    setFulfilledOrderOpen(!fulfilledOrderOpen);
-  }
-
-  const currentReserveHandler = (e) => {
-    setCurrentReserveOpen(!currentReserveOpen);
+  const acctModalHandler = (e) => {
+    setAcctModalOpen(!acctModalOpen);
+    setUsername(userData.username);
+    setContact(userData.contact);
+    setEmail(userData.email);
+    setAddress1(userData.address1);
   }
 
-  const pastReserveHandler = (e) => {
-    setPastReserveOpen(!pastReserveOpen);
+  const acctModalCloser = (e) => {
+    setAcctModalOpen(!acctModalOpen);
   }
-  // Log Out
+
+  const pwModalHandler =(e) => {
+    setPwModalOpen(!pwModalOpen);
+  }
+
+  const phoneNumberHandler = (e) => {
+    const formattedPhoneNumber = formatPhoneNumber(e.target.value);
+    setContact(formattedPhoneNumber);
+  };
+
+  const editAcctHandler = async (e) => {
+    e.preventDefault();
+
+    const config = {
+      header: {
+        "Content-Type": "application/json",
+      },
+      id: `${localStorage.userId}`,
+      username: `${username}`,
+      contact: `${contact}`,
+      email: `${email}`,
+      address1: `${address1}`,
+    };
+
+    try {
+      const { data } = await axios.put(
+        `${process.env.REACT_APP_SERVER_URL}/api/auth/${localStorage.userId}`, 
+        config
+      );
+      setSuccess(data.data)
+    } catch (error) {
+      setError(error.response.data.error)
+      console.log(error);
+    }
+
+    setAcctModalOpen(!acctModalOpen);
+  }
+
+  const checkHandler = (e) => {
+    console.log( username, email, contact, address1)
+  }
 
   // edit user ( username, contact, password, address1, email )
 
@@ -138,7 +219,7 @@ const Account = (props) => {
   
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}>
+      <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', bgcolor: 'rgba(255, 240, 174, .75)' }}>
         <Tabs
           classes={{ root: classes.root, scroller: classes.scroller }}
           variant="scrollable"
@@ -146,7 +227,7 @@ const Account = (props) => {
           onChange={handleChange}
           sx={{ borderBottom: 1, borderColor: 'divider', marginTop: '4em', position: 'fixed', zIndex: 1, bgcolor: 'white', marginLeft: 'auto', marginRight: 'auto', 'root': {'&.Mui-selected': { color: 'white'}}, }}
         >
-          <Tab label='Dashbord' {...allyProps(0)} />
+          <Tab label='Dashboard' {...allyProps(0)} />
           <Tab label='Account' {...allyProps(1)} />
           <Tab label='Orders' {...allyProps(2)} />
           <Tab label='Reservations' {...allyProps(3)} />
@@ -165,8 +246,8 @@ const Account = (props) => {
             <TabPanel value={value} index={0} >
               <Grid container sx={{ marginTop: '7.5em', paddingLeft: '1em'}}>
                 <Grid item xs={12} sx={{ marginBottom: '1.5em' }}>
-                  <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen'}}>Dashbord</Typography>
-                  <Typography>Welcome! {userData.username}</Typography>
+                  <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen'}}>Dashboard</Typography>
+                  <Typography variant="h6" sx={{ fontFamily: 'Raleway', color: '#dc5a41', borderBottom: '2px solid #dc5a41', paddingBottom: '.5em'}}>Welcome! {userData.username}</Typography>
                 </Grid>
                 {/* Current Orders */}
                 <Grid item xs={12} >
@@ -436,33 +517,134 @@ const Account = (props) => {
                 </Grid>
               </Grid>
             </TabPanel>
-              {/* Account */}
-              <TabPanel value={value} index={1}>
-                <Grid item xs={12}>
-                  <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen'}}>Account Details</Typography>
+            {/* Account */}
+            <TabPanel value={value} index={1}>
+              <Grid item xs={12}>
+                <Grid container sx={{ marginTop: '7.5em', paddingLeft: '1em'}}>
+                  <Grid item xs={12} sx={{ width: '90vw'}}>
+                    <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', borderBottom: '2px solid #dc5a41', paddingBottom: '.25em'}}>Account Details</Typography>
+                    <Card sx={{ width: 400, marginTop: '1.5em', marginLeft: 'auto', marginRight: 'auto', padding: '1em 1em', marginBottom: '2em'}}>
+                      <List>
+                        <ListItem sx={{ borderBottom: '1px solid lightgray'}}>
+                          <ListItemText primary="Name" secondary={userData.username} />
+                        </ListItem>
+                        <ListItem sx={{ borderBottom: '1px solid lightgray'}}>
+                          <ListItemText primary="Contact" secondary={userData.contact} />
+                        </ListItem>
+                        <ListItem sx={{ borderBottom: '1px solid lightgray'}}>
+                          <ListItemText primary="Email" secondary={userData.email} />
+                        </ListItem>
+                        <ListItem sx={{ borderBottom: '1px solid lightgray'}}>
+                          <ListItemText primary="Address" secondary={userData.address1 ? userData.address1 : "Not Registered"} />
+                        </ListItem>
+                        <ListItem sx={{ borderBottom: '1px solid lightgray'}}>
+                          <ListItemText primary="Total Orders" secondary={(userData.Orders).length} />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText primary="Total Reservations" secondary={(userData.Reservations).length} />
+                        </ListItem>
+                        <ListItem>
+                          <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                              <Button onClick={acctModalHandler} variant="contained" sx={{ width: '100%' }}>Edit Profile</Button>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <Button onClick={logoutHandler} variant="outlined" sx={{ width: '100%' }}>Log out</Button>
+                            </Grid>
+                          </Grid>
+                        </ListItem>
+                      </List>
+                    </Card>
+                    <Modal open={acctModalOpen}>
+                      <Card sx={{ width: 460, position: 'fixed', left: "50%", top: 
+                    '50%', transform: 'translate(-50%, -50%)', padding: '1.5em 1.5em'}}>
+                        <Typography variant="h6" sx={{ color: 'darkgreen', borderBottom: '1.5px solid #dc5a41', paddingBottom: '.5em'}}>Edit Profile</Typography>
+                        <form onSubmit={editAcctHandler}>
+                          <Grid container sx={{ }}>
+                            <Grid item xs={12} sx={{ marginTop: '1.5em', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                              <TextField
+                                type='text'
+                                id='name'
+                                label='Enter your name'
+                                value={username}
+                                variant='outlined'
+                                onChange={(e) => setUsername(e.target.value)}
+                                size='small'
+                                sx={{ width: 350 }}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sx={{ marginTop: '1.5em', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                              <TextField
+                                type='text'
+                                id='contact'
+                                label='Enter your contact number'
+                                value={contact}
+                                variant='outlined'
+                                onChange={(e) => phoneNumberHandler(e)}
+                                size='small'
+                                sx={{ width: 350 }}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sx={{ marginTop: '1.5em', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                              <TextField
+                                type='email'
+                                id='email'
+                                label='Enter your Email address'
+                                value={email}
+                                variant='outlined'
+                                onChange={(e) => setEmail(e.target.value)}
+                                size='small'
+                                sx={{ width: 350 }}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sx={{ marginTop: '1.5em', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '1.5em'}}>
+                              <TextField
+                                type='text'
+                                id='address'
+                                label='Enter your address'
+                                value={address1}
+                                variant='outlined'
+                                onChange={(e) => setAddress1(e.target.value)}
+                                size='small'
+                                sx={{ width: 350 }}
+                              />
+                            </Grid>
+                            <Grid item xs={4} sx={{ paddingRight: '7px'}} onClick={editAcctHandler}>
+                              <Button variant="contained" sx={{ width: '100%' }}>Update profile</Button>
+                            </Grid>
+                            <Grid item xs={4} sx={{ paddingRight: '7px'}} onClick={acctModalCloser}>
+                              <Button variant="outlined" sx={{ width: '100%' }}>close</Button>
+                            </Grid>
+                            <Grid item xs={4}>
+                              <Button variant="outlined" sx={{ width: '100%' }}>Password Reset</Button>
+                            </Grid>
+                            <Button onClick={checkHandler}>check state</Button>
+                          </Grid>
+                        </form>
+                      </Card>
+                    </Modal>
+                  </Grid>
                 </Grid>
-              </TabPanel>
-              {/* Orders */}
-              <TabPanel value={value} index={2}>
-                <Grid item xs={12}>
-                  <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen'}}>Orders</Typography>
-                </Grid>
-              </TabPanel>
-              {/* Reservations */}
-              <TabPanel value={value} index={3}>
-                <Grid item xs={12}>
-                  <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen'}}>Reservations</Typography>
-                </Grid>
-              </TabPanel>
+              </Grid>
+            </TabPanel>
+            {/* Orders */}
+            <TabPanel value={value} index={2}>
+              <Grid item xs={12}>
+                <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen'}}>Orders</Typography>
+              </Grid>
+            </TabPanel>
+            {/* Reservations */}
+            <TabPanel value={value} index={3}>
+              <Grid item xs={12}>
+                <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen'}}>Reservations</Typography>
+              </Grid>
+            </TabPanel>
           </>
           
         }
-      </Box>
-      <div className="loginContainer">
-        <button onClick={logoutHandler}>Logout</button>
-        {userData ? console.log(userData) : <p>userData not found</p>}
-        <Outlet />
-      </div>  
+      </Box> 
+      {userData ? console.log(userData) : <p>userData not found</p>}
+      <Outlet />
     </ThemeProvider>
   );
 }

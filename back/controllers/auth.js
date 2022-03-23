@@ -170,18 +170,10 @@ exports.listUser = async ( req, res, next ) => {
 }
 // update 1 user
 exports.editUser = async ( req, res, next ) => {
-	const id = req.params.id;
-	const { username, address1, email, contact, password, isAdmin } = req.body;
-
+	const id = req.body.id;
+	const { username, address1, email, contact } = req.body;
 	try {
-		const user = await User.findByIdAndUpdate(id, {
-			username,
-			email,
-			contact,
-			address1,
-			password,
-			isAdmin
-		});
+		const user = await User.findByIdAndUpdate(id, {username, address1, email, contact});
 
 		res.json({
 			message: "updated the user",
