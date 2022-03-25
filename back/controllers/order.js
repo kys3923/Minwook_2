@@ -1,13 +1,14 @@
 const Order = require('../models/Order');
 const ErrorResponse = require('../utils/errorResponse');
 const User = require('../models/User');
-// const Menu = require('../models/Menu');
+const Menu = require('../models/Menu');
 
 exports.orderRegistration = async ( req, res, next ) => {
 
   try {
 
     const order = new Order(req.body);
+    // const menu = await Menu.findById({_id: req.body.orderedItems.item, _id: req.body.orderedItems.options.option, _id: req.body.orderedItems.addOn })
     await order.save();
     const user = await User.findById({_id: req.body.customer})
     user.Orders.push(order);

@@ -70,7 +70,10 @@ const Header = (props) => {
                 <></>
               }
               {localStorage.role == "user" &&
+                <>
                 <Link to='account'><Button className={classes.navItems}><AccountBoxIcon />&nbsp;Account</Button></Link>
+              <button onClick={logoutHandler}>Logout</button>
+                </>
               }
             </Stack>
             {localStorage.role == "admin" && <>

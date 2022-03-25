@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // MUI
@@ -16,6 +17,7 @@ const OrderItem = (props) => {
   // states
   const [ item, setItem ] = useState([]);
   const [ dataLoaded, setDataLoaded ] = useState(false);
+  const [ loadCount, setLoadCount] = useState(0);
   const [ optionOpen, setOptionOpen ] = useState(false);
   const [ itemQty, setItemQty ] = useState(1);
   const [ brownRice, setBrownRice ] = useState(false);
@@ -32,6 +34,8 @@ const OrderItem = (props) => {
   const [ roll1, setRoll1 ] = useState('');
   const [ roll2, setRoll2 ] = useState('');
   const [ roll3, setRoll3 ] = useState('');
+
+  const navigate = useNavigate();
   
   useEffect(() => {
     async function fetchData() {
@@ -47,7 +51,7 @@ const OrderItem = (props) => {
       await setDataLoaded(true);
     }
     fetchData();
-  },[props.product]);
+  },[props.product, loadCount]);
 
   // Lunch Roll choices
   const lunchRollChoices = [
@@ -171,6 +175,11 @@ const OrderItem = (props) => {
     setSalGoneOrRain(e.target.value);
   }
 
+  const loadCountHandler = (e) => {
+    navigate('/')
+    window.location.reload(false)
+  }
+
   const AddToCartHandler = (e) => {
     let id = props.product
     let qty = itemQty
@@ -189,16 +198,21 @@ const OrderItem = (props) => {
           options: [
             {
               name: 'Spicy Mayo',
-              selected: spicyMayo
+              selected: spicyMayo,
+              price: 0.5,
+              id: '620d327e7b251cf7c3a827ee'
             },
             {
               name: 'Eel Sauce',
               selected: eelSauce,
+              price: 0.5,
+              id: '620d32727b251cf7c3a827ec'
             },
             {
               name: 'Crunch',
               selected: crunch,
-              price: 0.5
+              price: 0.5,
+              id: '620d32637b251cf7c3a827ea'
             }],
           comments: instruction
         },...props.cart])
@@ -218,19 +232,25 @@ const OrderItem = (props) => {
               name: 'Brown Rice',
               selected: brownRice,
               price: 1,
+              id: '620d32477b251cf7c3a827e6'
             },
             {
               name: 'Spicy Mayo',
-              selected: spicyMayo
+              selected: spicyMayo,
+              price: 0.5,
+              id: '620d327e7b251cf7c3a827ee'
             },
             {
               name: 'Eel Sauce',
-              selected: eelSauce
+              selected: eelSauce,
+              price: 0.5,
+              id: '620d32727b251cf7c3a827ec'
             },
             {
               name: 'Crunch',
               selected: crunch,
-              price: 0.5
+              price: 0.5,
+              id: '620d32637b251cf7c3a827ea'
             }],
           comments: instruction
         },...props.cart])
@@ -250,24 +270,31 @@ const OrderItem = (props) => {
               name: 'Brown Rice',
               selected: brownRice,
               price: 1,
+              id: '620d32477b251cf7c3a827e6'
             },
             {
               name: 'Soy Paper',
               selected: soyPaper,
               price: 1,
+              id: '620d32547b251cf7c3a827e8'
             },
             {
               name: 'Spicy Mayo',
               selected: spicyMayo,
+              price: 0.5,
+              id: '620d327e7b251cf7c3a827ee'
             },
             {
               name: 'Eel Sauce',
               selected: eelSauce,
+              price: 0.5,
+              id: '620d32727b251cf7c3a827ec'
             },
             {
               name: 'Crunch',
               selected: crunch,
               price: 0.5,
+              id: '620d32637b251cf7c3a827ea'
             }],
           tunaOrSalmon: tunaOrSalmon,
           comments: instruction
@@ -288,24 +315,31 @@ const OrderItem = (props) => {
               name: 'Brown Rice',
               selected: brownRice,
               price: 1,
+              id: '620d32477b251cf7c3a827e6'
             },
             {
               name: 'Soy Paper',
               selected: soyPaper,
               price: 1,
+              id: '620d32547b251cf7c3a827e8'
             },
             {
               name: 'Spicy Mayo',
               selected: spicyMayo,
+              price: 0.5,
+              id: '620d327e7b251cf7c3a827ee'
             },
             {
               name: 'Eel Sauce',
               selected: eelSauce,
+              price: 0.5,
+              id: '620d32727b251cf7c3a827ec'
             },
             {
               name: 'Crunch',
               selected: crunch,
               price: 0.5,
+              id: '620d32637b251cf7c3a827ea'
             }],
           comments: instruction
         },...props.cart])
@@ -737,11 +771,11 @@ const OrderItem = (props) => {
                           </Grid>
                           {/* spicy mayo */}
                           <Grid item xs={6}>
-                            <FormControlLabel control={<Switch onChange={spicyMayoHandler} />} label='Spicy Mayo topping' />
+                            <FormControlLabel control={<Switch onChange={spicyMayoHandler} />} label='Spicy Mayo topping +$0.50' />
                           </Grid>
                           {/* eel sauce */}
                           <Grid item xs={6}>
-                            <FormControlLabel control={<Switch onChange={eelSauceHandler} />} label='Eel Sauce topping' />
+                            <FormControlLabel control={<Switch onChange={eelSauceHandler} />} label='Eel Sauce topping +$0.50' />
                           </Grid>
                         </>
                         :
@@ -787,9 +821,23 @@ const OrderItem = (props) => {
           </Grid>
           )
           :
-          <Typography variant='h5' sx={{ color: 'darkgreen', fontWeight: 'bold'}}>
-            Loading...
-          </Typography>
+          <Card elevation={0}>
+            <Grid container direction='column'>
+              <Grid item xs={12} sx={{ marginBottom: '.5em'}}>
+                <Typography variant='h5' sx={{ color: 'darkgreen', fontWeight: 'bold'}}>
+                  Loading...
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sx={{ marginBottom: '.5em'}}>
+                <Typography variant='p1'>
+                  Click Button to load again
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Button onClick={loadCountHandler} variant='contained'>Reload</Button>
+              </Grid>
+            </Grid>
+          </Card>
         }
       </Card>
     </ThemeProvider>

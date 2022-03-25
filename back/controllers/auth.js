@@ -152,11 +152,7 @@ exports.listUser = async ( req, res, next ) => {
 	try {
 		const user = await User.findById(id)
 		.populate({
-			path: 'Orders',
-			populate: {
-				path: 'orderedItem',
-				model: 'Menu'
-			}
+			path: 'Orders'
 		})
 		.populate('Reservations')
 		

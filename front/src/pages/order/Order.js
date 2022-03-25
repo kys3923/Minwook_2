@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // import page components
@@ -7,7 +8,7 @@ import Cart from './Cart';
 
 // MUI stuff
 import PropTypes from 'prop-types';
-import { Tabs, Tab, Box, Card, CardContent, Typography, CardActions, Button, Grid, Modal } from '@mui/material';
+import { Tabs, Tab, Box, Card, Typography, Button, Grid, Modal } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import theme from '../../theme/theme';
@@ -77,8 +78,11 @@ const Order = (props) => {
   const [ products, setProducts ] = useState([]);
   const [ product, setProduct ] = useState('');
   const [ itemOpen, setItemOpen ] = useState(false);
+  const [ loadCount, setLoadCount ] = useState(0);
   const [ storeOpen, setStoreOpen ] = useState(true);
   const [ lunchHour, setLunchHour ] = useState(false);
+
+  const navigate = useNavigate();
 
   // MUI tab
   const handleChange = (event, newValue) => {
@@ -98,7 +102,7 @@ const Order = (props) => {
       setDataLoaded(true);
     }
     fetchData();
-  },[])
+  },[loadCount])
   
   // button handlers
 
@@ -115,6 +119,11 @@ const Order = (props) => {
     setCart([]);
   }
 
+  const loadCountHandler = (e) => {
+    navigate('/')
+    window.location.reload(false)
+  }
+
   const modalOpener = (e) => {
     e.preventDefault();
     setItemOpen(true);
@@ -129,7 +138,11 @@ const Order = (props) => {
     <ThemeProvider theme={theme}>
       <div className="orderContainer">
         { !dataLoaded ? (
-          <h2>Loading...</h2>
+          <Card>
+            <h2>Loading...</h2>
+            <p>Click Button to load again.</p>
+            <Button onClick={loadCountHandler}></Button>
+          </Card>
         ) : (
           <div className='order_left'>
             <Box

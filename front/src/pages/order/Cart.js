@@ -69,6 +69,10 @@ const Cart = (props) => {
                 tempNumArry.push(1*item.qty);
               } else if (tempOptionArry[i].name === 'Crunch') {
                 tempNumArry.push(0.5*item.qty);
+              } else if (tempOptionArry[i].name === 'Spicy Mayo') {
+                tempNumArry.push(0.5*item.qty);
+              } else if (tempOptionArry[i].name === 'Eel Sauce') {
+                tempNumArry.push(0.5*item.qty);
               }
             }
             tempNumArrySum = tempNumArry.reduce((a, b) => a + b, 0);
@@ -177,7 +181,7 @@ const Cart = (props) => {
                               <Grid item xs={2}>
                                 {option.selected ? 
                                   <>
-                                    {option.name === 'Brown Rice' || option.name === 'Soy Paper' || option.name === 'Crunch' ? 
+                                    {option.name === 'Brown Rice' || option.name === 'Soy Paper' || option.name === 'Crunch' || option.name === 'Spicy Mayo' || option.name === 'Eel Sauce' ? 
                                     <Typography sx={{ color: 'gray' }}>${(option.price.toFixed(2))}</Typography> 
                                     : 
                                     <></>
@@ -219,7 +223,7 @@ const Cart = (props) => {
                       { item.name === 'Pick 3 Rolls Lunch' ?
                         <>
                         {item.rollChoices.map((choice, i) =>(
-                          <Grid container>
+                          <Grid container key={i}>
                             <Grid item xs={4}>
                               <Typography sx={{ paddingLeft: '1em', color: 'gray', fontStyle: 'italic' }}>-&nbsp;Roll 1:</Typography>
                             </Grid>

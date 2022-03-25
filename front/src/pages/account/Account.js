@@ -210,8 +210,6 @@ const Account = (props) => {
     console.log( username, email, contact, address1)
   }
 
-  // edit user ( username, contact, password, address1, email )
-
   // delete user ( id )
 
   // if admin, delete usr from all list
@@ -229,15 +227,18 @@ const Account = (props) => {
         >
           <Tab label='Dashboard' {...allyProps(0)} />
           <Tab label='Account' {...allyProps(1)} />
-          <Tab label='Orders' {...allyProps(2)} />
-          <Tab label='Reservations' {...allyProps(3)} />
         </Tabs>
         { !userData ?
           <TabPanel value={value} index={0}>
-            <Grid container sx={{ marginTop: '5em'}}>
-              <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen'}}>Found Problem in loading data. </Typography>
-              <Typography>Click button to go back, and try again.</Typography>
-              <Button>Go back</Button>
+            <Grid container sx={{ marginTop: '7em'}}>
+              <Grid xs={12} >
+                <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', borderBottom: '2px solid #dc5a41', marginBottom: '.5em', paddingBottom: '.5em'}}>Found Problem in loading data. </Typography>
+              </Grid>
+              <Grid xs={12} sx={{ marginBottom: '1em'}}>
+                <Typography sx={{ marginBottom: '1em'}}>Click button to go back, and try again.</Typography>
+                <Button variant="contained">Go back</Button>
+                {console.log(localStorage.userId)}
+              </Grid>
             </Grid>
           </TabPanel>
         :
@@ -276,6 +277,7 @@ const Account = (props) => {
                             </Grid>
                               {userData.Orders.map((order, i) => {
                                 // received (paid) -> confirmed(confirmed) -> ready(ready)
+                                // if order is paid && confirmed && ready && picked up
                                 if (order.isPaid) {
                                   return (
                                     <div key={i} style={{width: '100%'}}>
@@ -298,7 +300,7 @@ const Account = (props) => {
                                           </Grid>
                                           <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
                                             <Typography>
-                                              ${order.grandTotal}
+                                              ${(order.grandTotal).toFixed(2)}
                                             </Typography>
                                           </Grid>
                                         </Grid>
@@ -321,7 +323,7 @@ const Account = (props) => {
                                           </Grid>
                                           <Grid item xs={6} sm={3} sx={{paddingRight: '.5em'}}>
                                             <Typography>
-                                              ${order.grandTotal}
+                                              ${(order.grandTotal).toFixed(2)}
                                             </Typography>
                                           </Grid>
                                         </Grid>
@@ -625,18 +627,6 @@ const Account = (props) => {
                     </Modal>
                   </Grid>
                 </Grid>
-              </Grid>
-            </TabPanel>
-            {/* Orders */}
-            <TabPanel value={value} index={2}>
-              <Grid item xs={12}>
-                <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen'}}>Orders</Typography>
-              </Grid>
-            </TabPanel>
-            {/* Reservations */}
-            <TabPanel value={value} index={3}>
-              <Grid item xs={12}>
-                <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen'}}>Reservations</Typography>
               </Grid>
             </TabPanel>
           </>
