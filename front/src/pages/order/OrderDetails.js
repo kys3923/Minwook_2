@@ -52,7 +52,7 @@ const OrderDetails = (props) => {
   }
 
   useEffect(() => {
-    console.log(agreed, JSON.stringify(props.finalCart.Orders), 'from useState');
+    console.log(agreed, 'from useState');
   },[agreed])
 
   return (
