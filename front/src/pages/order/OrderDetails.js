@@ -36,6 +36,9 @@ const OrderDetails = (props) => {
         const { data } = await axios.post(
           `${process.env.REACT_APP_SERVER_URL}/api/order/create`, request.body, config
         )
+        if (data.order) {
+          await props.setOrderId(data.order._id)
+        }
       } catch (error) {
         setError('Error from posting order');
       }

@@ -25,6 +25,7 @@ const Confirmation = (props) => {
   const [ sauceOpen, SetSauceOpen ] = useState(false);
   const [ drinkOpen, SetDrinkOpen ] = useState(false);
   const [ termsCondition, setTermsCondition ] = useState(false);
+  const [ orderId, setOrderId ] = useState('');
   
   // MUI Steps
   const [ activeStep, setActiveStep ] = useState(0);
@@ -52,18 +53,14 @@ const Confirmation = (props) => {
     SetDrinkOpen(!drinkOpen);
   }
   
-  const checkHandler = (e) => {
-    console.table(props.allItem.menu)
-    console.log(finalCart, spMayoQty, 'spMayo', soyQty, 'soy', eelQty, 'eel', gingerQty, 'ginger' )
-  }
 
   // MUI Steps
 
   const steps = [
     'Confirmation',
     'Add-On Order',
-    'Payment',
-    'Order Placement'
+    'Order Placement',
+    'Payment'
   ];
 
   const totalSteps = () => {
@@ -164,10 +161,6 @@ const Confirmation = (props) => {
     setFinalCartItems();
   },[props.cart, props.subTotal, grandTotal])
   
-  console.log(props.subTotal, 'props total', subTotal, 'state total', tax, 'tax', creditCardFee, 'credit fee', grandTotal, 'grandTotal')
-  // add modifiy item function - addon , comment
-  // add terms of conditions
-  // add subtotal
   return (
     <ThemeProvider theme={theme}>
       <Card sx={{ minWidth: '400px', maxWidth: '800px', padding: '3em 3em', margin: '0 auto', backgroundColor: 'rgba(255, 249, 220, 1)', marginTop: '1em' }} >
@@ -194,18 +187,26 @@ const Confirmation = (props) => {
               tax={tax} 
               creditCardFee={creditCardFee}
               grandTotal={grandTotal}
+              setOrderId={setOrderId}
               closeConfirmation={props.closeConfirmation}
               handleNext={handleNext}
             />
           ) : activeStep === 1 ? (
-            <AddOn />
-          ) : activeStep === 2 ? (
-            <PaymentSetting />
-          ) : (
-            <OrderFinal />
+            <AddOn 
+              handleBack={handleBack} 
+              handleNext={handleNext} 
+              orderId={orderId}
+              subTotal={subTotal}
+              tax={tax}
+              creditCardFee={creditCardFee}
+              grandTotal={grandTotal}
+            />
+            ) : activeStep === 2 ? (
+              <OrderFinal handleBack={handleBack}/>
+            ) : (
+              <PaymentSetting handleBack={handleBack} handleNext={handleNext}/>
           )}
         </Grid>
-        <Button onClick={checkHandler}>Check</Button>
       </Card>
     </ThemeProvider>
   );

@@ -1,19 +1,27 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 // TODO: grab total menu from parent, then check stock on each items (Drinks)
 
 // MUI
-import { Card, Typography, Grid, List, Collapse, ListItemButton, ListItemText, Select, MenuItem, IconButton, Button } from '@mui/material';
+import { Card, Typography, Grid, List, Collapse, ListItem, ListItemButton, ListItemText, Select, MenuItem, IconButton, Button, Modal } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 const AddOn = (props) => {
 
   // states
   const [ addOns, setAddOns ] = useState([]);
+  const [ addOnTotal, setAddOnTotal ] = useState();
+  const [ grandTotalWithAddOn, setGrandTotalWithAddOn ] = useState();
+  const [ alertModal, setAlertModal ] = useState(false);
+  const [ removingItem, setRemovingItem ] = useState('');
+  const [ error, setError ] = useState('');
   // states---sauce
   const [ sauceOpen, SetSauceOpen ] = useState(false);
   const [ soyQty, setSoyQty ] = useState('0');
@@ -314,8 +322,69 @@ const AddOn = (props) => {
     }
   }
 
+  const alertModalHandler = (e) => {
+    setAlertModal(!alertModal);
+  }
+
+  const removeItemHandler = (e) => {
+    function removeItem() {
+      const filtered = addOns.filter(item => item.id !== e.currentTarget.value)
+      setAddOns(filtered)
+    }
+    removeItem();
+  }
+
+  // calc total
+  const addedItemTotal = () => {
+    if (addOns.length > 0) {
+      let addOnsTotal = addOns.reduce(
+        function (a, b) {
+          return a+(b.price*b.qty)
+        }, 0
+      )
+      setAddOnTotal(addOnsTotal);
+      let newSubtotal = props.subTotal + addOnsTotal
+      let newCardFee = newSubtotal * 0.03
+      let newTax = newSubtotal * 0.0875
+      let newGrandTotal = newSubtotal + newCardFee + newTax
+      setGrandTotalWithAddOn(newGrandTotal);
+    }
+  }
+
+  const orderEditor = async (e) => {
+    if (addOns.length === 0) {
+      setAlertModal(true);
+    } else {
+      const config = {
+        header: {
+          "Content-Type": "application/json"
+        }
+      }
+  
+      const request = {
+        body: {
+          addOns: addOns,
+          addOnTotal: addOnTotal,
+          grandTotal: grandTotalWithAddOn
+        }
+      }
+
+      try {
+        const { data } = await axios.put(
+          `${process.env.REACT_APP_SERVER_URL}/api/order/${props.orderId}`, request.body, config
+        )
+        if (data.order) {
+          await console.log(request, data.order);
+        }
+      } catch (error) {
+        setError('Error from updating order')
+      }
+      props.handleNext();
+    }
+  }
+
   useEffect(() => {
-    console.log(soyQty, 'Soy QTY', addOns, 'AddOns', spMayo, 'spMayo', eelSauce, 'eelSauce', gingerD, 'gingerD', coke, 'coke', dietCoke, sprite, clubSoda, gingerAle, lemonSnapple, peachSnapple, whiteRice, brownRice, sushiRice)
+    addedItemTotal();
   },[soyQty, addOns, spMayo, eelSauce, gingerD, coke, dietCoke, sprite, clubSoda, gingerAle, lemonSnapple, peachSnapple, whiteRice, brownRice, sushiRice])
 
 
@@ -399,7 +468,7 @@ const AddOn = (props) => {
                       </Select>
                     </Grid>
                     <Grid item xs={2} sx={{ display: 'center', justifyContent: 'center', borderBottom: '1px solid lightgray', paddingBottom: '1em'}}>
-                      <IconButton color='primary' onClick={spMayoAddHandler}><AddOutlinedIcon /></IconButton>
+                      <IconButton color='primary' onClick={spMayoAddHandler} ><AddOutlinedIcon /></IconButton>
                     </Grid>
                     {/* eel sauce */}
                     <Grid item xs={6} sx={{ borderBottom: '1px solid lightgray', paddingBottom: '1em'}}>
@@ -808,19 +877,71 @@ const AddOn = (props) => {
               </Card>
             </List>
           </Grid>
+          {/* item added */}
           <Grid item xs={12}>
-            <Grid container>
-              <Grid item>
-                <Button variant='contained'>Back</Button>
+            <List>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41'}}>Added Items</Typography>
+                </Grid>
+                { addOns ? 
+                <>
+                  { addOns.map((addon, i) => (
+                    <Grid item xs={6} md={4} key={i}>
+                      <Card>
+                        <ListItem secondaryAction={<IconButton edge='end' aria-label='delete' onClick={removeItemHandler} value={addon.id}><DeleteIcon /></IconButton>}>
+                          <ListItemText primary={addon.name} secondary={
+                            <React.Fragment>
+                              <Typography sx={{ display: 'inline' }}>
+                                ${(addon.price).toFixed(2)}, Qty: {addon.qty}
+                              </Typography>
+                            </React.Fragment>
+                          } />
+                        </ListItem>
+                      </Card>
+                    </Grid>
+                  ))}
+                </> 
+                : 
+                <>
+                  <Grid item xs={12}>
+                    <Typography variant='h6'>There isn't any item added</Typography>
+                  </Grid>
+                </>
+                }
               </Grid>
-              <Grid item>
-                <Button variant='contained'>Add Items</Button>
+            </List>
+          </Grid>
+          {/* Buttons */}
+          <Grid item xs={12} sx={{ marginTop: '1em'}}>
+            <Grid container spacing={4}>
+              <Grid item xs={4}>
+                <Button variant='outlined' onClick={props.handleBack} sx={{ width: '100%'}}>Back</Button>
               </Grid>
-              <Grid item>
-                <Button variant='contained'>Next</Button>
+              <Grid item xs={4} >
+                <Button variant='contained' onClick={orderEditor} sx={{ width: '100%'}} >Add Items</Button>
+              </Grid>
+              <Grid item xs={4} >
+                <Button variant='contained' onClick={props.handleNext} sx={{ width: '100%'}}>Next</Button>
               </Grid>
             </Grid>
           </Grid>
+          {/* Alert */}
+          <Modal open={alertModal}>
+            <Card sx={{ width: 400, position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '2em 2em'}}>
+              <Grid container>
+                <Grid item xs={12} sx={{ borderBottom: '2px solid #dc5a41'}}>
+                  <Typography variant='h5' sx={{ color: 'darkgreen', paddingLeft: '.5em', paddingBottom: '.25em'}}>Notice</Typography>
+                </Grid>
+                <Grid item xs={12} sx={{ paddingTop: '1em', paddingLeft: '1em'}}>
+                  <Typography>There isn't any item added</Typography>
+                </Grid>
+                <Grid item xs={12} sx={{ paddingTop: '2.5em', display: 'center', justifyContent: 'center'}}>
+                  <Button variant='contained' onClick={alertModalHandler}>Back</Button>
+                </Grid>
+              </Grid>
+            </Card>
+          </Modal>
         </Grid>
       </Grid>
     </ThemeProvider>

@@ -68,18 +68,20 @@ exports.orderAllList = async ( req, res, next ) => {
 
 exports.updateOrder = async ( req, res, next ) => {
   const id = req.params.id;
-  const { totalPrice, comments, isConfirmed, isReady, willReadyBy, isDelivery, orderedItem } = req.body;
+  const { grandTotal, comments, isConfirmed, isReady, isFinished, isPaid, isAgreed, willReadyBy, isDelivery, orderedItem, addOns, addOnTotal } = req.body;
 
   try {
 
     const order = await Order.findByIdAndUpdate(id, {
-      totalPrice,
+      grandTotal,
       comments,
       isConfirmed,
       isReady,
       willReadyBy,
       isDelivery,
-      orderedItem
+      orderedItem,
+      addOns,
+      addOnTotal
     })
     order.save();
 

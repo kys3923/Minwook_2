@@ -45,7 +45,8 @@ const Cart = (props) => {
     }
     setItemCount();
     calcTotal();
-  },[props.cart, subTotal])
+    console.log(removeItem);
+  },[props.cart, subTotal, cartItems, removeItem])
 
   // calculate
   const calcTotal = () => {
@@ -109,6 +110,7 @@ const Cart = (props) => {
       if (removeItem) {
         const filteredCartItems = props.cart.filter(item => item.id !== removeItem)
         props.setCart(filteredCartItems);
+        setCartItems(filteredCartItems);
         setRemoveItem('');
       }
     }

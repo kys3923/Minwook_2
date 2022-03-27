@@ -33,10 +33,6 @@ const OrderSchema = new mongoose.Schema({
       ],
       caliOrSpTuna: String,
       tunaOrSalmon: String,
-      addOn: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Menu'
-      }
     },
   ],
   comments: String,
@@ -68,7 +64,22 @@ const OrderSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  isPlaced: {
+    type: Boolean,
+    default: false
+  },
+  addOns: [
+    { 
+      addOn: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Menu'
+      },
+      qty: Number,
+      name: String
+    }
+  ],
   grandTotal: Number,
+  addOnTotal: Number,
   willReadyBy: Date
 }, {timestamps: true});
 
