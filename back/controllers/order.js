@@ -36,7 +36,7 @@ exports.orderList = async ( req, res, next ) => {
 
   try {
 
-    const order = await Order.find({ id })
+    const order = await Order.find({"_id" : id }).populate({ path: 'orderedItems' })
 
     res.json({
       message: "found order listing",
@@ -68,7 +68,7 @@ exports.orderAllList = async ( req, res, next ) => {
 
 exports.updateOrder = async ( req, res, next ) => {
   const id = req.params.id;
-  const { grandTotal, comments, isConfirmed, isReady, isFinished, isPaid, isAgreed, willReadyBy, isDelivery, orderedItem, addOns, addOnTotal } = req.body;
+  const { grandTotal, comments, isConfirmed, isReady, isFinished, isPaid, isAgreed, willReadyBy, isDelivery, orderedItem, addOns, addOnTotal, isPaidAtRestaurant } = req.body;
 
   try {
 
@@ -81,7 +81,8 @@ exports.updateOrder = async ( req, res, next ) => {
       isDelivery,
       orderedItem,
       addOns,
-      addOnTotal
+      addOnTotal,
+      isPaidAtRestaurant
     })
     order.save();
 

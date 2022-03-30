@@ -14,6 +14,7 @@ const OrderDetails = (props) => {
 
   // handlers
   const orderRegHandler = async () => {
+    props.setLoading(true);
     if (!agreed) {
       setAgreeModal(true);
     } else {
@@ -45,18 +46,23 @@ const OrderDetails = (props) => {
       props.handleNext()
     }
   }
-
+  
   const agreementHandler = (e) => {
     setAgreed(!agreed);
   }
-
+  
   const agreeModalCloser = (e) => {
     setAgreeModal(false);
   }
-
+  
   useEffect(() => {
-    console.log(agreed, 'from useState');
-  },[agreed])
+    if (props.orderId) {
+      props.setLoading(false);
+    } else if (props.finalCart) {
+      props.setLoading(false)
+    }
+    console.log(agreed, 'from useState', props.loading, props.orderId);
+  },[agreed, props.loading])
 
   return (
     <ThemeProvider theme={theme}>
@@ -81,7 +87,7 @@ const OrderDetails = (props) => {
                         <Typography sx={{ fontStyle: 'italic'}}>x{item.qty}</Typography>
                       </Grid>
                       <Grid item xs={3}>
-                        <Typography sx={{ color: 'darkgreen', marginBottom: '.5em' }}>${item.price}</Typography>
+                        <Typography sx={{ color: 'darkgreen', marginBottom: '.5em' }}>${(item.price.toFixed(2))}</Typography>
                       </Grid>
                       {item.options ? <>
                         { item.options.map((option, i) => (

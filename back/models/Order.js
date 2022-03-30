@@ -17,9 +17,18 @@ const OrderSchema = new mongoose.Schema({
           option: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Menu'
+          },
+          qty: Number,
+          name: String,
+          price: Number,
+          selected: {
+            type: Boolean,
+            default: false
           }
         }
       ],
+      name: String,
+      price: Number,
       qty: Number,
       comments: String,
       salGoneOrRain: String,
@@ -68,6 +77,10 @@ const OrderSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  isPaidAtRestaurant: {
+    type: Boolean,
+    default: false,
+  },
   addOns: [
     { 
       addOn: {
@@ -75,7 +88,8 @@ const OrderSchema = new mongoose.Schema({
         ref: 'Menu'
       },
       qty: Number,
-      name: String
+      name: String,
+      price: Number
     }
   ],
   grandTotal: Number,

@@ -352,6 +352,7 @@ const AddOn = (props) => {
   }
 
   const orderEditor = async (e) => {
+    props.setLoading(true);
     if (addOns.length === 0) {
       setAlertModal(true);
     } else {
@@ -380,7 +381,13 @@ const AddOn = (props) => {
         setError('Error from updating order')
       }
       props.handleNext();
+      props.setLoading(false);
     }
+  }
+
+  const nextHanlder = (e) => {
+    props.setLoading(true);
+    props.handleNext();
   }
 
   useEffect(() => {
@@ -884,7 +891,7 @@ const AddOn = (props) => {
                 <Grid item xs={12}>
                   <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41'}}>Added Items</Typography>
                 </Grid>
-                { addOns ? 
+                { addOns.length > 0 ? 
                 <>
                   { addOns.map((addon, i) => (
                     <Grid item xs={6} md={4} key={i}>
@@ -892,7 +899,7 @@ const AddOn = (props) => {
                         <ListItem secondaryAction={<IconButton edge='end' aria-label='delete' onClick={removeItemHandler} value={addon.id}><DeleteIcon /></IconButton>}>
                           <ListItemText primary={addon.name} secondary={
                             <React.Fragment>
-                              <Typography sx={{ display: 'inline' }}>
+                              <Typography component={'span'} variant='body2'>
                                 ${(addon.price).toFixed(2)}, Qty: {addon.qty}
                               </Typography>
                             </React.Fragment>
@@ -905,7 +912,7 @@ const AddOn = (props) => {
                 : 
                 <>
                   <Grid item xs={12}>
-                    <Typography variant='h6'>There isn't any item added</Typography>
+                    <Typography variant='body1'>There isn't any item added</Typography>
                   </Grid>
                 </>
                 }
@@ -922,7 +929,7 @@ const AddOn = (props) => {
                 <Button variant='contained' onClick={orderEditor} sx={{ width: '100%'}} >Add Items</Button>
               </Grid>
               <Grid item xs={4} >
-                <Button variant='contained' onClick={props.handleNext} sx={{ width: '100%'}}>Next</Button>
+                <Button variant='contained' onClick={nextHanlder} sx={{ width: '100%'}}>Next</Button>
               </Grid>
             </Grid>
           </Grid>

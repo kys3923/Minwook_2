@@ -7,7 +7,7 @@ import OrderResult from './OrderResult';
 // TODO: import use navigate to home
 
 // Mui
-import { Button, Card, Grid, Typography, FormGroup, FormControlLabel, Checkbox, Stepper, Step, StepButton } from '@mui/material';
+import { Button, Card, Grid, Typography, FormGroup, FormControlLabel, Checkbox, Stepper, Step, StepButton, LinearProgress } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
 import EditIcon from '@mui/icons-material/Edit';
@@ -25,7 +25,8 @@ const Confirmation = (props) => {
   const [ sauceOpen, SetSauceOpen ] = useState(false);
   const [ drinkOpen, SetDrinkOpen ] = useState(false);
   const [ termsCondition, setTermsCondition ] = useState(false);
-  const [ orderId, setOrderId ] = useState('');
+  const [ orderId, setOrderId ] = useState();
+  const [ loading, setLoading ] = useState(true);
   
   // MUI Steps
   const [ activeStep, setActiveStep ] = useState(0);
@@ -44,15 +45,6 @@ const Confirmation = (props) => {
   const [ grandTotal, setGrandTotal ] = useState();
 
   // Handlers
-
-  const sauceOpenHandler = (e) => {
-    SetSauceOpen(!sauceOpen);
-  }
-
-  const drinkOpenHandler = (e) => {
-    SetDrinkOpen(!drinkOpen);
-  }
-  
 
   // MUI Steps
 
@@ -109,40 +101,6 @@ const Confirmation = (props) => {
     setCompleted({});
   };
 
-  
-  // Addon Handlers
-  const addOnSauceHandler = (e) => {
-    // have items that is more than 0 qty on soy, sp, eel, ginger, added to a temp array with keys
-    // add temp arry to addOn state
-    // add addOn state to final Cart
-    // make 0 for all sauce qty
-    // update displays
-  }
-
-  const soyQtyHandler = (e) => {
-    setSoyQty(e.target.value);
-  }
-
-  const soyAddHandler = (e) => {
-    e.preventDefault();
-    console.log(soyQty);
-
-    async function addSoyQty() {
-      if (soyQty !== 0) {
-        await setAddOns([{
-          id: "622e4de10a11c87f85a1f448",
-          qty: soyQty,
-          name: 'Soy Sauce',
-          price: 0,
-        },...addOns])
-      } else {
-        addSoyQty()
-      }
-    }
-    addSoyQty()
-    // setSoyQty(0);
-    console.log(addOns)
-  }
   const calcGrandTotal = () => {
     setSubTotal(props.subTotal*1);
     setTax(props.subTotal*0.0875);
@@ -159,11 +117,21 @@ const Confirmation = (props) => {
     }
     calcGrandTotal();
     setFinalCartItems();
+    if (dataLoaded) {
+      setLoading(false);
+    }
   },[props.cart, props.subTotal, grandTotal])
   
   return (
     <ThemeProvider theme={theme}>
-      <Card sx={{ minWidth: '400px', maxWidth: '800px', padding: '3em 3em', margin: '0 auto', backgroundColor: 'rgba(255, 249, 220, 1)', marginTop: '1em' }} >
+      { loading ?
+        <>
+        <LinearProgress sx={{ minWidth: '320px', maxWidth: '800px', margin: '0 auto', padding: '0 3em',  marginTop: '1em' }}/> 
+        </> 
+      : 
+        <Card sx={{ minWidth: '300px', maxWidth: '800px', margin: '0 auto', padding: '0 3em',  marginTop: '1em' }}/> 
+      }
+      <Card sx={{ minWidth: '300px', maxWidth: '800px', padding: '3em 3em', margin: '0 auto', backgroundColor: 'rgba(255, 249, 220, 1)' }} >
         <Grid container spacing={3}>
           <Grid item xs={12} sx={{ fontFamily: 'Raleway', fontWeight: 'bold', paddingBottom: '.5em', marginBottom: '1em', borderBottom: '2px solid #dc5a41' }}>
             <Typography variant='h4' sx={{ color: 'darkgreen', fontWeight: 'bold'}}>Order Confirmation</Typography>
@@ -188,11 +156,16 @@ const Confirmation = (props) => {
               creditCardFee={creditCardFee}
               grandTotal={grandTotal}
               setOrderId={setOrderId}
+              orderId={orderId}
               closeConfirmation={props.closeConfirmation}
               handleNext={handleNext}
+              setLoading={setLoading}
+              loading={loading}
             />
           ) : activeStep === 1 ? (
             <AddOn 
+              loading={loading}
+              setLoading={setLoading}
               handleBack={handleBack} 
               handleNext={handleNext} 
               orderId={orderId}
@@ -202,7 +175,17 @@ const Confirmation = (props) => {
               grandTotal={grandTotal}
             />
             ) : activeStep === 2 ? (
-              <OrderFinal handleBack={handleBack}/>
+              <OrderFinal 
+                handleBack={handleBack}
+                handleNext={handleNext} 
+                orderId={orderId}
+                loading={loading}
+                setLoading={setLoading}
+                subTotal={subTotal}
+                tax={tax}
+                creditCardFee={creditCardFee}
+                grandTotal={grandTotal}
+              />
             ) : (
               <PaymentSetting handleBack={handleBack} handleNext={handleNext}/>
           )}

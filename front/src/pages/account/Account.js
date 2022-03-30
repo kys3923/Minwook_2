@@ -1,10 +1,12 @@
-import { useNavigate, Navigate, Outlet } from "react-router-dom";
+// TODO: confirmation modal for editing profile
+
+import { useNavigate, Outlet } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
 // MUI
-import { TextField, Grid, Typography, Button, Tabs, Tab, Box, List, ListItemButton, ListItemText, Collapse, Card, Modal, ListItem } from "@mui/material";
+import { TextField, Grid, Typography, Button, Tabs, Tab, Box, List, ListItemButton, ListItemText, Collapse, Card, Modal, ListItem, CircularProgress } from "@mui/material";
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
 import PropTypes from 'prop-types';
@@ -178,6 +180,10 @@ const Account = (props) => {
     setContact(formattedPhoneNumber);
   };
 
+  const backToHomeHandler = (e) => {
+    navigate('/');
+  }
+
   const editAcctHandler = async (e) => {
     e.preventDefault();
 
@@ -232,12 +238,12 @@ const Account = (props) => {
           <TabPanel value={value} index={0}>
             <Grid container sx={{ marginTop: '7em'}}>
               <Grid xs={12} >
-                <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', borderBottom: '2px solid #dc5a41', marginBottom: '.5em', paddingBottom: '.5em'}}>Found Problem in loading data. </Typography>
+                <CircularProgress />
+                <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', borderBottom: '2px solid #dc5a41', marginBottom: '.5em', paddingBottom: '.5em'}}>loading data... </Typography>
               </Grid>
               <Grid xs={12} sx={{ marginBottom: '1em'}}>
                 <Typography sx={{ marginBottom: '1em'}}>Click button to go back, and try again.</Typography>
-                <Button variant="contained">Go back</Button>
-                {console.log(localStorage.userId)}
+                <Button variant="contained" onClick={backToHomeHandler}>Go back</Button>
               </Grid>
             </Grid>
           </TabPanel>
@@ -620,7 +626,6 @@ const Account = (props) => {
                             <Grid item xs={4}>
                               <Button variant="outlined" sx={{ width: '100%' }}>Password Reset</Button>
                             </Grid>
-                            <Button onClick={checkHandler}>check state</Button>
                           </Grid>
                         </form>
                       </Card>
@@ -633,7 +638,6 @@ const Account = (props) => {
           
         }
       </Box> 
-      {userData ? console.log(userData) : <p>userData not found</p>}
       <Outlet />
     </ThemeProvider>
   );

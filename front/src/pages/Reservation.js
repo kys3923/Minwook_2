@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 // MUI
-import { TextField, Paper, Grid, Button, Typography, Modal } from '@mui/material';
+import { TextField, Paper, Grid, Button, Typography, Modal, CircularProgress } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -25,6 +25,8 @@ const Reservation = (props) => {
   const [ reserveDate, setReserveDate ] = useState(new Date());
   const [ isConfirmed, setIdConfirmed ] = useState(false);
   const [ modalOpen, setModalOpen ] = useState(false);
+  const [ loading, setLoading ] = useState(false);
+  const [ ldata, setLdata ] = useState();
   const navigate = useNavigate();
   
   function formatPhoneNumber(telNum) {
@@ -74,6 +76,7 @@ const Reservation = (props) => {
       const { data } = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/api/reservation/create`, request.body, config
       )
+      await setLdata(data.reservation)
     } catch (error) {
       setError('A problem occured during resigter you reservation');
       setTimeout(() => {
@@ -84,9 +87,14 @@ const Reservation = (props) => {
       request.body,
       "in useEffect, checking submit"
     )
-
     setModalOpen(true);
   }
+
+  useEffect(() => {
+    if (ldata) {
+      setLoading(false);
+    }
+  },[ldata])
 
   // Handlers
   const modalHandler = (e) => {
@@ -97,6 +105,11 @@ const Reservation = (props) => {
   const backToHomeHandler = () => {
     setModalOpen(false);
     navigate('/');
+  }
+
+  const registerHandler = (e) => {
+    setLoading(true);
+    setUserId(localStorage.userId);
   }
 
   return (
@@ -199,7 +212,7 @@ const Reservation = (props) => {
                 autoComplete='on'
                 onChange={(e) => setComments(e.target.value)}
               />
-              <Button variant='contained' type='submit' sx={{ marginTop: '2em'}} onClick={(e) => setUserId(localStorage.userId)}>Confirm Reservation</Button>
+              <Button variant='contained' type='submit' sx={{ marginTop: '2em'}} onClick={registerHandler}>Confirm Reservation</Button>
             </form>
           </Paper>              
         </Grid>
@@ -223,13 +236,20 @@ const Reservation = (props) => {
             padding: '3em 2em'
           }}
         >
-          <Typography>
-            <CheckCircleOutlineRoundedIcon sx={{ color: 'darkgreen', fontWeight: 'bold', fontSize: '8em'}}/>
-          </Typography>
-          <Typography sx={{paddingTop: '1em', marginBottom: '2em'}}>
-            Your reservation has been successfully registered!
-          </Typography>
-          <Button variant='contained' onClick={backToHomeHandler}>back to home</Button>
+          { loading ? <>
+            <CircularProgress />
+            <Typography sx={{ paddingTop: '1.5em'}}>Loading...</Typography>
+          </> :
+            <>
+              <Typography>
+                <CheckCircleOutlineRoundedIcon sx={{ color: 'darkgreen', fontWeight: 'bold', fontSize: '8em'}}/>
+              </Typography>
+              <Typography sx={{paddingTop: '1em', marginBottom: '2em'}}>
+                Your reservation has been successfully registered!
+              </Typography>
+              <Button variant='contained' onClick={backToHomeHandler}>back to home</Button>
+            </>
+          }
         </Paper>
       </Modal>
     </ThemeProvider>

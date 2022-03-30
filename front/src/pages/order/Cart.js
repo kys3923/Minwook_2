@@ -45,7 +45,6 @@ const Cart = (props) => {
     }
     setItemCount();
     calcTotal();
-    console.log(removeItem);
   },[props.cart, subTotal, cartItems, removeItem])
 
   // calculate

@@ -8,7 +8,7 @@ import Cart from './Cart';
 
 // MUI stuff
 import PropTypes from 'prop-types';
-import { Tabs, Tab, Box, Card, Typography, Button, Grid, Modal } from '@mui/material';
+import { Tabs, Tab, Box, Card, Typography, Button, Grid, Modal, CircularProgress } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import theme from '../../theme/theme';
@@ -138,11 +138,16 @@ const Order = (props) => {
     <ThemeProvider theme={theme}>
       <div className="orderContainer">
         { !dataLoaded ? (
-          <Card>
-            <h2>Loading...</h2>
-            <p>Click Button to load again.</p>
-            <Button onClick={loadCountHandler}></Button>
-          </Card>
+          <Grid container sx={{ marginTop: '4.25em' }}>
+              <Card sx={{ paddingBottom: '1em', width: '100%', height: '100vh'}}>
+                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1em'}}>
+                  <CircularProgress />
+                </Grid>
+                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1em'}}>
+                  <Button onClick={loadCountHandler} variant='outlined'>Click to start again</Button>
+                </Grid>
+              </Card>
+            </Grid>
         ) : (
           <div className='order_left'>
             <Box
