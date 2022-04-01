@@ -49,11 +49,8 @@ exports.listMenu = async (req, res, next ) => {
 
 exports.listAllMenu = async (req, res, next ) => {
 
-  const title = req.query.title;
-  let condition = title ? { title: { $regex: new RegExp(title), $options: "i"}} : {};
-
   try {
-    const menu = await Menu.find(condition);
+    const menu = await Menu.find({});
 
     res.json({
       message: "all menu listed",

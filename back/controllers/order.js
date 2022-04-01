@@ -36,29 +36,26 @@ exports.orderList = async ( req, res, next ) => {
 
   try {
 
-    const order = await Order.find({"_id" : id }).populate({ path: 'orderedItems' })
+    const order = await Order.find({"_id" : id })
 
     res.json({
       message: "found order listing",
       order
     })
   } catch (error) {
-    next(order)
+    next(error)
   }
 }
 
 exports.orderAllList = async ( req, res, next ) => {
 
-  const title = req.query.title;
-  let condition = title ? { title: { $regex: new RegExp(title), $options: "i"}} : {};
-
   try {
 
-    const order = await Order.find(condition).sort({updatedAt: -1})
+    const listOrder = await Order.find({}).populate({path: 'customer', model: 'User'})
 
     res.json({
       message: "listing all orders",
-      order
+      listOrder
     })
 
   } catch (error) {

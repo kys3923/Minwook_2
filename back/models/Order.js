@@ -81,20 +81,9 @@ const OrderSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  addOns: [
-    { 
-      addOn: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Menu'
-      },
-      qty: Number,
-      name: String,
-      price: Number
-    }
-  ],
   grandTotal: Number,
   addOnTotal: Number,
-  willReadyBy: Date
+  willReadyBy: Date,
 }, {timestamps: true});
 
 OrderSchema.index({ updatedAt: 1 });
@@ -102,4 +91,6 @@ OrderSchema.plugin(autoIncrement.plugin, { model: 'OrderNumber', field: 'OrderNu
 
 let OrderNumber = connection.model('OrderNumber', OrderSchema);
 
-module.exports = mongoose.model('Order', OrderSchema);
+const Order = mongoose.model('Order', OrderSchema)
+
+module.exports = Order;

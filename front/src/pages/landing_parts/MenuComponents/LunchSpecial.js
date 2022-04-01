@@ -62,7 +62,6 @@ const LunchSpecial = (props) => {
       <h2 className='menuCardTitle2'>Sushi & Sashimi Lunch</h2>
       {sushiItems}
       <h3 className='menuCardTitle2'>Lunch Roll Combo</h3>
-      {/* TODO: add roll selection here */}
       <div className='menuCardLunchContainer'>
         <h3>Roll Selections</h3>
         <ul>

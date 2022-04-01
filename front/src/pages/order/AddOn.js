@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// TODO: grab total menu from parent, then check stock on each items (Drinks)
-
 // MUI
 import { Card, Typography, Grid, List, Collapse, ListItem, ListItemButton, ListItemText, Select, MenuItem, IconButton, Button, Modal } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
