@@ -86,7 +86,7 @@ const EditMenu = (props) => {
     { field: 'Sub_Category', headerName: 'Sub Category', editable: true, width: 160 },
     { field: 'price', headerName: 'Price', editable: true, width: 70 },
     { field: 'stock_availability', headerName: 'Stock', editable: true, width: 70 },
-    { field: 'caption', headerName: 'Caption', editable: true, width: 150 },
+    { field: 'caption', headerName: 'Caption', editable: true, width: 100 },
     { field: 'description', headerName: 'Description', editable: true, width: 500 },
   ]
 

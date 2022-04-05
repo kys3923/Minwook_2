@@ -3,11 +3,17 @@ import { useState, useEffect } from "react";
 import EditMenu from './MenuMgmt/EditMenu';
 import RegisterMenu from './MenuMgmt/RegisterMenu';
 
+// MUI
+import { ThemeProvider } from "@mui/material/styles";
+import theme from '../../theme/theme';
+import { Typography, Grid, Button, CircularProgress, Modal } from "@mui/material";
+
 
 const MenuManagement = (props) => {
 
   const [ register, setRegister ] = useState(false);
   const [ receivedData, setReceivedData ] = useState([]);
+  const [ loading, setLoading ] = useState(true);
 
   useEffect(() => {
     async function fetchData() {

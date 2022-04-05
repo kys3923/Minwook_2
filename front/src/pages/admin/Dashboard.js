@@ -114,7 +114,7 @@ const DashBoard = (props) => {
             <ReservationHistory />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <Typography>Menu Management</Typography>
+            <MenuManagement />
           </TabPanel>
           <TabPanel value={value} index={4}>
             <Typography>Customers</Typography>

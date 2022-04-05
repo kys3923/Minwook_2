@@ -70,7 +70,6 @@ const ReservationHistory = (props) => {
       </Grid> :
       <>
       <Grid container>
-        {console.log(reservations)}
         <Grid item xs={12}>
           <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41'}}>Reservation History</Typography>
         </Grid>
@@ -127,7 +126,7 @@ const ReservationHistory = (props) => {
               <Typography sx={{ marginTop: '1em' }}>Loading...</Typography>
             </Grid>
           </Grid>
-          {reservation ? <>{setModalLoading(false)}{console.log(reservation, 'found reservation')}</> : null }
+          {reservation ? <>{setModalLoading(false)}</> : null }
         </Card> 
         : 
         <Card sx={{ width: 500, maxHeight: '80vh', position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '2em 2em', overflow: 'auto'}}>
