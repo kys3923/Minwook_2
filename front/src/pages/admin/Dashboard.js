@@ -72,10 +72,7 @@ const DashBoard = (props) => {
       const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/order/list/listorder`, config);
       setAllOrders(data.listOrder);
     }
-    setTimeout(() => {
-      fetchOrders();
-      console.log('called')
-    },6000)
+    fetchOrders();
   },[])
 
   return (
@@ -90,7 +87,7 @@ const DashBoard = (props) => {
             sx={{ borderBottom: 1, borderColor: 'divider', width: '100%'}}
           >
             <Tab label="Dashboard" {...allyProps} />
-            <Tab label="Orders" {...allyProps} />
+            <Tab label="Order History" {...allyProps} />
             <Tab label="Reservations" {...allyProps} />
             <Tab label="Menu Management" {...allyProps} />
             <Tab label="Customers" {...allyProps} />

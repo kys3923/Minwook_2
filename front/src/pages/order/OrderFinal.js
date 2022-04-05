@@ -258,7 +258,7 @@ const OrderFinal = (props) => {
                 <Grid item xs={12} sx={{ marginBottom: '.5em', marginTop: '1em'}}>
                   <Typography>Added Items</Typography>
                 </Grid>
-                {orderData[0].addOns.length > 0 ?
+                {orderData[0].addOns ?
                 <>
                   {orderData[0].addOns.map((item, i) => (
                     <Grid item xs={12} key={i}>
@@ -398,36 +398,67 @@ const OrderFinal = (props) => {
                 <Grid item xs={5}>
                   <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${(props.subTotal).toFixed(2)}</Typography>
                 </Grid>
-                <Grid item xs={7}>
-                  <Typography sx={{ paddingLeft: '2em'}}>Add-ons</Typography>
-                </Grid>
-                <Grid item xs={5}>
-                  <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${(orderData[0].addOnTotal).toFixed(2)}</Typography>
-                </Grid>
-                <Grid item xs={7}>
-                  <Typography sx={{ paddingLeft: '2em'}}>Tax (8.875%)</Typography>
-                </Grid>
-                <Grid item xs={5}>
-                  <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
-                    ((props.subTotal + orderData[0].addOnTotal)*0.0875).toFixed(2)
-                  }</Typography>
-                </Grid>
-                <Grid item xs={7}>
-                  <Typography sx={{ paddingLeft: '2em'}}>Online processing fee (3%)</Typography>
-                </Grid>
-                <Grid item xs={5}>
-                  <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
-                    ((props.subTotal + orderData[0].addOnTotal)*0.03).toFixed(2)
-                  }</Typography>
-                </Grid>
-              </Grid>
-              <Grid container spacing={1} sx={{ paddingTop: '.5em'}}>
-                <Grid item xs={7}>
-                  <Typography sx={{ paddingLeft: '2em', fontStyle: 'italic', fontSize: '1.125em'}}>Total</Typography>
-                </Grid>
-                <Grid item xs={5}>
-                  <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: '#dc5a41', fontSize: '1.125em'}}>${orderData[0].grandTotal.toFixed(2)}</Typography>
-                </Grid>
+                {orderData[0].addOnTotal ?
+                  <>
+                    <Grid item xs={7}>
+                      <Typography sx={{ paddingLeft: '2em'}}>Add-ons</Typography>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${(orderData[0].addOnTotal).toFixed(2)}</Typography>
+                    </Grid>
+                    <Grid item xs={7}>
+                      <Typography sx={{ paddingLeft: '2em'}}>Tax (8.875%)</Typography>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
+                        ((props.subTotal + orderData[0].addOnTotal)*0.0875).toFixed(2)
+                      }</Typography>
+                    </Grid>
+                    <Grid item xs={7}>
+                      <Typography sx={{ paddingLeft: '2em'}}>Online processing fee (3%)</Typography>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
+                        ((props.subTotal + orderData[0].addOnTotal)*0.03).toFixed(2)
+                      }</Typography>
+                    </Grid>
+                  <Grid container spacing={1} sx={{ paddingTop: '.5em'}}>
+                    <Grid item xs={7}>
+                      <Typography sx={{ paddingLeft: '2em', fontStyle: 'italic', fontSize: '1.125em'}}>Total</Typography>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: '#dc5a41', fontSize: '1.125em'}}>${orderData[0].grandTotal.toFixed(2)}</Typography>
+                    </Grid>
+                  </Grid>
+                  </> 
+                :
+                <>
+                  <Grid item xs={7}>
+                    <Typography sx={{ paddingLeft: '2em'}}>Tax (8.875%)</Typography>
+                  </Grid>
+                  <Grid item xs={5}>
+                    <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
+                      (props.subTotal*0.0875).toFixed(2)
+                    }</Typography>
+                  </Grid>
+                  <Grid item xs={7}>
+                    <Typography sx={{ paddingLeft: '2em'}}>Online processing fee (3%)</Typography>
+                  </Grid>
+                  <Grid item xs={5}>
+                    <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
+                      (props.subTotal*0.03).toFixed(2)
+                    }</Typography>
+                  </Grid>
+                  <Grid container spacing={1} sx={{ paddingTop: '.5em'}}>
+                    <Grid item xs={7}>
+                      <Typography sx={{ paddingLeft: '2em', fontStyle: 'italic', fontSize: '1.125em'}}>Total</Typography>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: '#dc5a41', fontSize: '1.125em'}}>${orderData[0].grandTotal.toFixed(2)}</Typography>
+                    </Grid>
+                  </Grid>
+                </>
+                }
               </Grid>
             </Grid>
           </Grid>

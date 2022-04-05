@@ -51,7 +51,7 @@ exports.orderAllList = async ( req, res, next ) => {
 
   try {
 
-    const listOrder = await Order.find({}).populate({path: 'customer', model: 'User'})
+    const listOrder = await Order.find({}).populate({path: 'customer', model: 'User'}).sort({ OrderNumber: -1})
 
     res.json({
       message: "listing all orders",
