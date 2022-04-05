@@ -48,7 +48,6 @@ const OrderManagement = (props) => {
     }
     findOneOrder(e.currentTarget.value);
     setDetailOpen(true);
-    console.log(oneOrder)
   }
 
   const closeModal = (e) => {
@@ -77,14 +76,12 @@ const OrderManagement = (props) => {
     <ThemeProvider theme={theme}>
       { !loading ?
         <>
-          {console.log(loading)}
           <Grid container>
             <Grid item xs={12}>
               <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41'}}>Order History</Typography>
-              <Typography>loaded order {console.log(allOrders)}</Typography>
             </Grid>
             <Grid item xs={12}>
-              <Card elevation={2} sx={{ maxHeight: '80vh', overflow: 'auto'}}>
+              <Card elevation={2} sx={{ marginTop: '1em' }}>
                 <Grid container sx={{ padding: '3px 3px', minWidth: '900px', bgcolor:'darkgreen', textAlign: 'center', color: 'white'}}>
                   <Grid item xs={1} sx={{ padding: '3px 3px', borderRight: '1px solid gray'}}>
                     <Typography>Number</Typography>
@@ -109,7 +106,7 @@ const OrderManagement = (props) => {
                   </Grid>
                 </Grid>
                 {/* TODO: make it scrollable */}
-                <Grid item xs={12} sx={{ }}>
+                <Grid item xs={12} sx={{ maxHeight: '80vh', overflow: 'auto' }}>
                   {allOrders.map((order, i) => (
                     <Grid container key={i} sx={{ width: '100%', minWidth: '900px', textAlign: 'center', borderBottom: '1px solid lightgray'}}>
                       <Grid item xs={1} sx={{ padding: '3px 3px'}}>
@@ -362,14 +359,12 @@ const OrderManagement = (props) => {
                     </Grid>
                   </> 
                 : 
-                  <Grid container>
-                    <Grid item>
-                      <Typography>Loading...</Typography>
-                    </Grid>
-                    <Grid item>
-                        <Button variant='contained' onClick={closeModal}>Close</Button>
-                      </Grid>
+                <Grid container>
+                  <Grid item xs={12} sx={{ width: '100%', height: '75vh', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                    <CircularProgress />
+                    <Typography sx={{ marginTop: '1em'}}>Loading...</Typography>
                   </Grid>
+                </Grid>
                 }
               </Card>
             </Modal>

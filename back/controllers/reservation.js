@@ -24,13 +24,28 @@ exports.registerReservation = async ( req, res, next ) => {
 
 }
 
-exports.listAllReservations = async ( req, res, next ) => {
-
-  const title = req.query.title;
-  let condition = title ? { title: { $regex: new RegExp(title), $options: "i"}} : {};
+exports.reservationList = async ( req, res, next ) => {
+  const id = req.params.id;
+  if(!id) {
+    return next(new ErrorResponse("No reservation was found", 400))
+  }
 
   try {
-    const reservation = await Reservation.find(condition).sort({updatedAt: -1});
+    const reservation = await Reservation.find({"_id": id})
+
+    res.json({
+      message: "found reservation requested",
+      reservation
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.listAllReservations = async ( req, res, next ) => {
+
+  try {
+    const reservation = await Reservation.find({}).populate({path: 'customer', model: 'User'}).sort({reserveDate: -1});
 
     res.json({
       message: "listing all reservations",

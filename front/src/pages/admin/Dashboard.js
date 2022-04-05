@@ -5,6 +5,7 @@ import axios from 'axios';
 import MenuManagement from "./MenuManagement";
 import DashBoardPannel from './DashboardPannel';
 import OrderManagement from './OrderManagement';
+import ReservationHistory from './ReservationHistory';
 
 // MUI
 import PropTypes from 'prop-types';
@@ -88,12 +89,12 @@ const DashBoard = (props) => {
           >
             <Tab label="Dashboard" {...allyProps} />
             <Tab label="Order History" {...allyProps} />
-            <Tab label="Reservations" {...allyProps} />
+            <Tab label="Reservation History" {...allyProps} />
             <Tab label="Menu Management" {...allyProps} />
             <Tab label="Customers" {...allyProps} />
           </Tabs>
         </Box>
-        <Grid item xs={12} sx={{ border: '1px solid blue'}}>
+        <Grid item xs={12}>
           <TabPanel value={value} index={0}>
             { allOrders.length > 0 ?
               <DashBoardPannel allOrders={allOrders}/>
@@ -110,7 +111,7 @@ const DashBoard = (props) => {
             <OrderManagement allOrders={allOrders}/>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <Typography>Reservations</Typography>
+            <ReservationHistory />
           </TabPanel>
           <TabPanel value={value} index={3}>
             <Typography>Menu Management</Typography>
