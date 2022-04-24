@@ -38,7 +38,11 @@ const UserSchema = new mongoose.Schema({
     ref: 'Reservation'
   }],
   resetPasswordToken: String,
-  resetPasswordExpire: Date
+  resetPasswordExpire: Date,
+  CreditCards: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'CreditCard'
+  }]
 }, {timestamps: true})
 
 UserSchema.pre("save", async function(next) {

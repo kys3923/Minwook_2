@@ -14,37 +14,31 @@ const OrderDetails = (props) => {
 
   // handlers
   const orderRegHandler = async () => {
-    props.setLoading(true);
-    if (!agreed) {
-      setAgreeModal(true);
-    } else {
-      const config = {
-        header: {
-          "Content-Type": "application/json",
-        }
+    const config = {
+      header: {
+        "Content-Type": "application/json",
       }
-  
-      const request ={
-        body: {
-          "orderedItems": props.finalCart.Orders,
-          "customer": `${localStorage.userId}`,
-          "grandTotal": props.grandTotal,
-          "isAgreed": true
-        }
-      }
-  
-      try {
-        const { data } = await axios.post(
-          `${process.env.REACT_APP_SERVER_URL}/api/order/create`, request.body, config
-        )
-        if (data.order) {
-          await props.setOrderId(data.order._id)
-        }
-      } catch (error) {
-        setError('Error from posting order');
-      }
-      props.handleNext()
     }
+
+    const request ={
+      body: {
+        "orderedItems": props.finalCart.Orders,
+        "customer": `${localStorage.userId}`,
+        "grandTotal": props.grandTotal
+      }
+    }
+
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/api/order/create`, request.body, config
+      )
+      if (data.order) {
+        await props.setOrderId(data.order._id)
+      }
+    } catch (error) {
+      setError('Error from posting order');
+    }
+    props.handleNext()
   }
   
   const agreementHandler = (e) => {
@@ -56,19 +50,13 @@ const OrderDetails = (props) => {
   }
   
   useEffect(() => {
-    if (props.orderId) {
-      props.setLoading(false);
-    } else if (props.finalCart) {
-      props.setLoading(false)
-    }
-    console.log(agreed, 'from useState', props.loading, props.orderId);
-  },[agreed, props.loading])
+    console.log(agreed, 'from useState', props.orderId);
+  },[agreed])
 
   return (
     <ThemeProvider theme={theme}>
       {props.grandTotal*1 === props.grandTotal ?
       <>
-        {console.log(props.finalCart, props.subTotal)}
         <Grid item xs={12} md={6} sx={{ marginBottom: '1em' }}>
           <Grid container spacing={1}>
             <Grid item xs={12}>
@@ -225,7 +213,7 @@ const OrderDetails = (props) => {
                   <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${(props.tax).toFixed(2)}</Typography>
                 </Grid>
                 <Grid item xs={7}>
-                  <Typography sx={{ paddingLeft: '2em'}}>Online processing fee (3%)</Typography>
+                  <Typography sx={{ paddingLeft: '2em'}}>Online processing fee</Typography>
                 </Grid>
                 <Grid item xs={5}>
                   <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${(props.creditCardFee).toFixed(2)}</Typography>
@@ -242,11 +230,11 @@ const OrderDetails = (props) => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <FormGroup sx={{ width: '100%', display: 'center', justifyContent: 'center'}}>
             <FormControlLabel control={<Checkbox onChange={agreementHandler} />} label='I agree with the terms and conditions'/>
           </FormGroup>
-        </Grid>
+        </Grid> */}
         <Grid container spacing={3} sx={{ justifyContent: 'center', marginTop: '.5em'}}>
           <Grid item xs={6} sm={4}>
             <Button variant='contained' sx={{width: '100%'}} onClick={orderRegHandler}>Next</Button>

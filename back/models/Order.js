@@ -81,6 +81,10 @@ const OrderSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  creditCard: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'CreditCard'
+  },
   grandTotal: Number,
   addOnTotal: Number,
   willReadyBy: Date,

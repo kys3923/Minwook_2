@@ -342,15 +342,15 @@ const AddOn = (props) => {
       )
       setAddOnTotal(addOnsTotal);
       let newSubtotal = props.subTotal + addOnsTotal
-      let newCardFee = newSubtotal * 0.03
+      let newCardFee = (newSubtotal * 0.03) + .3
       let newTax = newSubtotal * 0.0875
       let newGrandTotal = newSubtotal + newCardFee + newTax
       setGrandTotalWithAddOn(newGrandTotal);
+      console.log(newSubtotal, newCardFee, newTax, newGrandTotal)
     }
   }
 
   const orderEditor = async (e) => {
-    props.setLoading(true);
     if (addOns.length === 0) {
       setAlertModal(true);
     } else {
@@ -379,12 +379,10 @@ const AddOn = (props) => {
         setError('Error from updating order')
       }
       props.handleNext();
-      props.setLoading(false);
     }
   }
 
   const nextHanlder = (e) => {
-    props.setLoading(true);
     props.handleNext();
   }
 

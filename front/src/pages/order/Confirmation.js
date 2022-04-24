@@ -7,36 +7,19 @@ import OrderResult from './OrderResult';
 // TODO: import use navigate to home
 
 // Mui
-import { Button, Card, Grid, Typography, FormGroup, FormControlLabel, Checkbox, Stepper, Step, StepButton, LinearProgress } from '@mui/material';
+import { Card, Grid, Typography, Stepper, Step, StepButton } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
-import EditIcon from '@mui/icons-material/Edit';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import MessageIcon from '@mui/icons-material/Message';
-import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
 
 const Confirmation = (props) => {
   // States
   const [ finalCart, setFinalCart ] = useState([]);
   const [ dataLoaded, setDataLoaded ] = useState(false);
-  const [ addOns, setAddOns ] = useState([]);
-  const [ removeItem, setRemoveItem ] = useState('');
-  const [ sauceOpen, SetSauceOpen ] = useState(false);
-  const [ drinkOpen, SetDrinkOpen ] = useState(false);
-  const [ termsCondition, setTermsCondition ] = useState(false);
   const [ orderId, setOrderId ] = useState();
-  const [ loading, setLoading ] = useState(true);
   
   // MUI Steps
   const [ activeStep, setActiveStep ] = useState(0);
   const [ completed, setCompleted ] = useState({});
-  
-  // Add on states
-  const [ spMayoQty, setSpMayoQty ] = useState(0);
-  const [ soyQty, setSoyQty ] = useState(0);
-  const [ eelQty, setEelQty ] = useState(0);
-  const [ gingerQty, setGingerQty ] = useState(0);
   
   // Calc Total
   const [ subTotal, setSubTotal ] = useState();
@@ -101,10 +84,11 @@ const Confirmation = (props) => {
     setCompleted({});
   };
 
+  // TODO: card fee = 3% + $.30
   const calcGrandTotal = () => {
     setSubTotal(props.subTotal*1);
     setTax(props.subTotal*0.0875);
-    setCreditCardFee(props.subTotal*0.03);
+    setCreditCardFee((props.subTotal*0.03)+.3);
     let allFees = tax+creditCardFee
     let tempTotal = subTotal+allFees
     setGrandTotal(tempTotal);
@@ -117,21 +101,11 @@ const Confirmation = (props) => {
     }
     calcGrandTotal();
     setFinalCartItems();
-    if (dataLoaded) {
-      setLoading(false);
-    }
   },[props.cart, props.subTotal, grandTotal])
   
   return (
     <ThemeProvider theme={theme}>
-      { loading ?
-        <>
-        <LinearProgress sx={{ minWidth: '320px', maxWidth: '800px', margin: '0 auto', padding: '0 3em',  marginTop: '1em' }}/> 
-        </> 
-      : 
-        <Card sx={{ minWidth: '300px', maxWidth: '800px', margin: '0 auto', padding: '0 3em',  marginTop: '1em' }}/> 
-      }
-      <Card sx={{ minWidth: '300px', maxWidth: '800px', padding: '3em 3em', margin: '0 auto', backgroundColor: 'rgba(255, 249, 220, 1)' }} >
+      <Card sx={{ minWidth: '300px', maxWidth: '800px', padding: '3em 3em', margin: '0 auto', backgroundColor: 'rgba(255, 249, 220, 1)', marginTop: '1em' }} >
         <Grid container spacing={3}>
           <Grid item xs={12} sx={{ fontFamily: 'Raleway', fontWeight: 'bold', paddingBottom: '.5em', marginBottom: '1em', borderBottom: '2px solid #dc5a41' }}>
             <Typography variant='h4' sx={{ color: 'darkgreen', fontWeight: 'bold'}}>Order Confirmation</Typography>
@@ -159,13 +133,9 @@ const Confirmation = (props) => {
               orderId={orderId}
               closeConfirmation={props.closeConfirmation}
               handleNext={handleNext}
-              setLoading={setLoading}
-              loading={loading}
             />
           ) : activeStep === 1 ? (
             <AddOn 
-              loading={loading}
-              setLoading={setLoading}
               handleBack={handleBack} 
               handleNext={handleNext} 
               orderId={orderId}
@@ -179,15 +149,18 @@ const Confirmation = (props) => {
                 handleBack={handleBack}
                 handleNext={handleNext} 
                 orderId={orderId}
-                loading={loading}
-                setLoading={setLoading}
                 subTotal={subTotal}
                 tax={tax}
                 creditCardFee={creditCardFee}
                 grandTotal={grandTotal}
+                handleComplete={handleComplete}
               />
             ) : (
-              <PaymentSetting handleBack={handleBack} handleNext={handleNext}/>
+              <PaymentSetting 
+                handleBack={handleBack} 
+                handleNext={handleNext}
+                orderId={orderId}
+              />
           )}
         </Grid>
       </Card>

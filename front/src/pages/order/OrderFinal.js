@@ -1,5 +1,6 @@
 import { useState, useEffect} from 'react';
 import axios from 'axios';
+// TODO: loading effect should be individually put, not from the parent component
 
 // Mui
 import { Grid, Typography, Card, CircularProgress, TextField, Button, ListItemButton, ListItemText, Collapse, List, Modal, Switch } from '@mui/material';
@@ -20,7 +21,6 @@ const OrderFinal = (props) => {
   const [ modalOpen, setModalOpen ] = useState(false);
 
   // handlers
-
   const commentHandler = (e) => {
     setComments(e.currentTarget.value);
   }
@@ -38,19 +38,27 @@ const OrderFinal = (props) => {
   }
 
   const nextHanlder = (e) => {
-    props.setLoading(true);
     props.handleNext();
+    // update grandtotal
+
+  }
+
+  const finalPriceHandler = (state) => {
+    if (state === true) {
+      let subtotal = props.subTotal;
+      let tax = props.tax;
+      let finalprice = subtotal + tax
+      return finalprice.toFixed(2)
+    } else {
+      let subtotal = props.subTotal;
+      let tax = props.tax;
+      let onlineFee = (subtotal * 0.03) + 0.3;
+      let finalPrice = subtotal + tax + onlineFee
+      return finalPrice.toFixed(2)
+    }
   }
 
   const updateButtonHandler = async (e) => {
-    // open modal
-    // set loading true
-    // if comment is not ''
-    // if payAtRestaurnt is true
-    // if &&
-    // set loading false
-    // set isUPdated true
-    // close modal
     if ( comments !== '' || payAtRestaurant === true ) {
       
       setModalOpen(true);
@@ -103,18 +111,13 @@ const OrderFinal = (props) => {
       return request
     }
     fetchData()
-    if (orderData) {
-      props.setLoading(false);
-    }
     console.log(props.orderId)
-  },[isUpdated, loading])
+  },[isUpdated, loading, payAtRestaurant])
 
   return (
     <ThemeProvider theme={theme}>
       { !orderData ? <CircularProgress /> :<>
         <Grid item xs={12} md={6} sx={{ marginBottom: '1em'}}>
-        {console.log(orderData, 'from return')}
-        {props.setLoading(false)}
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41', marginBottom: '7px'}}>Your Order</Typography>
@@ -385,83 +388,6 @@ const OrderFinal = (props) => {
               </List>
             </Grid>
           </Grid>
-          {/* Total */}
-          <Grid container spacing={1} sx={{ marginTop: '2em'}}>
-            <Grid item xs={12}>
-              <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41', marginBottom: '7px'}}>Total</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Grid container sx={{ borderBottom: '1px solid gray', paddingBottom: '1em'}} spacing={1}>
-                <Grid item xs={7}>
-                  <Typography sx={{ paddingLeft: '2em'}}>Subtotal</Typography>
-                </Grid>
-                <Grid item xs={5}>
-                  <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${(props.subTotal).toFixed(2)}</Typography>
-                </Grid>
-                {orderData[0].addOnTotal ?
-                  <>
-                    <Grid item xs={7}>
-                      <Typography sx={{ paddingLeft: '2em'}}>Add-ons</Typography>
-                    </Grid>
-                    <Grid item xs={5}>
-                      <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${(orderData[0].addOnTotal).toFixed(2)}</Typography>
-                    </Grid>
-                    <Grid item xs={7}>
-                      <Typography sx={{ paddingLeft: '2em'}}>Tax (8.875%)</Typography>
-                    </Grid>
-                    <Grid item xs={5}>
-                      <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
-                        ((props.subTotal + orderData[0].addOnTotal)*0.0875).toFixed(2)
-                      }</Typography>
-                    </Grid>
-                    <Grid item xs={7}>
-                      <Typography sx={{ paddingLeft: '2em'}}>Online processing fee (3%)</Typography>
-                    </Grid>
-                    <Grid item xs={5}>
-                      <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
-                        ((props.subTotal + orderData[0].addOnTotal)*0.03).toFixed(2)
-                      }</Typography>
-                    </Grid>
-                  <Grid container spacing={1} sx={{ paddingTop: '.5em'}}>
-                    <Grid item xs={7}>
-                      <Typography sx={{ paddingLeft: '2em', fontStyle: 'italic', fontSize: '1.125em'}}>Total</Typography>
-                    </Grid>
-                    <Grid item xs={5}>
-                      <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: '#dc5a41', fontSize: '1.125em'}}>${orderData[0].grandTotal.toFixed(2)}</Typography>
-                    </Grid>
-                  </Grid>
-                  </> 
-                :
-                <>
-                  <Grid item xs={7}>
-                    <Typography sx={{ paddingLeft: '2em'}}>Tax (8.875%)</Typography>
-                  </Grid>
-                  <Grid item xs={5}>
-                    <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
-                      (props.subTotal*0.0875).toFixed(2)
-                    }</Typography>
-                  </Grid>
-                  <Grid item xs={7}>
-                    <Typography sx={{ paddingLeft: '2em'}}>Online processing fee (3%)</Typography>
-                  </Grid>
-                  <Grid item xs={5}>
-                    <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
-                      (props.subTotal*0.03).toFixed(2)
-                    }</Typography>
-                  </Grid>
-                  <Grid container spacing={1} sx={{ paddingTop: '.5em'}}>
-                    <Grid item xs={7}>
-                      <Typography sx={{ paddingLeft: '2em', fontStyle: 'italic', fontSize: '1.125em'}}>Total</Typography>
-                    </Grid>
-                    <Grid item xs={5}>
-                      <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: '#dc5a41', fontSize: '1.125em'}}>${orderData[0].grandTotal.toFixed(2)}</Typography>
-                    </Grid>
-                  </Grid>
-                </>
-                }
-              </Grid>
-            </Grid>
-          </Grid>
 
           {/* modal */}
           <Modal open={modalOpen}>
@@ -491,6 +417,95 @@ const OrderFinal = (props) => {
             </Card>
           </Modal>
         </Grid>
+        {/* Total */}
+        <Grid item xs={12} md={6}>
+          <Grid container spacing={1} sx={{ marginTop: '2em'}}>
+            <Grid item xs={12}>
+              <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41', marginBottom: '7px'}}>Total</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Grid container sx={{ borderBottom: '1px solid gray', paddingBottom: '1em'}} spacing={1}>
+                <Grid item xs={7}>
+                  <Typography sx={{ paddingLeft: '2em'}}>Subtotal</Typography>
+                </Grid>
+                <Grid item xs={5}>
+                  <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${(props.subTotal).toFixed(2)}</Typography>
+                </Grid>
+                {orderData[0].addOnTotal ?
+                  <>
+                    <Grid item xs={7}>
+                      <Typography sx={{ paddingLeft: '2em'}}>Add-ons</Typography>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${(orderData[0].addOnTotal).toFixed(2)}</Typography>
+                    </Grid>
+                    <Grid item xs={7}>
+                      <Typography sx={{ paddingLeft: '2em'}}>Tax (8.875%)</Typography>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
+                        ((props.subTotal + orderData[0].addOnTotal)*0.0875).toFixed(2)
+                      }</Typography>
+                    </Grid>
+                    {!payAtRestaurant ?
+                    <>
+                      <Grid item xs={7}>
+                        <Typography sx={{ paddingLeft: '2em'}}>Online processing fee</Typography>
+                      </Grid>
+                      <Grid item xs={5}>
+                        <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
+                          ((props.subTotal*0.03)+0.3).toFixed(2)
+                        }</Typography>
+                      </Grid>
+                    </>
+                    : null}
+                  <Grid container spacing={1} sx={{ paddingTop: '.5em'}}>
+                    <Grid item xs={7}>
+                      <Typography sx={{ paddingLeft: '2em', fontStyle: 'italic', fontSize: '1.125em'}}>Total</Typography>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: '#dc5a41', fontSize: '1.125em'}}>${orderData[0].grandTotal.toFixed(2)}</Typography>
+                    </Grid>
+                  </Grid>
+                  </> 
+                :
+                <>
+                  <Grid item xs={7}>
+                    <Typography sx={{ paddingLeft: '2em'}}>Tax (8.875%)</Typography>
+                  </Grid>
+                  <Grid item xs={5}>
+                    <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
+                      (props.subTotal*0.0875).toFixed(2)
+                    }</Typography>
+                  </Grid>
+                  {!payAtRestaurant ?
+                    <>
+                      <Grid item xs={7}>
+                        <Typography sx={{ paddingLeft: '2em'}}>Online processing fee</Typography>
+                      </Grid>
+                      <Grid item xs={5}>
+                        <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
+                          ((props.subTotal*0.03)+.3).toFixed(2)
+                        }</Typography>
+                      </Grid>
+                    </>
+                    : null}
+                  <Grid container spacing={1} sx={{ paddingTop: '.5em'}}>
+                    <Grid item xs={7}>
+                      <Typography sx={{ paddingLeft: '2em', fontStyle: 'italic', fontSize: '1.125em'}}>Total</Typography>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: '#dc5a41', fontSize: '1.125em'}}>${finalPriceHandler(payAtRestaurant)}</Typography>
+                    </Grid>
+                  </Grid>
+                </>
+                }
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        {/* Terms of conditions */}
+
         {/* button */}
         <Grid item xs={12} sx={{ marginTop: '1em'}}>
           <Grid container spacing={4}>

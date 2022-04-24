@@ -18,6 +18,7 @@ import MenuManagement from './pages/admin/MenuManagement';
 import EditMenu from './pages/admin/MenuMgmt/EditMenu';
 import RegisterMenu from './pages/admin/MenuMgmt/RegisterMenu';
 import Account from './pages/account/Account';
+import TOC from './pages/TermsOfConditions/TOC';
 import Confirmation from './pages/order/Confirmation';
 
 
@@ -59,6 +60,7 @@ function App() {
       <Routes>
         {/* public route */}
         <Route path='/' element={<Main />} />
+        <Route path='policy-agreement' element={<TOC />} />
         <Route path='login' element={<LogIn />} />
         <Route path='register' element={<Register />} />
         <Route path='forgotpassword' element={<ForgotPassword />} />
