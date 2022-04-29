@@ -76,46 +76,45 @@ const CardInformation = (props) => {
               />
           </Grid>
           <Grid item xs={6}>
-            <FormControl>
+            <FormControl sx={{ width: '100%'}}>
               <InputLabel>State</InputLabel>
-            </FormControl>
               <Select
                 value={props.state}
                 size='small'
                 label='State'
                 sx={{ width: '100%'}}
                 onChange={cardStateInput}
-              >
+                >
                 {states.map((state, i) => (
                   <MenuItem
-                    value={state.name}
-                    key={i}
+                  value={state.name}
+                  key={i}
                   >
                     {state.name}
                   </MenuItem>
                 ))}
               </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={6}>
-            <FormControl>
+            <FormControl sx={{ width: '100%' }}>
               <InputLabel>Country</InputLabel>
-            </FormControl>
-            <Select
-              value={props.country}
-              label='Country'
-              size='small'
-              sx={{ width: '100%'}}
-              onChange={cardCountryInput}
-            >
-              {countries.map((country, i) => (
-                <MenuItem
+              <Select
+                value={props.country}
+                size='small'
+                label='Country'
+                onChange={cardCountryInput}
+                >
+                {countries.map((country, i) => (
+                  <MenuItem
                   value={country.country}
                   key={i}
-                >
-                    {country.country}
-                </MenuItem>
-              ))}
-            </Select>
+                  >
+                      {country.country}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
         </Grid>
       </Grid>

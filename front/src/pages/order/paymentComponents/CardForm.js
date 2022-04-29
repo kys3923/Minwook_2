@@ -7,6 +7,7 @@ import { Button, Grid, Typography, Card, TextField } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../../theme/theme';
 import CardInformation from './CardInformation';
+import styled from "@emotion/styled";
 
 
 const Cardform = (props) => {
@@ -25,6 +26,21 @@ const Cardform = (props) => {
   // stripe
   const stripe = useStripe();
   const elements = useElements();
+
+  const CardElementContainer = styled.div`
+    height: 19px;
+    display: flex;
+    align-items: center;
+    margin-top: 25px;
+    margin-bottom: 25px;
+
+    & .StripeElement {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid gray;
+      border-radius: 5px;
+    }
+  `;
 
   // handlers
   const cardNameHandler = (e) => {
@@ -63,18 +79,32 @@ const Cardform = (props) => {
       }
     }
 
+    setPaymentProcessing(true);
+
     const cardElement = elements.getElement('card');
-    console.log(cardElement)
+
+    // TODO: call server to receive the data
+
   }
 
-  
+  const iframeStyles = {
+    base: {
+    },
+    invalid: {},
+    complete: {}
+  }
 
+  const cardElementOpts = {
+    iconStyle: 'solid',
+    style: iframeStyles,
+    hidePostalCode:  true
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <Grid item xs={12}>
         <Card sx={{ padding: '1em 1em'}}>
-          <form>
+          <form onSubmit={handleFormSubmit}>
             <Grid container>
               <Grid item xs={12}>
                 <CardInformation 
@@ -93,7 +123,11 @@ const Cardform = (props) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <CardElement />
+                <CardElementContainer>
+                  <CardElement 
+                    options={cardElementOpts}
+                  />
+                </CardElementContainer>
               </Grid>
               <Grid item xs={12}>
                 {/* TODO: loading buttong */}
