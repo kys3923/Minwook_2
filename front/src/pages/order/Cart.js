@@ -45,6 +45,7 @@ const Cart = (props) => {
     }
     setItemCount();
     calcTotal();
+    console.log(cartItems);
   },[props.cart, subTotal, cartItems, removeItem])
 
   // calculate
@@ -120,6 +121,10 @@ const Cart = (props) => {
   const checkingHandler = (e) => {
     console.table(cartItems)
     console.log(subTotal)
+  }
+
+  const clearCart = (e) => {
+    setCartItems([]);
   }
   
   return (
@@ -340,7 +345,7 @@ const Cart = (props) => {
       </Modal>
       <Modal open={confirmationOpen} sx={{overflow: 'scroll'}}>
         <Bar>
-          <Confirmation allItem={props.allitem} cart={cartItems} subTotal={subTotal} closeConfirmation={closeConfirmation}/>
+          <Confirmation allItem={props.allitem} cart={cartItems} subTotal={subTotal} closeConfirmation={closeConfirmation} clearCart={clearCart} />
         </Bar>
       </Modal>
       <div className="cartContainer" onClick={continueOrderHandler}>

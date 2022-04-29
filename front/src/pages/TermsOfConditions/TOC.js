@@ -4,7 +4,6 @@ import theme from '../../theme/theme';
 import ConditionsOfUse from './ConditionsOfUse';
 import PrivacyPolicy from './PrivacyPolicy';
 import Disclaimer from './Disclaimer';
-import { borderBottom } from '@mui/system';
 
 const TOC = (props) => {
   return (

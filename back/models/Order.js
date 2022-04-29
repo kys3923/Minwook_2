@@ -85,6 +85,17 @@ const OrderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'CreditCard'
   },
+  addOns: [
+    { 
+      addOn: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Menu'
+      },
+      qty: Number,
+      name: String,
+      price: Number
+    }
+  ],
   grandTotal: Number,
   addOnTotal: Number,
   willReadyBy: Date,

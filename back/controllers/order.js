@@ -79,8 +79,13 @@ exports.updateOrder = async ( req, res, next ) => {
       orderedItem,
       addOns,
       addOnTotal,
-      isPaidAtRestaurant
+      isPaidAtRestaurant,
+      isAgreed,
+      isFinished,
+      isPaid
     })
+
+
     order.save();
 
     res.json({

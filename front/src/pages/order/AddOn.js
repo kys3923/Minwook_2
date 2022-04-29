@@ -346,7 +346,6 @@ const AddOn = (props) => {
       let newTax = newSubtotal * 0.0875
       let newGrandTotal = newSubtotal + newCardFee + newTax
       setGrandTotalWithAddOn(newGrandTotal);
-      console.log(newSubtotal, newCardFee, newTax, newGrandTotal)
     }
   }
 
@@ -378,17 +377,20 @@ const AddOn = (props) => {
       } catch (error) {
         setError('Error from updating order')
       }
+      props.handleComplete();
       props.handleNext();
     }
   }
 
   const nextHanlder = (e) => {
+    props.handleComplete();
     props.handleNext();
   }
 
   useEffect(() => {
     addedItemTotal();
-  },[soyQty, addOns, spMayo, eelSauce, gingerD, coke, dietCoke, sprite, clubSoda, gingerAle, lemonSnapple, peachSnapple, whiteRice, brownRice, sushiRice])
+    console.log(addOns, grandTotalWithAddOn, addOnTotal);
+  },[soyQty, addOns, spMayo, eelSauce, gingerD, coke, dietCoke, sprite, clubSoda, gingerAle, lemonSnapple, peachSnapple, whiteRice, brownRice, sushiRice, grandTotalWithAddOn, addOnTotal])
 
 
   return (

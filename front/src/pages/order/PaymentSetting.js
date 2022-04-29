@@ -28,6 +28,45 @@ const PaymentSetting = (props) => {
 
   // handlers
 
+  const tempHandler = (e) => {
+    console.log(props.completed, props.activeStep)
+    props.handleNext();
+  }
+
+  function determineOrder(data) {
+    if (orderData) {
+      if (data.isPaidAtRestaurant == true) {
+        props.handleComplete();
+        props.handleNext();
+      }
+    }
+  }
+
+  const totalCalcualtor = (text) => {
+    const subTotal = props.subTotal
+    const taxRate = 0.08875
+    let addOnTotal
+    let returnText 
+    if (text === 'add') {
+      addOnTotal = orderData[0].addOnTotal
+      return addOnTotal
+    } else if (text === 'tax') {
+      let taxWithAddOn = ( subTotal + orderData[0].addOnTotal ) * taxRate
+      let taxWithoutAddOn = subTotal * taxRate
+      orderData[0].addOnTotal > 0 ? returnText = taxWithAddOn : returnText = taxWithoutAddOn 
+      return returnText
+    } else if (text === 'subTotal') {
+      return subTotal
+    } else if (text === 'grandTotal') {
+      return orderData[0].grandTotal
+    } else if (text === 'online') {
+      let onlineWithAddOn = ((subTotal + orderData[0].addOnTotal) * 0.03) + 0.3
+      let onlineWithoutAddOn = (subTotal * 0.03) + 0.3
+      orderData[0].addOnTotal > 0 ? returnText = onlineWithAddOn : returnText = onlineWithoutAddOn
+      return returnText
+    }
+  }
+
   // useEffect
   useEffect(()=> {
     setLoading(true);
@@ -38,7 +77,7 @@ const PaymentSetting = (props) => {
         }
       }
       const request = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/order/${props.orderId}`, config)
-      setOrderData(request.data.order)
+      await setOrderData(request.data.order)
       return request
     }
     fetchOrderData();
@@ -56,15 +95,15 @@ const PaymentSetting = (props) => {
         </Grid>
         {/* TODO: need to be deleted below */}
         {/* TODO: if paidAtRestaurant skip this one to result page */}
-        { props.setLoading(false) } 
       </Grid> 
       : 
       <>
         {console.log(orderData, 'from return')}
+        {determineOrder(orderData[0])}
         <Grid item xs={12} md={6} sx={{ marginBottom: '1em'}}>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41', marginBottom: '7px' }}>Payment</Typography>
+              <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41', marginBottom: '7px' }}>Your Order</Typography>
             </Grid>
             <Grid item xs={12}>
               <Card sx={{ padding: '1em 1em'}}>
@@ -268,32 +307,77 @@ const PaymentSetting = (props) => {
                       </Grid>
                     </> : null
                   }
+                  {/* TOTAL */}
+                  {/* subtotal */}
+                  <Grid item xs={12} sx={{ paddingTop: '1em', paddingBottom: '1em'}}>
+                    <Typography>Total</Typography>
+                  </Grid>
+                  <Grid item xs={7}>
+                    <Typography sx={{ color: 'gray', paddingLeft: '2em'}}>Subtotal</Typography>
+                  </Grid>
+                  <Grid item xs={5}>
+                    <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: 'darkgreen'}}>${(totalCalcualtor('subTotal')).toFixed(2)}</Typography>
+                  </Grid>
+                  {/* Add on */}
+                  { orderData[0].addOns ?
+                  <Grid item xs={12}>
+                    <Grid container>
+                      <Grid item xs={7}>
+                        <Typography sx={{ color: 'gray', paddingLeft: '2em'}}>Added Items Total</Typography>
+                      </Grid>
+                      <Grid item xs={5}>
+                        <Typography sx={{ textAlign: 'Right', paddingRight: '2em', color: 'darkgreen'}}>${(totalCalcualtor('add')).toFixed(2)}</Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid> : null}
+                  {/* tax */}
+                  <Grid item xs={7}>
+                    <Typography sx={{ color: 'gray', paddingLeft: '2em'}}>Tax (8.875%)</Typography>
+                  </Grid>
+                  <Grid item xs={5}>
+                    <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: 'darkgreen'}}>${(totalCalcualtor('tax').toFixed(2))}</Typography>
+                  </Grid>
+                  {/* onlineFee */}
+                  <Grid item xs={7}>
+                    <Typography sx={{ color: 'gray', paddingLeft: '2em'}}>Online Transaction Fee</Typography>
+                  </Grid>
+                  <Grid item xs={5}>
+                    <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: 'darkgreen'}}>${(totalCalcualtor('online').toFixed(2))}</Typography>
+                  </Grid>
+                  {/* Grand total */}
+                  <Grid item xs={7} sx={{ marginTop: '.25em' }}>
+                    <Typography sx={{ paddingLeft: '2em'}}>
+                      Amount Due
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={5} sx={{ marginTop: '.25em' }}>
+                    <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: '#dc5a41', fontWeight: 'bold'}}>${(totalCalcualtor('grandTotal').toFixed(2))}</Typography>
+                  </Grid>
                 </Grid>
               </Card>
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+        {/* Payment */}
+        <Grid item xs={12} md={6}>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Typography>Show total</Typography>
+              <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41', marginBottom: '7px'}}>Payment</Typography>
             </Grid>
-            <Grid item xs={12}>
-              <Grid container>
-                <Elements stripe={stripePromise}>
-                  <Cardform />
-                </Elements>
+            <Grid item xs={12} sx={{ marginBottom: '1em'}}>
+              <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <Grid container spacing={2}>
+                    <Elements stripe={stripePromise}>
+                      <Cardform
+                        total={orderData[0].grandTotal}
+                      />
+                    </Elements>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} sx={{ marginBottom: '1em'}}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography>Card Infomation</Typography>
-            </Grid>
-            <Grid item xs={12}>
-            </Grid>
+            <Button onClick={tempHandler}>Temp Button</Button>
           </Grid>
         </Grid>
       </>

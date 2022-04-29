@@ -1,9 +1,10 @@
 import { useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-// TODO: loading effect should be individually put, not from the parent component
 
 // Mui
-import { Grid, Typography, Card, CircularProgress, TextField, Button, ListItemButton, ListItemText, Collapse, List, Modal, Switch } from '@mui/material';
+import { Grid, Typography, Card, CircularProgress, TextField, Button, ListItemButton, ListItemText, Collapse, List, Modal, Switch, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -19,6 +20,9 @@ const OrderFinal = (props) => {
   const [ isUpdated, setIsUpdated ] = useState(false);
   const [ optionOpen, setOptionOpen ] = useState(false);
   const [ modalOpen, setModalOpen ] = useState(false);
+  const [ agreed, setAgreed ] = useState(false);
+  const [ agreeModal, setAgreeModal ] = useState(false);
+  const [ readyToNext, setReadyToNext ] = useState(false);
 
   // handlers
   const commentHandler = (e) => {
@@ -37,24 +41,79 @@ const OrderFinal = (props) => {
     setModalOpen(false);
   }
 
-  const nextHanlder = (e) => {
-    props.handleNext();
-    // update grandtotal
+  const nextHanlder = async (e) => {
+    if (!agreed) {
+      agreeModalOpener();
+    } else {
+      setLoading(true);
 
+      const config = {
+        header: {
+          "Content-Type": "application/json"
+        }
+      }
+
+      const request = {
+        body: {
+          comments: comments,
+          isPaidAtRestaurant: payAtRestaurant,
+          grandTotal: finalPriceHandler(payAtRestaurant),
+          isAgreed: agreed
+        }
+      }
+
+      try {
+        const { data } = await axios.put(`${process.env.REACT_APP_SERVER_URL}/api/order/${props.orderId}`, request.body, config)
+        if(data.order) {
+          props.handleComplete();
+          props.handleNext();
+        }
+      } catch (error) {
+        console.log(error)
+      }
+
+    }
+    // if checked,
+    // set loading true
+    // update grandtotal, terms conditions
+    // set loading false
+    // if payAtRestaurant, props.handleComplete, otherwise
+    // props.handleNext();
+    console.log(comments, '-comments', payAtRestaurant, '-payAt', agreed, '-agreed', loading, '-loading', readyToNext)
   }
 
+  const agreementHandler = (e) => {
+    setAgreed(!agreed);
+  }
+
+  const agreeModalOpener = () => {
+    setAgreeModal(true);
+  }
+
+  const agreeModalCloser = (e) => {
+    setAgreeModal(false);
+  }
+
+  // TODO: calculate Addon
   const finalPriceHandler = (state) => {
-    if (state === true) {
-      let subtotal = props.subTotal;
-      let tax = props.tax;
-      let finalprice = subtotal + tax
-      return finalprice.toFixed(2)
-    } else {
-      let subtotal = props.subTotal;
-      let tax = props.tax;
-      let onlineFee = (subtotal * 0.03) + 0.3;
-      let finalPrice = subtotal + tax + onlineFee
-      return finalPrice.toFixed(2)
+    if (!!orderData) {
+      console.log(orderData)
+      if (state === true) {
+        let subtotal = props.subTotal;
+        let addOnTotal = 0;
+        !!orderData[0].addOnTotal ? addOnTotal = orderData[0].addOnTotal : addOnTotal = 0 ;
+        let tax = (props.subTotal + addOnTotal) * 0.08875;
+        let finalprice = subtotal + tax + addOnTotal
+        return finalprice
+      } else {
+        let subtotal = props.subTotal;
+        let addOnTotal = 0
+        !!orderData[0].addOnTotal ? addOnTotal = orderData[0].addOnTotal : addOnTotal = 0;
+        let tax = (props.subTotal + addOnTotal) * 0.08875;
+        let onlineFee = ((subtotal + addOnTotal) *0.03)+0.3;
+        let finalPrice = subtotal + tax + onlineFee + addOnTotal
+        return finalPrice
+      }
     }
   }
 
@@ -73,7 +132,8 @@ const OrderFinal = (props) => {
       const request = {
         body: {
           comments: comments,
-          isPaidAtRestaurant: payAtRestaurant
+          isPaidAtRestaurant: payAtRestaurant,
+          grandTotal: finalPriceHandler(payAtRestaurant)
         }
       }
 
@@ -85,9 +145,6 @@ const OrderFinal = (props) => {
           await console.log(data.order, 'from request')
           setLoading(false);
           setIsUpdated(!isUpdated);
-          setTimeout(() => {
-            setModalOpen(false)
-          }, 2000)
         }
       } catch (error) {
         console.log(error)
@@ -111,8 +168,8 @@ const OrderFinal = (props) => {
       return request
     }
     fetchData()
-    console.log(props.orderId)
-  },[isUpdated, loading, payAtRestaurant])
+    console.log(props.orderId, agreed, payAtRestaurant, loading, finalPriceHandler(payAtRestaurant), comments)
+  },[agreed])
 
   return (
     <ThemeProvider theme={theme}>
@@ -409,10 +466,30 @@ const OrderFinal = (props) => {
                     <CheckCircleOutlineRoundedIcon sx={{ fontSize: '4em', color: 'darkgreen'}} />
                   </Grid>
                   <Grid item xs={12} sx={{ paddingTop: '1em', textAlign: 'center'}}>
-                    <Typography>Update success</Typography>
+                    <Typography>Order has been updated successfully.</Typography>
                   </Grid>
-                  <Button onClick={modalCloser}>temp close</Button>
+                  <Grid item xs={12} sx={{ display: 'center', justifyContent: 'center', marginTop: '1.5em'}}>
+                    <Button onClick={modalCloser} variant='contained'>Close</Button>
+                  </Grid>
                 </>}
+              </Grid>
+            </Card>
+          </Modal>
+          {/* agree Modal */}
+          <Modal open={agreeModal}>
+            <Card sx={{ width: 400, position: 'fixed', top: '50%', left: '50%', transform : 'translate(-50%, -50%)', padding: '2em 2em'}}>
+              <Grid container>
+                <Grid item xs={12} sx={{ borderBottom: '2px solid #dc5a41'}}>
+                  <Typography variant='h5' sx={{ color: 'darkgreen', paddingLeft: '.5em', paddingBottom: '.25em'}}>Notice</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant='body1' sx={{ padding: '2em 2em'}}>
+                    You need to agree to the terms and conditions to continue
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sx={{ display: 'center', justifyContent: 'center'}}>
+                  <Button onClick={agreeModalCloser} variant='contained'>Close</Button>
+                </Grid>
               </Grid>
             </Card>
           </Modal>
@@ -444,7 +521,7 @@ const OrderFinal = (props) => {
                     </Grid>
                     <Grid item xs={5}>
                       <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
-                        ((props.subTotal + orderData[0].addOnTotal)*0.0875).toFixed(2)
+                        ((props.subTotal + orderData[0].addOnTotal)*0.08875).toFixed(2)
                       }</Typography>
                     </Grid>
                     {!payAtRestaurant ?
@@ -454,7 +531,7 @@ const OrderFinal = (props) => {
                       </Grid>
                       <Grid item xs={5}>
                         <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
-                          ((props.subTotal*0.03)+0.3).toFixed(2)
+                          (((props.subTotal+orderData[0].addOnTotal)*0.03)+0.3).toFixed(2)
                         }</Typography>
                       </Grid>
                     </>
@@ -464,7 +541,7 @@ const OrderFinal = (props) => {
                       <Typography sx={{ paddingLeft: '2em', fontStyle: 'italic', fontSize: '1.125em'}}>Total</Typography>
                     </Grid>
                     <Grid item xs={5}>
-                      <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: '#dc5a41', fontSize: '1.125em'}}>${orderData[0].grandTotal.toFixed(2)}</Typography>
+                      <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: '#dc5a41', fontSize: '1.125em'}}>${finalPriceHandler(payAtRestaurant).toFixed(2)}</Typography>
                     </Grid>
                   </Grid>
                   </> 
@@ -475,7 +552,7 @@ const OrderFinal = (props) => {
                   </Grid>
                   <Grid item xs={5}>
                     <Typography sx={{ textAlign: 'right', paddingRight: '2em'}}>${
-                      (props.subTotal*0.0875).toFixed(2)
+                      (props.subTotal*0.08875).toFixed(2)
                     }</Typography>
                   </Grid>
                   {!payAtRestaurant ?
@@ -495,7 +572,7 @@ const OrderFinal = (props) => {
                       <Typography sx={{ paddingLeft: '2em', fontStyle: 'italic', fontSize: '1.125em'}}>Total</Typography>
                     </Grid>
                     <Grid item xs={5}>
-                      <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: '#dc5a41', fontSize: '1.125em'}}>${finalPriceHandler(payAtRestaurant)}</Typography>
+                      <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: '#dc5a41', fontSize: '1.125em'}}>${(finalPriceHandler(payAtRestaurant)).toFixed(2)}</Typography>
                     </Grid>
                   </Grid>
                 </>
@@ -505,15 +582,31 @@ const OrderFinal = (props) => {
           </Grid>
         </Grid>
         {/* Terms of conditions */}
-
+        <Grid item xs={12} md={6} >
+          <Grid container spacing={1} sx={{ marginTop: '2em'}}>
+            <Grid item xs={12}>
+              <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41', marginBottom: '7px'}}>Agreement</Typography>
+            </Grid>
+            <Grid container spacing={1} sx={{ padding : '1em 1em', height: '9.75em', paddingLeft: '2em'}}>
+              <Grid item xs={12}>
+                <FormGroup sx={{ width: '100%' }}>
+                  <FormControlLabel control={<Checkbox onChange={agreementHandler} />} label={`I agree with the terms and conditions`} />
+                </FormGroup>
+              </Grid>
+              <Grid item xs={12} sx={{ marginTop: '3em'}}>
+                <Link target='_blank' to='../policy-agreement'><Typography variant='body2' sx={{ fontSize: '.75em', color: 'gray', textAlign: 'center'}}>Terms and Conditions</Typography></Link>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
         {/* button */}
         <Grid item xs={12} sx={{ marginTop: '1em'}}>
-          <Grid container spacing={4}>
+          <Grid container spacing={4} >
             <Grid item xs={6}>
               <Button variant='outlined' onClick={props.handleBack} sx={{ width: '100%'}}>Back</Button>
             </Grid>
             <Grid item xs={6}>
-              <Button variant='contained' onClick={nextHanlder} sx={{ width: '100%'}}>Next</Button>
+              <LoadingButton loading={loading} variant='contained' onClick={nextHanlder} sx={{ width: '100%'}}>Next</LoadingButton>
             </Grid>
           </Grid>
         </Grid>

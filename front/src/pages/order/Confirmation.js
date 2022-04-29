@@ -14,7 +14,6 @@ import theme from '../../theme/theme';
 const Confirmation = (props) => {
   // States
   const [ finalCart, setFinalCart ] = useState([]);
-  const [ dataLoaded, setDataLoaded ] = useState(false);
   const [ orderId, setOrderId ] = useState();
   
   // MUI Steps
@@ -84,7 +83,6 @@ const Confirmation = (props) => {
     setCompleted({});
   };
 
-  // TODO: card fee = 3% + $.30
   const calcGrandTotal = () => {
     setSubTotal(props.subTotal*1);
     setTax(props.subTotal*0.0875);
@@ -97,7 +95,6 @@ const Confirmation = (props) => {
   useEffect(() => {
     async function setFinalCartItems() {
       await setFinalCart({ "Orders": props.cart });
-      setDataLoaded(true);
     }
     calcGrandTotal();
     setFinalCartItems();
@@ -121,7 +118,11 @@ const Confirmation = (props) => {
             ))}
           </Stepper>
           {allStepsCompleted() ? (
-            <OrderResult />
+            <OrderResult 
+              closeConfirmation={props.closeConfirmation}
+              orderId={orderId}
+              subTotal={subTotal}
+            />
           ) : activeStep === 0 ? (
             <OrderDetails 
               finalCart={finalCart} 
@@ -131,6 +132,7 @@ const Confirmation = (props) => {
               grandTotal={grandTotal}
               setOrderId={setOrderId}
               orderId={orderId}
+              handleComplete={handleComplete}
               closeConfirmation={props.closeConfirmation}
               handleNext={handleNext}
             />
@@ -138,6 +140,7 @@ const Confirmation = (props) => {
             <AddOn 
               handleBack={handleBack} 
               handleNext={handleNext} 
+              handleComplete={handleComplete}
               orderId={orderId}
               subTotal={subTotal}
               tax={tax}
@@ -160,6 +163,11 @@ const Confirmation = (props) => {
                 handleBack={handleBack} 
                 handleNext={handleNext}
                 orderId={orderId}
+                handleComplete={handleComplete}
+                allStepsCompleted={allStepsCompleted}
+                completed={completed}
+                activeStep={activeStep}
+                subTotal={subTotal}
               />
           )}
         </Grid>

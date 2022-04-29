@@ -38,6 +38,7 @@ const OrderDetails = (props) => {
     } catch (error) {
       setError('Error from posting order');
     }
+    props.handleComplete()
     props.handleNext()
   }
   
