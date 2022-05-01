@@ -35,32 +35,31 @@ const MenuManagement = (props) => {
     setRegister(!register)
   }
 
+  // TODO: loading spinner
+
   return (
-    <div className="menumgmt_container">
-      <ul className="menumgmt_headerlist">
-
-        { register ? 
-            <>
-              <li onClick={buttonHandler} className="admin_buttons">Edit Menu</li>
-              <li className="admin_buttons_selected">Register Menu</li> 
-            </>
-          :
-            <>
-              <li className="admin_buttons_selected">Edit Menu</li>
-              <li onClick={buttonHandler} className="admin_buttons">Register Menu</li>
-            </>
-        }
-        
-      </ul>
-      <div className="menumgmt_totalcontainer">
-        <div className="menumgmt_leftcontainer">
-          {register ? <RegisterMenu /> : <EditMenu receivedData={receivedData} />}
-        </div>
-        <div className="menumgmt_rightcontainer">
-
-        </div>
-      </div>
-    </div>
+    <ThemeProvider theme={theme}>
+      { register ?
+        <Grid container spacing={2} sx={{ marginBottom: '2em'}}>
+          <Grid item  xs={6} >
+            <Button variant="contained" sx={{ width: '100%'}} onClick={buttonHandler}>Edit Menu</Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Button disabled variant="contained" sx={{ width: '100%'}}>Register Menu</Button>
+          </Grid>
+        </Grid>
+        :
+        <Grid container spacing={2} sx={{ marginBottom: '2em'}}>
+          <Grid item  xs={6} >
+            <Button disabled variant="contained" sx={{ width: '100%'}}>Edit Menu</Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Button variant="contained" sx={{ width: '100%'}} onClick={buttonHandler}>Register Menu</Button>
+          </Grid>
+        </Grid>
+      }
+      {register ? <RegisterMenu /> : <EditMenu receivedData={receivedData} />}
+    </ThemeProvider>
   );
 }
 export default MenuManagement;

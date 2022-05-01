@@ -1,6 +1,33 @@
 const CreditCard = require('../models/CreditCard');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
+const stripe = require('stripe')(`${process.env.STRIPE_API_SECRET}`)
+
+exports.chargeCard = async (req, res) => {
+  const { id, totalAmount } = req.body;
+  // calculate
+  const calculateOrderAmount = (order) => {
+    return 1400;
+  }
+  // post
+  try {
+    const payment = await stripe.paymentIntents.create({
+      amount: calculateOrderAmount(totalAmount),
+      currency: 'USD',
+      payment_method: id
+    })
+
+    return res.status(200).json({
+      confirmed: payment
+    })
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      message: error.message
+    })
+  }
+  // send email
+}
 
 exports.registerCreditCard = async (req, res, next) => {
 

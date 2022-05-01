@@ -45,7 +45,7 @@ const OrderItem = (props) => {
         }
       }
       
-      const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/menu/${props.product}`, config);
+      const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/menu/list/${props.product}`, config);
       
       await setItem(data);
       await setDataLoaded(true);

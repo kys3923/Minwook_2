@@ -25,54 +25,46 @@ const CardInformation = (props) => {
       <Grid item xs={12}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography>Card Information</Typography>
-            <ul>
-              <li>line1 = {props.line1}</li>
-              <li>city = {props.city}</li>
-              <li>state = {props.state}</li>
-              <li>country = {props.country}</li>
-              <li>cardName = {props.cardName}</li>
-              <li>postal = {props.postal}</li>
-            </ul>
+            <Typography>Billing Information</Typography>
           </Grid>
           <Grid item xs={12}>
             <TextField 
-              size='small'
               type='text'
               value={props.cardName}
               label='Name on the card'
               sx={{width: '100%'}}
               onChange={props.cardNameHandler}
+              required
               />
             </Grid>
           <Grid item xs={12}>
             <TextField 
-              size='small'
               type='text'
               value={props.line1}
               label='Address'
               sx={{width: '100%'}}
               onChange={props.cardAddressHandler}
+              required
               />
             </Grid>
           <Grid item xs={12}>
             <TextField 
-              size='small'
               type='text'
               value={props.city}
               label='City'
               sx={{width: '100%'}}
               onChange={props.cardCityHandler}
+              required
               />
           </Grid>
           <Grid item xs={12}>
             <TextField 
-              size='small'
               type='text'
               value={props.postal}
               label='Zip Code'
               sx={{width: '100%'}}
               onChange={cardPostalInput}
+              required
               />
           </Grid>
           <Grid item xs={6}>
@@ -80,10 +72,10 @@ const CardInformation = (props) => {
               <InputLabel>State</InputLabel>
               <Select
                 value={props.state}
-                size='small'
                 label='State'
                 sx={{ width: '100%'}}
                 onChange={cardStateInput}
+                required
                 >
                 {states.map((state, i) => (
                   <MenuItem
@@ -101,9 +93,9 @@ const CardInformation = (props) => {
               <InputLabel>Country</InputLabel>
               <Select
                 value={props.country}
-                size='small'
                 label='Country'
                 onChange={cardCountryInput}
+                required
                 >
                 {countries.map((country, i) => (
                   <MenuItem

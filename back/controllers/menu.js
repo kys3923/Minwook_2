@@ -62,8 +62,9 @@ exports.listAllMenu = async (req, res, next ) => {
 }
 
 exports.listMenuById = async (req, res, next ) => {
+  const id = req.params.id;
   try {
-    const menu = await Menu.findById(req.params.id);
+    const menu = await Menu.findById(id);
 
     res.json({
       message: 'menu listed',

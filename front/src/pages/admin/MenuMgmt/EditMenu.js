@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { makeStyles } from '@mui/styles';
+
+// MUI
+import { ThemeProvider } from '@mui/material/styles'
+import theme from '../../../theme/theme';
+import { Typography, Grid, Button, Modal, Card, Chip, Stack, CircularProgreess } from '@mui/material';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import axios from 'axios';
 
 const EditMenu = (props) => {
@@ -14,104 +19,160 @@ const EditMenu = (props) => {
   const [ stock_availability, setStock ] = useState(null);
   const [ error, setError ] = useState('loading');
   const [ receivedData, setReceivedData ] = useState([]);
-  const [ id, setId ] = useState('');
   const [ isLoaded, setIsLoaded ] = useState(false);
-  const [ isPopUpOpen, SetIsPopUpOpen ] = useState(false);
+  const [ modalOpen, setModalOpen ] = useState(false);
+  const [ selectedID, setSelectedID ] = useState('')
+  const [ selectedMenu, setSelectedMenu ] = useState();
   
-  // ------------------------------------- receiving all menu from api
-  useEffect(() => {
-    if (props.receivedData.length > 0) {
-      setIsLoaded(true);
-      setReceivedData(props.receivedData);
+  
+  // handlers
+  const modalOpener = async (e) => {
+    const setStates = async (data) => {
+      if (!!data) {
+          await setName(data.name)
+          await setDescription(data.description)
+          await setCaption(data.caption)
+          await setPrice(data.price)
+          await setCategory(data.category)
+          await setSubCategory(data.Sub_Category)
+          await setStock(data.stock_availability)
+          await setSelectedID(data._id)
+        }
+      }
+    const findOneMenu = async (data) => {
+      console.log(data, 'data', receivedData)
+      const foundMenu = receivedData.find(menu => menu._id === data)
+      await setSelectedMenu(foundMenu)
+      setStates(foundMenu)
     }
-  },[props.receivedData])
-  
-  // ------------------------------------ menu boxes
-  const popupHandler = (e) => {
-    SetIsPopUpOpen(true)
-  }
-
-  const popupClose = (e) => {
-    SetIsPopUpOpen(false)
-  }
-  
-  let EditPopUp =
-    isPopUpOpen ? 
-      <div>
-        <h2>This is popup page</h2>
-        <button onClick={(e) => {popupClose()}}>Close</button>
-      </div>
-    :
-    <></>
-
-
-
-  
-  let allMenuBoxes =
-  isLoaded ?
-    receivedData.map((menu, i) => {
-      return (
-        <div key={i} className="admin_menubox">
-          <ul className="admin_menubox_ul">
-            <li className="admin_menubox_name">{menu.name}</li>
-            <li className="admin_menubox_description">{menu.description}</li>
-            <li className="admin_menubox_id">{menu.id}</li>
-            <li className="admin_menubox_caption">{menu.caption}</li>
-            <li className="admin_menubox_price">{menu.price}</li>
-            <li className="admin_menubox_category">{menu.category}</li>
-            <li className="admin_menubox_Sub_Category">{menu.Sub_Category}</li>
-            <li className="admin_menubox_stock_availability">{menu.stock_availability}</li>
-          </ul>
-        </div>
-      )
-    })
-  :
-    <div>
-      <p>Loading...</p>
-    </div>
-
-  // MUI grid components
-
-  const useStyles = makeStyles({
-
-    dataGrid: {
-      width: "100%"
+    
+    findOneMenu(e.target.value)
+    setModalOpen(true);
     }
-  })
+    
+    const modalCloser = (e) => {
+      setModalOpen(false)
+    }
+    
+    const stockFormatter = (boolean) => {
+      if (boolean) {
+        return 'in stock'
+      } else {
+        return 'out of stock'
+      }
+    }
+    // ------------------------------------- receiving all menu from api
+    useEffect(() => {
+      if (props.receivedData.length > 0) {
+        setIsLoaded(true);
+        setReceivedData(props.receivedData);
+      }
+    },[props.receivedData, selectedMenu])
 
-  const columns = [
-    { field: '_id', hide: true },
-    { field: 'name', headerName: 'Name', editable: true, width: 200 },
-    { field: 'category', headerName: 'Category', editable: true, width: 150 },
-    { field: 'Sub_Category', headerName: 'Sub Category', editable: true, width: 160 },
-    { field: 'price', headerName: 'Price', editable: true, width: 70 },
-    { field: 'stock_availability', headerName: 'Stock', editable: true, width: 70 },
-    { field: 'caption', headerName: 'Caption', editable: true, width: 100 },
-    { field: 'description', headerName: 'Description', editable: true, width: 500 },
-  ]
-
-  const classes = useStyles();
   return (
-    <div className="view_admin_container">
-      {/* {allMenuBoxes} */}
-      <DataGrid 
-        className={classes.dataGrid} 
-        columns={columns} 
-        rows={receivedData} 
-        getRowId={(row) => row._id} 
-        density="compact" 
-        autoPageSize={true}
-      />
-      <button onClick={(e) => {popupHandler()}} className='admin_edit_button'>Edit</button>
-      {EditPopUp}
-    </div>
+    <ThemeProvider theme={theme}>
+      <Grid container>
+        <Grid item xs={12}>
+          <Card elevation={2} sx={{ marginTop: '1em'}}>
+            <Grid container sx={{ height: '2em', padding: '3ps 3px', minWidth: '900px', bgcolor: 'darkgreen', textAlign: 'center', color: 'white'}}>
+              <Grid item sx={{ padding: '3px 3px', borderRight: '1px solid gray'}} xs={2}>
+                <Typography>Name</Typography>
+              </Grid>
+              <Grid item sx={{ padding: '3px 3px', borderRight: '1px solid gray'}} xs={1.5}>
+                <Typography>Category</Typography>
+              </Grid>
+              <Grid item sx={{ padding: '3px 3px', borderRight: '1px solid gray'}} xs={1.5}>
+                <Typography>Sub_Category</Typography>
+              </Grid>
+              <Grid item sx={{ padding: '3px 3px', borderRight: '1px solid gray'}} xs={1}>
+                <Typography>Price</Typography>
+              </Grid>
+              <Grid item sx={{ padding: '3px 3px', borderRight: '1px solid gray'}} xs={1}>
+                <Typography>Stock</Typography>
+              </Grid>
+              <Grid item sx={{ padding: '3px 3px', borderRight: '1px solid gray'}} xs={1}>
+                <Typography>Caption</Typography>
+              </Grid>
+              <Grid item sx={{ padding: '3px 3px', borderRight: '1px solid gray'}} xs={3}>
+                <Typography>Description</Typography>
+              </Grid>
+              <Grid item sx={{ padding: '3px 3px'}} xs={1}>
+                <Typography>Edit</Typography>
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid item xs={12} sx={{ maxHeight: '80vh', overflow: 'auto'}}>
+                {receivedData.map((menu, i) => (
+                  <Grid container sx={{ minWidth: '900px', borderBottom: '1px solid lightgray', padding: '3px 0'}} key={i}>
+                    <Grid item xs={2} sx={{ paddingLeft: 3, display: 'flex', alignItems: 'center'}}>
+                      <Typography sx={{ fontSize: '.85em'}}>{menu.name}</Typography>
+                    </Grid>
+                    <Grid item xs={1.5} sx={{ paddingLeft: 3, display: 'flex', alignItems: 'center'}}>
+                      <Typography sx={{ fontSize: '.85em'}}>{menu.category}</Typography>
+                    </Grid>
+                    <Grid item xs={1.5} sx={{ paddingLeft: 3, display: 'flex', alignItems: 'center'}}>
+                      <Typography sx={{ fontSize: '.85em'}}>{menu.Sub_Category}</Typography>
+                    </Grid>
+                    <Grid item xs={1} sx={{ paddingLeft: 3, display: 'flex', alignItems: 'center'}}>
+                      <Typography sx={{ fontSize: '.85em'}}>$ {menu.price.toFixed(2)}</Typography>
+                    </Grid>
+                    <Grid item xs={1} sx={{ paddingLeft: 3, display: 'flex', alignItems: 'center'}}>
+                      <Typography sx={{ fontSize: '.85em'}}>{stockFormatter(menu.stock_availability)}</Typography>
+                    </Grid>
+                    <Grid item xs={1} sx={{ paddingLeft: 3, display: 'flex', alignItems: 'center'}}>
+                      <Typography sx={{ fontSize: '.85em'}}>{menu.caption}</Typography>
+                    </Grid>
+                    <Grid item xs={3} sx={{ paddingLeft: 3, display: 'flex', alignItems: 'center'}}>
+                      <Typography sx={{ fontSize: '.85em'}}>{menu.description}</Typography>
+                    </Grid>
+                    <Grid item xs={1} sx={{ paddingLeft: 3, display: 'flex', alignItems: 'center'}}>
+                      <Button value={menu._id} onClick={modalOpener}>Edit</Button>
+                    </Grid>
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+          </Card>
+        </Grid>
+      </Grid>
+      <Modal open={modalOpen}>
+        <Card sx={{ width: 400, position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '2em 2em'}}>
+          <Grid container>
+            <Grid item xs={12} sx={{ borderBottom: '2px solid #dc5a41'}}>
+              <Typography variant='h5' sx={{ color: 'darkgreen', paddingLeft: '.5em', paddingBottom: '.25em'}}>Menu Edit</Typography>
+            </Grid>
+            <Grid item xs={12} sx={{ paddingTop: '1em', paddingLeft: '1em'}}>
+              <Grid container>
+                <Grid item xs={12}>
+                  <Typography>{name}</Typography>
+                  <Typography>{category}</Typography>
+                  <Typography>{Sub_Category}</Typography>
+                  <Typography>{price}</Typography>
+                  <Typography>{stock_availability}</Typography>
+                  <Typography>{caption}</Typography>
+                  <Typography>{description}</Typography>
+                  <Typography>{selectedID}</Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Grid container spacing={2}>
+                {console.log(selectedMenu)}
+                <Grid item xs={4}>
+                  <Button variant='outlined' onClick={modalCloser} sx={{ width: '100%'}}>Close</Button>
+                </Grid>
+                <Grid item xs={4}>
+                  <Button variant='contained' onClick={modalCloser} sx={{ width: '100%'}}>Update</Button>
+                </Grid>
+                <Grid item xs={4}>
+                  <Button onClick={modalCloser} sx={{ width: '100%'}}>Delete</Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Card>
+      </Modal>
+    </ThemeProvider>
   )
 }
-
-
-
-// -------------------------- EDIT MENU = POPUP WINDOW ---------------------//
-
-
-
 export default EditMenu;

@@ -4,6 +4,7 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { formatZipCode } from './CardUtils';
 import { Button, Grid, Typography, Card, TextField } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../../theme/theme';
 import CardInformation from './CardInformation';
@@ -28,17 +29,17 @@ const Cardform = (props) => {
   const elements = useElements();
 
   const CardElementContainer = styled.div`
-    height: 19px;
+    height: 15px;
     display: flex;
     align-items: center;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 
     & .StripeElement {
       width: 100%;
       padding: 15px;
       border: 1px solid gray;
-      border-radius: 5px;
+      border-radius: 4px;
     }
   `;
 
@@ -69,6 +70,8 @@ const Cardform = (props) => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
+    setPaymentProcessing(true);
+
     const billingDetails = {
       name: cardName,
       address: {
@@ -79,7 +82,7 @@ const Cardform = (props) => {
       }
     }
 
-    setPaymentProcessing(true);
+    console.log(Number(props.total.toFixed(2)))
 
     const cardElement = elements.getElement('card');
 
@@ -87,16 +90,8 @@ const Cardform = (props) => {
 
   }
 
-  const iframeStyles = {
-    base: {
-    },
-    invalid: {},
-    complete: {}
-  }
-
   const cardElementOpts = {
     iconStyle: 'solid',
-    style: iframeStyles,
     hidePostalCode:  true
   }
 
@@ -130,8 +125,7 @@ const Cardform = (props) => {
                 </CardElementContainer>
               </Grid>
               <Grid item xs={12}>
-                {/* TODO: loading buttong */}
-                <Button variant="contained" type='submit' sx={{ width: '100%'}}>Button</Button>
+                <LoadingButton disabled={paymentProcessing || !stripe} loading={paymentProcessing} variant="contained" type='submit' sx={{ width: '100%'}}>Pay ${(props.total).toFixed(2)}</LoadingButton>
               </Grid>
             </Grid>
           </form>

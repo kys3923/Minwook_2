@@ -71,7 +71,7 @@ const ReservationHistory = (props) => {
       <>
       <Grid container>
         <Grid item xs={12}>
-          <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41'}}>Reservation History</Typography>
+          <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41'}}>Reservation History</Typography>
         </Grid>
         <Grid item xs={12}>
           <Card elevation={2} sx={{ marginTop: '1em' }}>

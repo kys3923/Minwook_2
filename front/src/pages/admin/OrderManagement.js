@@ -78,7 +78,7 @@ const OrderManagement = (props) => {
         <>
           <Grid container>
             <Grid item xs={12}>
-              <Typography variant='h4' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41'}}>Order History</Typography>
+              <Typography variant='h5' sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', paddingBottom: '.5em', borderBottom: '1px solid #dc5a41'}}>Order History</Typography>
             </Grid>
             <Grid item xs={12}>
               <Card elevation={2} sx={{ marginTop: '1em' }}>
@@ -101,7 +101,7 @@ const OrderManagement = (props) => {
                   <Grid item xs={2} sx={{ padding: '3px 3px', borderRight: '1px solid gray'}}>
                     <Typography>Date</Typography>
                   </Grid>
-                  <Grid item xs={2}>
+                  <Grid item xs={2} sx={{ padding: '3px 3px'}}>
                     <Typography>More Info</Typography>
                   </Grid>
                 </Grid>
@@ -119,7 +119,7 @@ const OrderManagement = (props) => {
                         <Typography sx={{ lineHeight: '1.9em'}}>{order.customer.username}</Typography>
                       </Grid>
                       <Grid item xs={1} sx={{ padding: '3px 3px'}}>
-                        <Typography sx={{ lineHeight: '1.9em'}}>$ {(order.grandTotal).toFixed(2)}</Typography>
+                        {order.grandTotal ? <Typography sx={{ lineHeight: '1.9em'}}>$ {(order.grandTotal).toFixed(2)}</Typography> : <Typography sx={{ lineHeight: '1.9em'}}>N/A</Typography>}
                       </Grid>
                       <Grid item xs={2} sx={{ padding: '3px 3px'}}>
                         <Typography sx={{ lineHeight: '1.9em'}}>{paymentFilter(order.isPaidAtRestaurant)}</Typography>

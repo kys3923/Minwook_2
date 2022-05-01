@@ -28,11 +28,6 @@ const PaymentSetting = (props) => {
 
   // handlers
 
-  const tempHandler = (e) => {
-    console.log(props.completed, props.activeStep)
-    props.handleNext();
-  }
-
   function determineOrder(data) {
     if (orderData) {
       if (data.isPaidAtRestaurant == true) {
@@ -319,7 +314,7 @@ const PaymentSetting = (props) => {
                     <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: 'darkgreen'}}>${(totalCalcualtor('subTotal')).toFixed(2)}</Typography>
                   </Grid>
                   {/* Add on */}
-                  { orderData[0].addOns ?
+                  { orderData[0].addOns.length > 0 ?
                   <Grid item xs={12}>
                     <Grid container>
                       <Grid item xs={7}>
@@ -377,7 +372,6 @@ const PaymentSetting = (props) => {
                 </Grid>
               </Grid>
             </Grid>
-            <Button onClick={tempHandler}>Temp Button</Button>
           </Grid>
         </Grid>
       </>
