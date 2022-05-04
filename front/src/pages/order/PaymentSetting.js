@@ -365,7 +365,11 @@ const PaymentSetting = (props) => {
                   <Grid container spacing={2}>
                     <Elements stripe={stripePromise}>
                       <Cardform
+                        handleNext={props.handleNext}
+                        handleComplete={props.handleComplete}
                         total={orderData[0].grandTotal}
+                        orderNumber={orderData[0].OrderNumber}
+                        orderId={orderData[0]._id}
                       />
                     </Elements>
                   </Grid>

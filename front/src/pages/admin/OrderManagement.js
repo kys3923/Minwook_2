@@ -110,22 +110,22 @@ const OrderManagement = (props) => {
                   {allOrders.map((order, i) => (
                     <Grid container key={i} sx={{ width: '100%', minWidth: '900px', textAlign: 'center', borderBottom: '1px solid lightgray'}}>
                       <Grid item xs={1} sx={{ padding: '3px 3px'}}>
-                        <Typography sx={{ lineHeight: '1.9em'}}>{order.OrderNumber}</Typography>
+                        <Typography sx={{ lineHeight: '1.9em', fontSize: '.85em'}}>{order.OrderNumber}</Typography>
                       </Grid>
                       <Grid item xs={2} sx={{ padding: '3px 3px'}}>
-                        <Typography sx={{ lineHeight: '1.9em'}}>{statusFilter(order.isConfirmed, order.isFinished, order.isPlaced, order.isReady)}</Typography>
+                        <Typography sx={{ lineHeight: '1.9em', fontSize: '.85em'}}>{statusFilter(order.isConfirmed, order.isFinished, order.isPlaced, order.isReady)}</Typography>
                       </Grid>
                       <Grid item xs={2} sx={{ padding: '3px 3px'}}>
-                        <Typography sx={{ lineHeight: '1.9em'}}>{order.customer.username}</Typography>
+                        <Typography sx={{ lineHeight: '1.9em', fontSize: '.85em'}}>{order.customer.username}</Typography>
                       </Grid>
                       <Grid item xs={1} sx={{ padding: '3px 3px'}}>
-                        {order.grandTotal ? <Typography sx={{ lineHeight: '1.9em'}}>$ {(order.grandTotal).toFixed(2)}</Typography> : <Typography sx={{ lineHeight: '1.9em'}}>N/A</Typography>}
+                        {order.grandTotal ? <Typography sx={{ lineHeight: '1.9em', fontSize: '.85em'}}>$ {(order.grandTotal).toFixed(2)}</Typography> : <Typography sx={{ lineHeight: '1.9em'}}>N/A</Typography>}
                       </Grid>
                       <Grid item xs={2} sx={{ padding: '3px 3px'}}>
-                        <Typography sx={{ lineHeight: '1.9em'}}>{paymentFilter(order.isPaidAtRestaurant)}</Typography>
+                        <Typography sx={{ lineHeight: '1.9em', fontSize: '.85em'}}>{paymentFilter(order.isPaidAtRestaurant)}</Typography>
                       </Grid>
                       <Grid item xs={2} sx={{ padding: '3px 3px' }}>
-                        <Typography sx={{ lineHeight: '1.9em'}}>{moment(order.updatedAt).format('h[:]mm[ ]a[, ]MM[/]DD[/]YY')}</Typography>
+                        <Typography sx={{ lineHeight: '1.9em', fontSize: '.85em'}}>{moment(order.updatedAt).format('h[:]mm[ ]a[, ]MM[/]DD[/]YY')}</Typography>
                       </Grid>
                       <Grid item xs={2} sx={{ padding: '3px 3px' }}>
                         <Button size='small' value={order._id} onClick={detailHandler}>Details</Button>

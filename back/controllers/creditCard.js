@@ -4,22 +4,24 @@ const ErrorResponse = require('../utils/errorResponse');
 const stripe = require('stripe')(`${process.env.STRIPE_API_SECRET}`)
 
 exports.chargeCard = async (req, res) => {
-  const { id, totalAmount } = req.body;
+  const { orderNumber, totalAmount } = req.body;
   // calculate
   const calculateOrderAmount = (order) => {
-    return 1400;
+    return order * 100;
   }
   // post
   try {
-    const payment = await stripe.paymentIntents.create({
+    const paymentIntent = await stripe.paymentIntents.create({
       amount: calculateOrderAmount(totalAmount),
       currency: 'USD',
-      payment_method: id
+      description: `Order #${orderNumber}`
     })
 
-    return res.status(200).json({
-      confirmed: payment
-    })
+    res.status(200).send(paymentIntent.client_secret)
+
+    // return res.status(200).json({
+    //   confirmed: payment
+    // })
   } catch (error) {
     console.log(error);
     return res.status(400).json({

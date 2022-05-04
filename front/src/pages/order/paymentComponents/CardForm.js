@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-import { formatZipCode } from './CardUtils';
 import { Button, Grid, Typography, Card, TextField } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { ThemeProvider } from '@mui/material/styles';
@@ -22,6 +20,7 @@ const Cardform = (props) => {
   const [ country, setCountry ] = useState('');
   const [ cardName, setCardName ] = useState('');
   const [ postal, setPostal ] = useState('');
+  const [ checkoutError, setCheckoutError ] = useState('');
 
 
   // stripe
@@ -70,7 +69,7 @@ const Cardform = (props) => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    setPaymentProcessing(true);
+    // setPaymentProcessing(true);
 
     const billingDetails = {
       name: cardName,
@@ -82,11 +81,46 @@ const Cardform = (props) => {
       }
     }
 
-    console.log(Number(props.total.toFixed(2)))
+    try {
+      const { data: clientSecret } = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/creditcard/charge`, {
+        totalAmount: Number(props.total.toFixed(2)),
+        orderNumber: props.orderNumber
+      })
 
-    const cardElement = elements.getElement('card');
+      const paymentMethodReq = await stripe.createPaymentMethod({
+        type: 'card',
+        card: elements.getElement('card'),
+        billing_details: billingDetails
+      })
 
-    // TODO: call server to receive the data
+      
+      if (paymentMethodReq.error) {
+          setCheckoutError(paymentMethodReq.error.message);
+          setPaymentProcessing(false)
+          return
+        }
+        
+      const { error } = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: paymentMethodReq.paymentMethod.id
+        })
+          
+          console.log(paymentMethodReq)
+
+        
+      if (error) {
+        setCheckoutError(error.message)
+        setPaymentProcessing(false)
+        console.log(error.message)
+        return
+      }
+
+      props.handleComplete();
+      props.handlNext();
+
+    } catch (err) {
+      setCheckoutError(err.message)
+      console.log(err.message)
+    }
 
   }
 
@@ -124,6 +158,11 @@ const Cardform = (props) => {
                   />
                 </CardElementContainer>
               </Grid>
+              { !checkoutError === '' ? 
+              <Grid item xs={12}>
+                <Typography sx={{ color: 'red', textAlign: 'center', marginBottom: '1em'}}>There is error</Typography>
+              </Grid> 
+              : null}
               <Grid item xs={12}>
                 <LoadingButton disabled={paymentProcessing || !stripe} loading={paymentProcessing} variant="contained" type='submit' sx={{ width: '100%'}}>Pay ${(props.total).toFixed(2)}</LoadingButton>
               </Grid>

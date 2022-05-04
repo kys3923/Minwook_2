@@ -18,10 +18,6 @@ const OrderResult = (props) => {
     await navigate('/');
   }
 
-  const closeButtonHandler2 = (e) => {
-    console.log('close button clicked', orderData, '-orderData')
-  }
-
   const priceFomatter= (text) => {
     if (text === 'subtotal') {
       return props.subTotal
@@ -225,7 +221,7 @@ const OrderResult = (props) => {
               <Typography>Added Items</Typography>
             </Grid>
             <Grid item xs={12} sx={{ borderBottom: '1px solid #dc5a41', paddingBottom: '1em'}}>
-            {orderData[0].addOns ?
+            {orderData[0].addOns.length > 0 ?
             <>
               {orderData[0].addOns.map((item, i) => (
                   <Card key={i} sx={{ padding: '1em 1em', borderBottom: '1px solid lightgray'}} elevation={0}>
@@ -245,8 +241,8 @@ const OrderResult = (props) => {
             </>
             :
             <>
-              <Grid item xs={12} sx={{ borderBottom: '1px solid #dc5a41', paddingBottom: '1em'}}>
-                <Typography sx={{ paddingLeft: '3em', color: 'gray'}}>No items added.</Typography>
+              <Grid item xs={12} sx={{ paddingBottom: '1em'}}>
+                <Typography sx={{ paddingLeft: '2em', color: 'gray'}}>No items added.</Typography>
               </Grid>
             </>
             }
@@ -286,21 +282,19 @@ const OrderResult = (props) => {
             <Grid item xs={5}>
               <Typography sx={{ textAlign: 'right', paddingRight: '2em', color: 'darkgreen'}}>${(priceFomatter('subtotal')).toFixed(2)}</Typography>
             </Grid>
+            { orderData[0].addOnTotal > 0 ? 
             <Grid item xs={12}>
-              { orderData[0].addOnTotal > 0 ? 
-              <>
-                {orderData[0].addOns.map((item, i) => (
-                  <Grid container key={i}>
-                    <Grid item xs={7}>
-                      <Typography sx={{ color: 'gray', paddingLeft: '2em'}}>{item.name}</Typography>
-                    </Grid>
-                    <Grid item xs={5}>
-                      <Typography sx={{ textAlign: 'Right', paddingRight: '2em', color: 'darkgreen'}}>${priceFomatter('addOn').toFixed(2)}</Typography>
-                    </Grid>
+              {orderData[0].addOns.map((item, i) => (
+                <Grid container key={i}>
+                  <Grid item xs={7}>
+                    <Typography sx={{ color: 'gray', paddingLeft: '2em'}}>{item.name}</Typography>
                   </Grid>
-                ))}
-              </> : null }
-            </Grid>
+                  <Grid item xs={5}>
+                    <Typography sx={{ textAlign: 'Right', paddingRight: '2em', color: 'darkgreen'}}>${priceFomatter('addOn').toFixed(2)}</Typography>
+                  </Grid>
+                </Grid>
+              ))}
+            </Grid> : null }
             <Grid item xs={7}>
               <Typography sx={{ color: 'gray', paddingLeft: '2em'}}>Tax (8.875%)</Typography>
             </Grid>
@@ -332,7 +326,6 @@ const OrderResult = (props) => {
           <CheckCircleOutlineRounded sx={{ fontSize: '6em', color: 'green', marginTop: '.5em'}} />
           <Typography variant='h6' sx={{ paddingTop: '1em'}}>Your order has been placed!</Typography>
           <Typography variant='body1' sx={{ paddingTop: '1em', fontSize: '.9em', color: 'gray'}}>We have sent confirmation email to you. <br /> Please show the email at pick up.</Typography>
-          <Button onClick={closeButtonHandler2} variant='contained' sx={{ marginTop: '2em', marginBottom: '2em'}}>Check</Button>
           <Button onClick={closeButtonHandler} variant='contained' sx={{ marginTop: '2em', marginBottom: '2em'}}>Close</Button>
         </Grid>
       </> 

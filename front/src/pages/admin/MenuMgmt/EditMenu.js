@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 // MUI
 import { ThemeProvider } from '@mui/material/styles'
 import theme from '../../../theme/theme';
-import { Typography, Grid, Button, Modal, Card, Chip, Stack, CircularProgreess } from '@mui/material';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import { Typography, Grid, Button, Modal, Card, Chip, Stack, CircularProgreess, TextField, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel, Switch } from '@mui/material';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import { LoadingButton } from '@mui/lab'
 import axios from 'axios';
 
 const EditMenu = (props) => {
@@ -16,14 +16,15 @@ const EditMenu = (props) => {
   const [ price, setPrice ] = useState(0);
   const [ category, setCategory ] = useState('');
   const [ Sub_Category, setSubCategory] = useState('');
-  const [ stock_availability, setStock ] = useState(null);
-  const [ error, setError ] = useState('loading');
+  const [ stock_availability, setStock ] = useState(false);
   const [ receivedData, setReceivedData ] = useState([]);
-  const [ isLoaded, setIsLoaded ] = useState(false);
   const [ modalOpen, setModalOpen ] = useState(false);
   const [ selectedID, setSelectedID ] = useState('')
   const [ selectedMenu, setSelectedMenu ] = useState();
-  
+  const [ error, setError ] = useState('loading');
+  const [ isLoading, setIsLoading ] = useState(false);
+  const [ updateIsProcessing, setUpdateIsProcessing ] = useState(false);
+  const [ deleteIsProcessing, setDeleteIsProcessing ] = useState(false);
   
   // handlers
   const modalOpener = async (e) => {
@@ -61,10 +62,100 @@ const EditMenu = (props) => {
         return 'out of stock'
       }
     }
+
+    const nameInputHandler = (e) => {
+      setName(e.currentTarget.value);
+    }
+
+    const categoryInputHandler = (e) => {
+      setCategory(e.currentTarget.value);
+    }
+
+    const subCategoryInputHandler = (e) => {
+      setSubCategory(e.currentTarget.value);
+    }
+
+    const captionInputHandler = (e) => {
+      setCaption(e.currentTarget.value);
+    }
+
+    const priceInputHandler = (e) => {
+      setPrice(e.currentTarget.value);
+    }
+
+    const descriptionInputHandler = (e) => {
+      setDescription(e.currentTarget.value);
+    }
+
+    const stockInputHandler = (e) => {
+      setStock(e.target.checked);
+    }
+
+    // Edit request
+    const updateButtonHandler = async (e) => {
+      setUpdateIsProcessing(true)
+      const config = {
+        header: {
+          "Content-Type": "application/json"
+        }
+      }
+
+      const request = {
+        body: {
+          name: name,
+          description: description,
+          caption: caption,
+          price: price,
+          category: category,
+          Sub_Category: Sub_Category,
+          stock_availability: stock_availability
+        }
+      }
+
+      try {
+        const { data } = await axios.put(`${process.env.REACT_APP_SERVER_URL}/api/menu/update/${selectedID}`, request.body, config)
+        setUpdateIsProcessing(false)
+        modalCloser();
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    // Delete request
+    const deleteButtonHandler = async (e) => {
+      setDeleteIsProcessing(true)
+      const config = {
+        header: {
+          "Content-Type": "application/json"
+        }
+      }
+
+      const request = {
+        body: {
+          name: name,
+          description: description,
+          caption: caption,
+          price: price,
+          category: category,
+          Sub_Category: Sub_Category,
+          stock_availability: stock_availability
+        }
+      }
+
+      try {
+        const { data } = await axios.delete(`${process.env.REACT_APP_SERVER_URL}/api/menu/delete/${selectedID}`, request.body, config)
+        console.log(data)
+        setDeleteIsProcessing(false)
+        modalCloser()
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
     // ------------------------------------- receiving all menu from api
     useEffect(() => {
       if (props.receivedData.length > 0) {
-        setIsLoaded(true);
+        setIsLoading(false);
         setReceivedData(props.receivedData);
       }
     },[props.receivedData, selectedMenu])
@@ -141,17 +232,78 @@ const EditMenu = (props) => {
             <Grid item xs={12} sx={{ borderBottom: '2px solid #dc5a41'}}>
               <Typography variant='h5' sx={{ color: 'darkgreen', paddingLeft: '.5em', paddingBottom: '.25em'}}>Menu Edit</Typography>
             </Grid>
-            <Grid item xs={12} sx={{ paddingTop: '1em', paddingLeft: '1em'}}>
+            <Grid item xs={12} sx={{ paddingTop: '1em', paddingLeft: '1em', paddingRight: '1em'}}>
               <Grid container>
                 <Grid item xs={12}>
-                  <Typography>{name}</Typography>
-                  <Typography>{category}</Typography>
-                  <Typography>{Sub_Category}</Typography>
-                  <Typography>{price}</Typography>
-                  <Typography>{stock_availability}</Typography>
-                  <Typography>{caption}</Typography>
-                  <Typography>{description}</Typography>
-                  <Typography>{selectedID}</Typography>
+                  <Typography variant='body1' sx={{ fontSize: '.75em', fontStyle: 'italic', fontWeight: 'light', marginBottom: '1em'}}>For detailed menu item changes, please contact YK Technology Corporation representative.</Typography>
+                  <TextField 
+                    value={name}
+                    label='Menu Item Name'
+                    onChange={nameInputHandler}
+                    sx={{ width: '100%', margin: '.5em 0' }}
+                    size='small'
+                    required
+                  />
+                  <TextField 
+                    value={category}
+                    label='Menu Category'
+                    onChange={categoryInputHandler}
+                    size='small'
+                    sx={{ width: '100%', margin: '.5em 0' }}
+                  />
+                  <TextField 
+                    value={Sub_Category}
+                    label='Menu sub category'
+                    onChange={subCategoryInputHandler}
+                    size='small'
+                    sx={{ width: '100%', margin: '.5em 0' }}
+                  />
+                  <TextField 
+                    value={caption}
+                    label='Menu caption'
+                    onChange={captionInputHandler}
+                    size='small'
+                    sx={{ width: '100%', margin: '.5em 0' }}
+                  />
+                  <TextField 
+                    value={price}
+                    type='number'
+                    label='Menu price'
+                    onChange={priceInputHandler}
+                    size='small'
+                    sx={{ width: '100%', margin: '.5em 0' }}
+                    required
+                  />
+                  <TextField 
+                    value={description}
+                    label='Description'
+                    size='small'
+                    multiline
+                    rows={2}
+                    onChange={descriptionInputHandler}
+                    sx={{ width: '100%', margin: '.5em 0'}}
+                  />
+                  <Grid container>
+                    <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                      <Typography sx={{ marginRight: '2em'}}>Stock: </Typography>
+                      {stock_availability ?
+                        <Typography sx={{marginRight: '1em', color: 'lightgray'}}>Out of Stock</Typography>
+                      :
+                        <Typography sx={{marginRight: '1em', color: 'darkgreen'}}>Out of Stock</Typography>
+                      }
+                      <Switch 
+                        checked={stock_availability}
+                        onChange={stockInputHandler}
+                        sx={{ marginRight: '1em'}}
+                      />
+                      {stock_availability ?
+                      <Typography sx={{marginRight: '1em', color: 'darkgreen'}}>Available</Typography>
+                      :
+                        <Typography sx={{marginRight: '1em', color: 'lightgray'}}>Available</Typography>
+                      }
+                    </Grid>
+                  </Grid>
+                  <Typography sx={{ fontSize: '.75em', fontStyle: 'italic', fontWeight: 'light', textAlign: 'center', marginBottom: '1em'}}>Edit page must be refreshed to see the changes in Edit page</Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -162,10 +314,10 @@ const EditMenu = (props) => {
                   <Button variant='outlined' onClick={modalCloser} sx={{ width: '100%'}}>Close</Button>
                 </Grid>
                 <Grid item xs={4}>
-                  <Button variant='contained' onClick={modalCloser} sx={{ width: '100%'}}>Update</Button>
+                  <LoadingButton loading={updateIsProcessing} variant='contained' onClick={updateButtonHandler} sx={{ width: '100%'}}>Update</LoadingButton>
                 </Grid>
                 <Grid item xs={4}>
-                  <Button onClick={modalCloser} sx={{ width: '100%'}}>Delete</Button>
+                  <LoadingButton loading={deleteIsProcessing} onClick={deleteButtonHandler} sx={{ width: '100%'}}>Delete</LoadingButton>
                 </Grid>
               </Grid>
             </Grid>

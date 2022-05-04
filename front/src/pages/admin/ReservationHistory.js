@@ -96,19 +96,19 @@ const ReservationHistory = (props) => {
             <Grid item xs={12} sx={{ maxHeight: '80vh', overflow: 'auto' }}>
               {reservations.map((reservation, i) => (
                 <Grid container key={i} sx={{ width: '100%', minWidth: '900px', textAlign: 'center', borderBottom: '1px solid lightgray'}}>
-                  <Grid item xs={2} sx={{ padding: '3px 3px'}}>
-                    <Typography sx={{ lineHeight: '1.9em'}}>{statusFilter(reservation.isShowedUp)}</Typography>
+                  <Grid item xs={2} sx={{ padding: '3px 3px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <Typography sx={{ lineHeight: '1.9em', fontSize: '.85em'}}>{statusFilter(reservation.isShowedUp)}</Typography>
                   </Grid>
-                  <Grid item xs={3} sx={{ padding: '3px 3px'}}>
-                    <Typography sx={{ lineHeight: '1.9em'}}>{moment(reservation.reserveDate).format('MM[/]DD[/]YY[, ]hh[:]mm[ ]a')}</Typography>
+                  <Grid item xs={3} sx={{ padding: '3px 3px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <Typography sx={{ lineHeight: '1.9em', fontSize: '.85em'}}>{moment(reservation.reserveDate).format('MM[/]DD[/]YY[, ]hh[:]mm[ ]a')}</Typography>
                   </Grid>
-                  <Grid item xs={3} sx={{ padding: '3px 3px'}}>
-                    <Typography sx={{ lineHeight: '1.9em'}}>{reservation.name}</Typography>
+                  <Grid item xs={3} sx={{ padding: '3px 3px', display: 'flex', alignItems: 'center', paddingLeft: '2em'}}>
+                    <Typography sx={{ lineHeight: '1.9em', fontSize: '.85em'}}>{reservation.name}</Typography>
                   </Grid>
-                  <Grid item xs={2} sx={{ padding: '3px 3px'}}>
-                    <Typography sx={{ lineHeight: '1.9em'}}>{reservation.totalParty}&nbsp;ppl</Typography>
+                  <Grid item xs={2} sx={{ padding: '3px 3px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <Typography sx={{ lineHeight: '1.9em', fontSize: '.85em'}}>{reservation.totalParty}&nbsp;ppl</Typography>
                   </Grid>
-                  <Grid item xs={2} sx={{ padding: '3px 3px'}}>
+                  <Grid item xs={2} sx={{ padding: '3px 3px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <Button size='small' value={reservation._id} onClick={detailHandler}>Details</Button>
                   </Grid>
                 </Grid>
@@ -143,17 +143,7 @@ const ReservationHistory = (props) => {
             </Grid>
             <Grid item xs={12}>
               <Grid container sx={{ padding: '1em 2em'}}>
-                <Grid item xs={5} sx={{ borderBottom: '1px solid #dc5a41', marginBottom: '.5em' }}>
-                  <Typography variant='h6' sx={{ color: '#dc5a41' }}>
-                    Reserved Name:
-                  </Typography>
-                </Grid>
-                <Grid item xs={7} sx={{ borderBottom: '1px solid #dc5a41', marginBottom: '.5em' }}>
-                  <Typography variant='h6' sx={{ color: 'darkgreen' }}>
-                    {reservation.name}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sx={{ marginTop: '.25em'}}>
+                <Grid item xs={12} sx={{ marginTop: '.25em', marginBottom: '1em'}}>
                   <Stack
                     direction='row'
                     alignItems='flex-start'
@@ -164,34 +154,44 @@ const ReservationHistory = (props) => {
                     <Chip size='small' variant='outlined' sx={{ border: '1px solid darkgreen'}} label={moment(reservation.updatedAt).format('MM[/]DD[/]YY[, ]h[:]mm[ ]a')} />
                   </Stack>
                 </Grid>
-                <Grid item xs={5} sx={{ borderBottom: '1px solid lightgray', marginBottom: '.5em', marginTop: '1em' }}>
-                  <Typography variant='h6' sx={{ color: '#dc5a41' }}>
+                <Grid item xs={5} sx={{ marginBottom: '.5em' }}>
+                  <Typography variant='body1' sx={{ color: '#dc5a41' }}>
+                    Reserved Name:
+                  </Typography>
+                </Grid>
+                <Grid item xs={7} sx={{ marginBottom: '.5em' }}>
+                  <Typography variant='body1' sx={{ color: 'darkgreen' }}>
+                    {reservation.name}
+                  </Typography>
+                </Grid>
+                <Grid item xs={5} sx={{ marginBottom: '.5em', marginTop: '.5em' }}>
+                  <Typography variant='body1' sx={{ color: '#dc5a41' }}>
                     Reserved Date:
                   </Typography>
                 </Grid>
-                <Grid item xs={7} sx={{ borderBottom: '1px solid lightgray', marginBottom: '.5em', marginTop: '1em' }}>
-                  <Typography variant='h6' sx={{ color: 'darkgreen' }}>
+                <Grid item xs={7} sx={{ marginBottom: '.5em', marginTop: '.5em' }}>
+                  <Typography variant='body1' sx={{ color: 'darkgreen' }}>
                     {moment(reservation.reserveDate).format('MM[/]DD[/]YY[, ]hh[:]mm[ ]a')}
                   </Typography>
                 </Grid>
-                <Grid item xs={5} sx={{ borderBottom: '1px solid lightgray', marginBottom: '.5em', marginTop: '1em' }}>
-                  <Typography variant='h6' sx={{ color: '#dc5a41' }}>
+                <Grid item xs={5} sx={{ marginBottom: '.5em', marginTop: '.5em' }}>
+                  <Typography variant='body1' sx={{ color: '#dc5a41' }}>
                     Number of Party:
                   </Typography>
                 </Grid>
-                <Grid item xs={7} sx={{ borderBottom: '1px solid lightgray', marginBottom: '.5em', marginTop: '1em' }}>
-                  <Typography variant='h6' sx={{ color: 'darkgreen' }}>
+                <Grid item xs={7} sx={{ marginBottom: '.5em', marginTop: '.5em' }}>
+                  <Typography variant='body1' sx={{ color: 'darkgreen' }}>
                     {reservation.totalParty}&nbsp;ppl
                   </Typography>
                 </Grid>
                 { reservation.comments ? 
                 <>
-                  <Grid item xs={5} sx={{ borderBottom: '1px solid lightgray', marginBottom: '.5em', marginTop: '1em' }}>
-                    <Typography variant='h6' sx={{ color: '#dc5a41' }}>
+                  <Grid item xs={5} sx={{ marginBottom: '.5em', marginTop: '.5em' }}>
+                    <Typography variant='body1' sx={{ color: '#dc5a41' }}>
                       Comments:
                     </Typography>
                   </Grid>
-                  <Grid item xs={7} sx={{ borderBottom: '1px solid lightgray', marginBottom: '.5em', marginTop: '1em' }}>
+                  <Grid item xs={7} sx={{ marginBottom: '.5em', marginTop: '.5em' }}>
                     <Typography variant='body1' sx={{ color: 'darkgreen', paddingTop: '.25em' }}>
                       {reservation.comments}
                     </Typography>
