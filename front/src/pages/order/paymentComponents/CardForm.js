@@ -115,7 +115,8 @@ const Cardform = (props) => {
       }
 
       props.handleComplete();
-      props.handlNext();
+      // TODO: send email
+      props.handleNext();
 
     } catch (err) {
       setCheckoutError(err.message)

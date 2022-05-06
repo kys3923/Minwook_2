@@ -72,14 +72,12 @@ const Header = (props) => {
               {localStorage.role == "user" &&
                 <>
                 <Link to='account'><Button className={classes.navItems}><AccountBoxIcon />&nbsp;Account</Button></Link>
-              <button onClick={logoutHandler}>Logout</button>
                 </>
               }
             </Stack>
             {localStorage.role == "admin" && <>
               <Link to='dashboard'><Button className={classes.navItems}><DashboardIcon /> Dashboard</Button></Link>
               <Link to='/menu'><Button className={classes.navItems}>Menu Management</Button></Link>
-              <button onClick={logoutHandler}>Logout</button>
             </>
             }
             <Paper className={classes.navItems}>

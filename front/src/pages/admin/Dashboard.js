@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // pages
 import MenuManagement from "./MenuManagement";
-import DashBoardPannel from './DashboardPannel';
+import DashBoardPannel from './Dashboard/DashboardPannel';
 import OrderManagement from './OrderManagement';
 import ReservationHistory from './ReservationHistory';
 
@@ -91,13 +91,18 @@ const DashBoard = (props) => {
             <Tab label="Order History" {...allyProps} />
             <Tab label="Reservation History" {...allyProps} />
             <Tab label="Menu Management" {...allyProps} />
-            <Tab label="Customers" {...allyProps} />
           </Tabs>
         </Box>
         <Grid item xs={12}>
           <TabPanel value={value} index={0}>
             { allOrders.length > 0 ?
-              <DashBoardPannel allOrders={allOrders}/>
+              <DashBoardPannel 
+                allOrders={allOrders}
+                storeOpen={props.storeOpen} 
+                setStoreOpen={props.setStoreOpen} 
+                manualOpen={props.manualOpen} 
+                setManualOpen={props.setManualOpen}
+              />
               :
               <Grid container>
                 <Grid item sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', height: '70vh'}} xs={12}>
@@ -115,9 +120,6 @@ const DashBoard = (props) => {
           </TabPanel>
           <TabPanel value={value} index={3}>
             <MenuManagement />
-          </TabPanel>
-          <TabPanel value={value} index={4}>
-            <Typography>Customers</Typography>
           </TabPanel>
         </Grid>
       </Grid>
