@@ -13,14 +13,18 @@ exports.checkStatus = async ( req, res ) => {
 
 exports.updateStatus = async ( req, res, next ) => {
   const id = req.params.id;
-  const { status } = req.body;
+  const { isOpenStoreAuto, manualStatus } = req.body;
+  console.log(req.body, 'request')
 
-  if ( !status ) {
+  if ( isOpenStoreAuto === '' ) {
     return next(new ErrorResponse('status need to be provided', 400))
   } 
 
   try {
-    const request = await StoreStatus.findByIdAndUpdate(id, {status})
+    const request = await StoreStatus.findByIdAndUpdate(id, {isOpenStoreAuto, manualStatus})
+
+    request.save()
+
     res.json({
       message: 'status has been updated'
     })

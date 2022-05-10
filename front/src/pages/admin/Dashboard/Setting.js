@@ -33,10 +33,6 @@ const Setting = (props) => {
     <ThemeProvider theme={theme}>
       <StoreOpen 
         TimeFormatter={TimeFormatter}
-        storeOpen={props.storeOpen} 
-        setStoreOpen={props.setStoreOpen} 
-        manualOpen={props.manualOpen} 
-        setManualOpen={props.setManualOpen}
       />
     </ThemeProvider>
   );

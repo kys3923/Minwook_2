@@ -98,10 +98,6 @@ const DashBoard = (props) => {
             { allOrders.length > 0 ?
               <DashBoardPannel 
                 allOrders={allOrders}
-                storeOpen={props.storeOpen} 
-                setStoreOpen={props.setStoreOpen} 
-                manualOpen={props.manualOpen} 
-                setManualOpen={props.setManualOpen}
               />
               :
               <Grid container>

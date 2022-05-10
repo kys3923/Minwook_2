@@ -48,10 +48,6 @@ const DashBoardPannel = (props) => {
             </AccordionSummary>
             <AccordionDetails sx={{ bgcolor: 'rgba(255, 240, 174, 0.75)'}}>
               <Setting 
-                storeOpen={props.storeOpen} 
-                setStoreOpen={props.setStoreOpen} 
-                manualOpen={props.manualOpen} 
-                setManualOpen={props.setManualOpen}
               />
             </AccordionDetails>
           </Accordion>

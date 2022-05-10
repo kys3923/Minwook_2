@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const StoreStatusSchema = new mongoose.Schema({
   status: String,
-  auto: Boolean
+  isOpenStoreAuto: Boolean,
+  manualStatus: Boolean
 })
 
 const StoreStatus = mongoose.model('StoreStatus', StoreStatusSchema);

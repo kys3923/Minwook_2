@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import moment from 'moment-timezone'
 
 // import page components
 import OrderItem from './OrderItem';
 import Cart from './Cart';
+import { determineDay, TimeFormatter, storeOpener } from '../../Util/StoreSetting'
 
 // MUI stuff
 import PropTypes from 'prop-types';
@@ -79,7 +81,7 @@ const Order = (props) => {
   const [ product, setProduct ] = useState('');
   const [ itemOpen, setItemOpen ] = useState(false);
   const [ loadCount, setLoadCount ] = useState(0);
-  const [ storeOpen, setStoreOpen ] = useState(true);
+  const [ storeOpen, setStoreOpen ] = useState(false);
   const [ lunchHour, setLunchHour ] = useState(false);
 
   const navigate = useNavigate();
@@ -101,7 +103,25 @@ const Order = (props) => {
       setProducts(data);
       setDataLoaded(true);
     }
+    console.log(props.isAutoOpen, 'at order - autoOpen', props.manualOpen, 'at order - manualOpen')
+    function now() {
+      const date = new Date();
+      let localeTime = moment.tz(date, 'America/New_York')
+      // let openClose = storeOpener(determineDay(localeTime), TimeFormatter(localeTime))
+      // TODO: bottome is the test time => set time to current
+      let openClose = storeOpener('regular hours', 1000)
+      if (openClose === 'regular open' || openClose === 'longer hour open') {
+        setStoreOpen(true);
+      } else if (openClose === 'lunch hour') {
+        setStoreOpen(true);
+        setLunchHour(true);
+      } else {
+        setStoreOpen(false);
+        setLunchHour(false);
+      }
+    }
     fetchData();
+    now()
   },[loadCount])
   
   // button handlers
@@ -137,6 +157,7 @@ const Order = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <div className="orderContainer">
+        {console.log(storeOpen, lunchHour, )}
         { !dataLoaded ? (
           <Grid container sx={{ marginTop: '4.25em' }}>
               <Card sx={{ paddingBottom: '1em', width: '100%', height: '100vh'}}>
@@ -196,15 +217,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                            {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -230,15 +293,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -264,15 +369,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -302,15 +449,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -336,15 +525,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -378,15 +609,75 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {lunchHour ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Not Lunch Time
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <>
+                                  {lunchHour ? 
+                                  <>
+                                    <Button 
+                                    variant='outlined' 
+                                    sx={{ width: '100%'}}
+                                    size='small'
+                                    value={menu._id}
+                                    onClick={modalOpener}
+                                    >
+                                      <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                    </Button>
+                                  </> 
+                                  : 
+                                  <>
+                                    <Button 
+                                    variant='outlined' 
+                                    sx={{ width: '100%'}}
+                                    size='small'
+                                    value={menu._id}
+                                    onClick={modalOpener}
+                                    disabled
+                                    >
+                                      Not Lunch Time
+                                    </Button>
+                                  </>}
+                                </>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -412,15 +703,75 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {lunchHour ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Not Lunch Time
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <>
+                                  {lunchHour ? 
+                                  <>
+                                    <Button 
+                                    variant='outlined' 
+                                    sx={{ width: '100%'}}
+                                    size='small'
+                                    value={menu._id}
+                                    onClick={modalOpener}
+                                    >
+                                      <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                    </Button>
+                                  </> 
+                                  : 
+                                  <>
+                                    <Button 
+                                    variant='outlined' 
+                                    sx={{ width: '100%'}}
+                                    size='small'
+                                    value={menu._id}
+                                    onClick={modalOpener}
+                                    disabled
+                                    >
+                                      Not Lunch Time
+                                    </Button>
+                                  </>}
+                                </>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -458,15 +809,75 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {lunchHour ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Not Lunch Time
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <>
+                                  {lunchHour ? 
+                                  <>
+                                    <Button 
+                                    variant='outlined' 
+                                    sx={{ width: '100%'}}
+                                    size='small'
+                                    value={menu._id}
+                                    onClick={modalOpener}
+                                    >
+                                      <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                    </Button>
+                                  </> 
+                                  : 
+                                  <>
+                                    <Button 
+                                    variant='outlined' 
+                                    sx={{ width: '100%'}}
+                                    size='small'
+                                    value={menu._id}
+                                    onClick={modalOpener}
+                                    disabled
+                                    >
+                                      Not Lunch Time
+                                    </Button>
+                                  </>}
+                                </>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -492,15 +903,75 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {lunchHour ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Not Lunch Time
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <>
+                                  {lunchHour ? 
+                                  <>
+                                    <Button 
+                                    variant='outlined' 
+                                    sx={{ width: '100%'}}
+                                    size='small'
+                                    value={menu._id}
+                                    onClick={modalOpener}
+                                    >
+                                      <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                    </Button>
+                                  </> 
+                                  : 
+                                  <>
+                                    <Button 
+                                    variant='outlined' 
+                                    sx={{ width: '100%'}}
+                                    size='small'
+                                    value={menu._id}
+                                    onClick={modalOpener}
+                                    disabled
+                                    >
+                                      Not Lunch Time
+                                    </Button>
+                                  </>}
+                                </>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -534,15 +1005,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -568,15 +1081,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -606,15 +1161,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -648,15 +1245,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -682,15 +1321,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -716,15 +1397,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -750,15 +1473,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -784,15 +1549,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -818,15 +1625,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -860,15 +1709,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -894,15 +1785,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -936,15 +1869,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -970,15 +1945,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -1004,15 +2021,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
@@ -1042,15 +2101,57 @@ const Order = (props) => {
                             <Typography sx={{ color: 'darkgreen', fontStyle: 'italic', fontFamily: 'Raleway', fontSize: '1.25em'}}>${menu.price}</Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Button 
-                              variant='outlined' 
-                              sx={{ width: '100%'}}
-                              size='small'
-                              value={menu._id}
-                              onClick={modalOpener}
-                            >
-                              <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
-                            </Button>
+                          {props.isAutoOpen ? 
+                            <>
+                              {storeOpen ? 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                : 
+                                <Button 
+                                  variant='outlined' 
+                                  sx={{ width: '100%'}}
+                                  size='small'
+                                  value={menu._id}
+                                  onClick={modalOpener}
+                                  disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </> 
+                            : 
+                            <>
+                              {props.manualOpen ?
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                >
+                                  <ShoppingCartIcon sx={{ fontSize: '1.3em'}} />&nbsp;Add to Cart
+                                </Button>
+                                :
+                                <Button 
+                                variant='outlined' 
+                                sx={{ width: '100%'}}
+                                size='small'
+                                value={menu._id}
+                                onClick={modalOpener}
+                                disabled
+                                >
+                                  Restaurant closed
+                                </Button>
+                              }
+                            </>
+                            }
                           </Grid>
                         </Grid>
                       </Card>
