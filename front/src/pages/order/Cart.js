@@ -333,11 +333,6 @@ const Cart = (props) => {
                     <ShoppingCartIcon />&nbsp;Continue Order
                   </Button>
                 </Grid>
-                <Grid item xs={12}>
-                  <Button onClick={checkingHandler} sx={{ width: '100%' }}>
-                    Check
-                  </Button>
-                </Grid>
               </Grid>
             }
           </Card>

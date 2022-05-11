@@ -149,7 +149,6 @@ const StoreOpen = (props) => {
       const request = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/status/checkStatus`, config)
       setStatus(request.data.status[0].isOpenStoreAuto);
       setStoreOpen(request.data.status[0].manualStatus)
-      console.log(request.data.status[0])
       return request
     }
     fetchData()

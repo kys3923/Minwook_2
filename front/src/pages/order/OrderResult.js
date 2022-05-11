@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { io } from 'socket.io-client';
 
 // Mui
 import { Grid, Typography, CircularProgress, Card, Button } from '@mui/material';
@@ -55,6 +56,19 @@ const OrderResult = (props) => {
     }
     fetchData()
   },[])
+  
+  useEffect(() => {
+    if (orderData) {
+      // TODO: update server url
+      const socket = io('http://localhost:8000')
+
+      try {
+        socket.emit('newOrder', orderData[0])
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  },[orderData])
 
   return (
     <ThemeProvider theme={theme}>

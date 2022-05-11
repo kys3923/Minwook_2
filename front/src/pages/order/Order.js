@@ -103,7 +103,6 @@ const Order = (props) => {
       setProducts(data);
       setDataLoaded(true);
     }
-    console.log(props.isAutoOpen, 'at order - autoOpen', props.manualOpen, 'at order - manualOpen')
     function now() {
       const date = new Date();
       let localeTime = moment.tz(date, 'America/New_York')
@@ -157,7 +156,6 @@ const Order = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <div className="orderContainer">
-        {console.log(storeOpen, lunchHour, )}
         { !dataLoaded ? (
           <Grid container sx={{ marginTop: '4.25em' }}>
               <Card sx={{ paddingBottom: '1em', width: '100%', height: '100vh'}}>

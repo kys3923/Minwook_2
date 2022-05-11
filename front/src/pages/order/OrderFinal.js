@@ -22,7 +22,6 @@ const OrderFinal = (props) => {
   const [ modalOpen, setModalOpen ] = useState(false);
   const [ agreed, setAgreed ] = useState(false);
   const [ agreeModal, setAgreeModal ] = useState(false);
-  const [ readyToNext, setReadyToNext ] = useState(false);
 
   // handlers
   const commentHandler = (e) => {
@@ -71,15 +70,7 @@ const OrderFinal = (props) => {
       } catch (error) {
         console.log(error)
       }
-
     }
-    // if checked,
-    // set loading true
-    // update grandtotal, terms conditions
-    // set loading false
-    // if payAtRestaurant, props.handleComplete, otherwise
-    // props.handleNext();
-    console.log(comments, '-comments', payAtRestaurant, '-payAt', agreed, '-agreed', loading, '-loading', readyToNext)
   }
 
   const agreementHandler = (e) => {
@@ -97,7 +88,6 @@ const OrderFinal = (props) => {
   // TODO: calculate Addon
   const finalPriceHandler = (state) => {
     if (!!orderData) {
-      console.log(orderData)
       if (state === true) {
         let subtotal = props.subTotal;
         let addOnTotal = 0;
@@ -168,7 +158,6 @@ const OrderFinal = (props) => {
       return request
     }
     fetchData()
-    console.log(props.orderId, agreed, payAtRestaurant, loading, finalPriceHandler(payAtRestaurant), comments)
   },[agreed])
 
   return (

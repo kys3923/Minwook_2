@@ -9,20 +9,10 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
 import { Grid, Typography, Card, CircularProgress, Button, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 
-// Card Num Fomatt
-
-const numberFomatter = (Number) => {
-  let key1 = 'pk_test_51KlJjkKrjDamwGGy6pCBPHGF0QO2KduD8qoOJPwNSVIkJiivT8oULOqdNJ8D7N2NorkiNKdSmJNCjP8HmDAVuCll00y9TL2HIt'
-  let key2 = 'sk_test_51KlJjkKrjDamwGGycW2L6Weg5TUzgi63ves98e26b2uW65olRwwZdQYgUEKS1K8arzf6WSCxzNTUWBXq0fI3zXVQ004qdiieSk'
-  let id = 'acct_1KlJjkKrjDamwGGy'
-}
-
 // Stripe
-// TODO: activate, and .env the key
 
 const PaymentSetting = (props) => {
 
-  const [ loading, setLoading ] = useState(false);
   const [ orderData, setOrderData ] = useState();
   const [ stripePromise, setStripePromise ] = useState(() => loadStripe('pk_test_51KlJjkKrjDamwGGy6pCBPHGF0QO2KduD8qoOJPwNSVIkJiivT8oULOqdNJ8D7N2NorkiNKdSmJNCjP8HmDAVuCll00y9TL2HIt'))
 
@@ -64,7 +54,6 @@ const PaymentSetting = (props) => {
 
   // useEffect
   useEffect(()=> {
-    setLoading(true);
     async function fetchOrderData() {
       const config = {
         header: {
@@ -88,12 +77,9 @@ const PaymentSetting = (props) => {
             Loading...
           </Typography>
         </Grid>
-        {/* TODO: need to be deleted below */}
-        {/* TODO: if paidAtRestaurant skip this one to result page */}
       </Grid> 
       : 
       <>
-        {console.log(orderData, 'from return')}
         {determineOrder(orderData[0])}
         <Grid item xs={12} md={6} sx={{ marginBottom: '1em'}}>
           <Grid container spacing={1}>
