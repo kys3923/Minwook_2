@@ -14,9 +14,6 @@ exports.orderRegistration = async ( req, res, next ) => {
     user.Orders.push(order);
     await user.save();
 
-
-  // TODO: send customer the order confirmation email
-
     res.json({
       message: "order has been made",
       order,

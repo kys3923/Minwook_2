@@ -20,7 +20,7 @@ exports.register = async ( req, res, next ) => {
 
 		sendToken(user, 201, res);
 
-		// send welcome email
+		//TODO: send welcome email
 
 	} catch (error) {
 		next(error);

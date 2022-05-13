@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import moment from 'moment';
+// move io to dashboardPannel
 
 // Mui
 import { ThemeProvider } from '@mui/material/styles'
@@ -20,8 +21,12 @@ const OrderStatus = (props) => {
   const [ confirmOrderNum, setConfirmOrderNum ] = useState(0);
   const [ readyPickNum, setReadyPickNum ] = useState(0);
   const [ orderNumber, setOrderNumber ] = useState();
-  const [ socketNewOrders, setSocketNewOrders ] = useState([])
-  const [ fetching, setFetching ] = useState(false);
+  const [ socketNewOrders, setSocketNewOrders ] = useState([]);
+  const [ socketConfirmedOrders, setSocketConfirmedOrders ] = useState([]);
+  const [ socketReadyOrders, setSocketReadyOrders ] = useState([]);
+  const [ fetchingNewOrder, setFetchingNewOrder ] = useState(false);
+  const [ fetchingConfirmedOrder, setFetchingConfirmedOrder ] = useState(false);
+  const [ fetchingReadyOrder, setFetchingReadyOrder ] = useState(false);
   const [ buttonLoading, setButtonLoading ] = useState(false);
   const [ modalValue, setModalValue ] = useState('');
   const [ modalOpen, setModalOpen ] = useState(false);
@@ -30,29 +35,34 @@ const OrderStatus = (props) => {
   const socket = io('http://localhost:8000')
 
   useEffect(() => {
-    setFetching(true)
-    const fetchingData = async () => {
+    setFetchingNewOrder(true)
+    setFetchingConfirmedOrder(true);
+    const fetchingNewOrderData = () => {
       try {
-        await socket.on('broadcast', (order) => {
+        socket.on('broadcast', (order) => {
           setSocketNewOrders(order);
-          setFetching(false);
+          setFetchingNewOrder(false);
         })
       } catch (err) {
         console.log(err)
       }
     }
-    const pingpongFetch = async () => {
+    
+    const fetchingConfirmedOrderData = () => {
       try {
-        await socket.on('ping', function(data){
-          socket.emit('pong', {beat: 1})
+        socket.on('confirmOrder', (order) => {
+          setSocketConfirmedOrders(order)
+          setFetchingConfirmedOrder(false);
         })
       } catch (err) {
         console.log(err)
       }
     }
-    fetchingData();
-    pingpongFetch();
+
+    fetchingNewOrderData();
+    fetchingConfirmedOrderData();
   },[])
+  
 
   // use anything else to use the useEffect here
   useEffect(() => {
@@ -61,6 +71,18 @@ const OrderStatus = (props) => {
     }
   }, [socketNewOrders])
 
+  useEffect(() => {
+    if (!!socketConfirmedOrders.length > 0) {
+      setConfirmOrderNum(socketConfirmedOrders.length)
+    }
+  },[socketConfirmedOrders])
+
+  // useEffect(() => {
+  //   if (!!socketConfirmedOrders.length > 0) {
+  //     setConfirmOrderNum(socketConfirmedOrders.length)
+  //   }
+  // },[socketConfirmedOrders])
+  
   useEffect(() => {
     if (!!modalValue) {
       console.log(modalValue, modalOpen)
@@ -95,6 +117,19 @@ const OrderStatus = (props) => {
     setModalOpen(true);
   }
 
+  const confirmOrderHandler = (e) => {
+    console.log(e.currentTarget.value);
+    const connectingSocket = async () => {
+      try {
+        await socket.emit('confirmOrder', e.currentTarget.value)
+        console.log('req sent')
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    connectingSocket();
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Grid item xs={12} md={8} sx={{ margin: '3em auto'}}>
@@ -110,7 +145,7 @@ const OrderStatus = (props) => {
             <Badge badgeContent={newOrderNum} color='primary'><Typography sx={{fontSize: '1.25em', color: 'darkgreen'}}>New</Typography></Badge>
           </AccordionSummary>
           <AccordionDetails sx={{ bgcolor: 'rgba(255, 240, 174, 0.75)'}}>
-            { fetching && !!socketNewOrders ? 
+            { fetchingNewOrder && !!socketNewOrders ? 
               <Grid container>
                 <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '2em auto', flexDirection: 'column'}}>
                   <CircularProgress />
@@ -153,7 +188,7 @@ const OrderStatus = (props) => {
                               <LoadingButton variant='outlined' value={order._id} onClick={detailButtonHandler}>Order Details</LoadingButton>
                             </Grid>
                             <Grid item xs={12}>
-                              <LoadingButton variant='contained' value={order._id}>Confirm Order</LoadingButton>
+                              <LoadingButton variant='contained' value={order._id} onClick={confirmOrderHandler}>Confirm Order</LoadingButton>
                             </Grid>
                           </Grid>
                         </Grid>
@@ -175,12 +210,63 @@ const OrderStatus = (props) => {
             expandIcon={<ExpandMoreIcon />}
           >
             {/* TODO: Badge numers = order length */}
-            <Typography sx={{ width: '33%', flexShrink: 0, fontSize: '1.25em', color: 'darkgreen'}}>Confirmed</Typography>
+            <Badge badgeContent={confirmOrderNum} color='primary'><Typography sx={{fontSize: '1.25em', color: 'darkgreen'}}>Confirmed</Typography></Badge>
             {/* TODO: set lineheight */}
-            <Typography sx={{ fontSize: '1em', color: 'gray'}}>Second text</Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ bgcolor: 'rgba(255, 240, 174, 0.75)'}}>
-            <Typography>some details</Typography>
+          { fetchingConfirmedOrder && !!socketConfirmedOrders ? 
+              <Grid container>
+                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '2em auto', flexDirection: 'column'}}>
+                  <CircularProgress />
+                  <Typography variant='body1' sx={{marginTop: '.5em'}}>Loading...</Typography>
+                </Grid>
+              </Grid>
+            : 
+              <Grid container sx={{ maxHeight: '50vh', overflow: 'auto', '&::-webkit-scrollbar': {display: 'none'}}} spacing={2} >
+                {console.log(socketConfirmedOrders)}
+                {socketConfirmedOrders.map((order, i) => (
+                  <Grid item xs={12} key={i}>
+                    <Card sx={{ padding: '1em 1em'}}>
+                      <Grid container>
+                        <Grid item xs={8}>
+                          <Grid container>
+                            <Grid item xs={12} sx={{marginBottom: '.5em', marginTop: '.5em', display: 'flex', flexDirection: 'row'}}>
+                              <Typography sx={{ fontWeight: 'bold', color: 'darkgreen', marginRight: '1.5em'}}>
+                                {order.OrderNumber}
+                              </Typography>
+                              <Typography sx={{ fontSize: '.85em', fontWeight: 'light', paddingTop: '.15em'}}>
+                                Order Placed: {moment(order.updatedAt).calendar()}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12} sx={{marginBottom: '.5em', display: 'flex', flexDirection: 'row'}}>
+                              <Typography sx={{ marginRight: '1em', fontWeight: 'light'}}>
+                                Order Total: 
+                              </Typography>
+                              <Typography sx={{ color: '#dc5a41', fontWeight: 'bold'}}>
+                                {totalPriceText(order.grandTotal)}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12} sx={{marginBottom: '.5em'}}>
+                              {paidOrNotPaidText(order.isPaidAtRestaurant)}
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid item xs={4}>
+                          <Grid container>
+                            <Grid item xs={12} sx={{ marginBottom: '.5em', marginTop: '.5em'}}>
+                              <LoadingButton variant='outlined' value={order._id} onClick={detailButtonHandler}>Order Details</LoadingButton>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <LoadingButton variant='contained' value={order._id} onClick={confirmOrderHandler}>Confirm Order</LoadingButton>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            }
           </AccordionDetails>
         </Accordion>
         {/* Finished Orders */}
