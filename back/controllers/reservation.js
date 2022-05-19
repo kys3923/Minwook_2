@@ -17,7 +17,6 @@ exports.registerReservation = async ( req, res, next ) => {
       reservation,
       user
     })
-    // TODO: send email to customer and the request email
   } catch (error) {
     next(error)
   }
@@ -31,7 +30,7 @@ exports.reservationList = async ( req, res, next ) => {
   }
 
   try {
-    const reservation = await Reservation.find({"_id": id})
+    const reservation = await Reservation.find({"_id": id}).populate({path: 'customer', model: 'User'})
 
     res.json({
       message: "found reservation requested",

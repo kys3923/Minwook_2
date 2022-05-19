@@ -1,5 +1,3 @@
-// TODO: fix CSS
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -20,13 +18,13 @@ const PasswordReset = ({ match }) => {
 
   const resetPasswordHandler = async (e) => {
     e.preventDefault();
-
+    
     const config = {
       header: {
         "Content-Type": "application/json",
       },
     };
-
+    
     if (password !== confirmPassword) {
       setPassword("");
       setTimeout(() => {
@@ -34,18 +32,20 @@ const PasswordReset = ({ match }) => {
       }, 5000);
       return setError("Passwords don't match");
     }
-
+    
     try {
+      let resetToken = window.location.pathname.slice(15)
       const { data } = await axios.put(
-        `${process.env.REACT_APP_SERVER_URL}/api/auth/passwordreset/${match.params.resetToken}`,
+        `${process.env.REACT_APP_SERVER_URL}/api/auth/resetpassword/${resetToken}`,
         {
           password,
         },
         config
-      );
-      setSuccess(data.data);
+        );
+        console.log(data);
+        setSuccess(data.data);
     } catch (error) {
-      setError(error.response.data.error);
+      setError(error.response);
       setTimeout(() => {
         setError('');
       }, 5000);
@@ -61,7 +61,7 @@ const PasswordReset = ({ match }) => {
           width: '100vw',
           minHeight: '60vh',
           marginBottom: '10em',
-          marginTop: '3em'
+
         }}
       >
         <Paper elevation={2}
@@ -70,7 +70,8 @@ const PasswordReset = ({ match }) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            paddingTop: '1em'
+            padding: '3em 2em',
+            marginTop: '6.5em'
           }}
         >
           <h3 className='login_title'>Reset Password</h3>
@@ -109,40 +110,6 @@ const PasswordReset = ({ match }) => {
           </form>
         </Paper>
       </Grid>
-{/* TODO: Check below stuff */}
-    <div className='resetpassword_container'>
-      <form
-        onSubmit={resetPasswordHandler}
-        className='resetpassword_form'
-      >
-        <h3 className='resetPassword_title'>Reset Password</h3>
-        <div className='form-group'>
-          <label htmlFor='password'>New Pasword:</label>
-          <input 
-            type='password'
-            required
-            id="password"
-            placeholder='Enter new password'
-            autoComplete='true'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div className='form-group'>
-          <label htmlFor='confirmPassword'>Confirm New Pasword:</label>
-          <input 
-            type='password'
-            required
-            id="confirmPassword"
-            placeholder='Confirm new password'
-            autoComplete='true'
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit" className='form_button_primary'>Reset Password</button>
-      </form>
-    </div>
     </ThemeProvider>
   );
 }

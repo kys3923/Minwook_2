@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 // MUI
 import { ThemeProvider } from '@mui/material/styles';
-import { Typography, Grid, Accordion, AccordionSummary, AccordionDetails, Modal } from "@mui/material";
+import { Typography, Grid, Accordion, AccordionSummary, AccordionDetails, Modal, CircularProgress } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 // components
@@ -10,7 +10,7 @@ import theme from '../../../theme/theme';
 import Setting from "./Setting";
 import DashboardHeader from "./DashboardHeader";
 import AdminLogout from "./AdminLogout";
-import OrderStatus from "./OrderStatus";
+import DashBoardSocket from "./DashBoradSocket";
 
 // view current orders using socket io
 
@@ -28,7 +28,7 @@ const DashBoardPannel = (props) => {
     <ThemeProvider theme={theme}>
       <Grid container>
         <DashboardHeader />
-        <OrderStatus />
+        <DashBoardSocket/>
       </Grid>
       <Grid container>
         <Grid item xs={12}>
@@ -37,8 +37,8 @@ const DashBoardPannel = (props) => {
         <Grid item xs={12} md={8} sx={{ margin: '3em auto' }}>
           {/* store open/close */}
           <Accordion
-            expanded={expanded === 'panel4'}
-            onChange={pannelHandler('panel4')}
+            expanded={expanded === 'panel7'}
+            onChange={pannelHandler('panel7')}
             elevation={3}
           >
             <AccordionSummary
@@ -53,8 +53,8 @@ const DashBoardPannel = (props) => {
           </Accordion>
           {/* Admin Logout */}
           <Accordion
-            expanded={expanded === 'panel5'}
-            onChange={pannelHandler('panel5')}
+            expanded={expanded === 'panel8'}
+            onChange={pannelHandler('panel8')}
             elevation={3}
           >
             <AccordionSummary

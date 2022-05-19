@@ -121,10 +121,11 @@ const Account = (props) => {
       }
       const request = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/auth/${localStorage.userId}`, config);
       setUserData(request.data.user)
+      console.log(request)
       return request
     }
     fetchData();
-  }, [acctModalOpen])
+  }, [])
 
   const navigate = useNavigate();
 
@@ -238,11 +239,11 @@ const Account = (props) => {
         { !userData ?
           <TabPanel value={value} index={0}>
             <Grid container sx={{ marginTop: '7em'}}>
-              <Grid xs={12} >
+              <Grid item xs={12} >
                 <CircularProgress />
                 <Typography variant="h4" sx={{ fontFamily: 'Raleway', fontWeight: 'bold', color: 'darkgreen', borderBottom: '2px solid #dc5a41', marginBottom: '.5em', paddingBottom: '.5em'}}>loading data... </Typography>
               </Grid>
-              <Grid xs={12} sx={{ marginBottom: '1em'}}>
+              <Grid item xs={12} sx={{ marginBottom: '1em'}}>
                 <Typography sx={{ marginBottom: '1em'}}>Click button to go back, and try again.</Typography>
                 <Button variant="contained" onClick={backToHomeHandler}>Go back</Button>
               </Grid>
@@ -569,7 +570,7 @@ const Account = (props) => {
                     '50%', transform: 'translate(-50%, -50%)', padding: '1.5em 1.5em'}}>
                         <Typography variant="h6" sx={{ color: 'darkgreen', borderBottom: '1.5px solid #dc5a41', paddingBottom: '.5em'}}>Edit Profile</Typography>
                         <form onSubmit={editAcctHandler}>
-                          <Grid container sx={{ }}>
+                          <Grid container>
                             <Grid item xs={12} sx={{ marginTop: '1.5em', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                               <TextField
                                 type='text'

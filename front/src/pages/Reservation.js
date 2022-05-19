@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 // MUI
@@ -11,6 +10,9 @@ import DateTimePicker from '@mui/lab/DateTimePicker';
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import theme from '../theme/theme';
 
+import { io } from 'socket.io-client';
+// TODO: update serverURL
+const socket = io('http://localhost:8000')
 
 const Reservation = (props) => {
   
@@ -28,6 +30,8 @@ const Reservation = (props) => {
   const [ loading, setLoading ] = useState(false);
   const [ ldata, setLdata ] = useState();
   const navigate = useNavigate();
+
+
   
   function formatPhoneNumber(telNum) {
     if (!telNum) return telNum;
@@ -50,51 +54,33 @@ const Reservation = (props) => {
   };
 
   const reservationHandler = async (e) => {
-    e.preventDefault();
     
-    const config = {
-      header: { 
-        header: { 
-          "Content-Type": "application/json"
+    const request = {
+      "name": `${name}`,
+      "customer": `${userId}`,
+      "email": `${email}`,
+      "contact": `${contact}`,
+      "totalParty": `${totalParty}`,
+      "comments": `${comments}`,
+      "reserveDate": `${reserveDate}`
+    }
+    const sendRequest = async () => {
+      if (!!request) {
+        try {
+          await socket.emit('newReservation', request)
+          // modal on
+        } catch (err) {
+          console.log(err)
         }
       }
     }
-    
-    const request = {
-      body: {
-        "name": `${name}`,
-        "customer": `${userId}`,
-        "email": `${email}`,
-        "contact": `${contact}`,
-        "totalParty": `${totalParty}`,
-        "comments": `${comments}`,
-        "reserveDate": `${reserveDate}`
-      }
-    }
-    
-    try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/api/reservation/create`, request.body, config
-      )
-      await setLdata(data.reservation)
-    } catch (error) {
-      setError('A problem occured during resigter you reservation');
-      setTimeout(() => {
-        setError('');
-      }, 10000);
-    }
-    console.table (
-      request.body,
-      "in useEffect, checking submit"
-    )
-    setModalOpen(true);
-  }
 
-  useEffect(() => {
-    if (ldata) {
-      setLoading(false);
+    const handleRequest = async () => {
+      await sendRequest();
+      await setModalOpen(true);
     }
-  },[ldata])
+    handleRequest();
+  }
 
   // Handlers
   const modalHandler = (e) => {
@@ -107,10 +93,9 @@ const Reservation = (props) => {
     navigate('/');
   }
 
-  const registerHandler = (e) => {
-    setLoading(true);
+  useEffect(() => {
     setUserId(localStorage.userId);
-  }
+  },[])
 
   return (
     <ThemeProvider theme={theme}>
@@ -119,7 +104,8 @@ const Reservation = (props) => {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        backgroundColor: 'rgba(255, 240, 174, 0.75)'
+        backgroundColor: 'rgba(255, 240, 174, 0.75)',
+        minHeight: '81vh'
       }}>
         <Grid item sx={{ marginTop: '3em'}}>
           <Paper sx={{ 
@@ -129,8 +115,7 @@ const Reservation = (props) => {
             <Typography variant='h5' sx={{ fontWeight: 'bold', color: 'darkgreen', textAlign: 'center', paddingTop: '1.5em', marginBottom: '1em'}}>
               Make a Reservation
             </Typography>
-            {error && <span className="error_message">{error}</span>}
-            <form onSubmit={reservationHandler} className='register_form'>
+            <form className='register_form'>
               <TextField 
                 type='text'
                 required
@@ -212,7 +197,7 @@ const Reservation = (props) => {
                 autoComplete='on'
                 onChange={(e) => setComments(e.target.value)}
               />
-              <Button variant='contained' type='submit' sx={{ marginTop: '2em'}} onClick={registerHandler}>Confirm Reservation</Button>
+              <Button variant='contained' sx={{ marginTop: '2em'}} onClick={reservationHandler}>Confirm Reservation</Button>
             </form>
           </Paper>              
         </Grid>
@@ -244,10 +229,11 @@ const Reservation = (props) => {
               <Typography>
                 <CheckCircleOutlineRoundedIcon sx={{ color: 'darkgreen', fontWeight: 'bold', fontSize: '8em'}}/>
               </Typography>
-              <Typography sx={{paddingTop: '1em', marginBottom: '2em'}}>
-                Your reservation has been successfully registered!
+              <Typography sx={{paddingTop: '1em'}}>
+                Your reservation has been successfully requested!
               </Typography>
-              <Button variant='contained' onClick={backToHomeHandler}>back to home</Button>
+              <Typography variant='body1' sx={{ fontWeight: 'light', padding: '1.5em 1.5em'}}>We'll contact you within 30minutes to confirm the reservation. Please check your email for the confimation and details.</Typography>
+              <Button variant='contained' onClick={backToHomeHandler} sx={{ marginTop: '.25em'}}>back to home</Button>
             </>
           }
         </Paper>

@@ -12,10 +12,10 @@ const Footer = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <Grid container sx={{ padding: '2em 5em', bgcolor: '#2c3545' }} spacing={2}>
-        <Grid item xs={12} sm={6} md={4} sx={{ padding: '.5em .5em', display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'nowrap'}}>
+        <Grid item xs={12} sm={6} md={4} sx={{ padding: '.5em .5em', display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'nowrap', minWidth: 280}}>
           <Typography variant='h6' sx={{ color: 'gray', marginBottom: '.25em', textOrientation: 'sideways', writingMode: 'vertical-lr', transform: 'rotate(180deg)', textAlign: 'right'}}>Hours</Typography>
           <Grid container>
-            <Grid item xs={7} sx={{ paddingLeft: '.5em'}}>
+            <Grid item xs={7} sx={{ paddingLeft: '.5em', minWidth: '130px'}}>
               <Typography variant='body1' sx={{ fontSize: '.75em', color: 'white', marginBottom: '.25em'}}>
                 Mon, Wed, Thur, Sun :
               </Typography>

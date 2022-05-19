@@ -68,6 +68,7 @@ const Register = (props) => {
 
       localStorage.setItem("authToken", data.token);
       localStorage.setItem("role", data.role)
+      localStorage.setItem('userId', data.userId)
       window.location.reload(false)
     } catch (error) {
       setError('The email address has already taken');

@@ -15,6 +15,14 @@ const reserveSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  isConfirmed: {
+    type: Boolean,
+    default: false
+  },
+  isDenied: {
+    type: Boolean,
+    default: false
+  },
   reserveDate: Date,
 }, {timestamps: true});
 
