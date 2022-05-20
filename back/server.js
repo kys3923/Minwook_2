@@ -32,6 +32,7 @@ app.get('/', (req, res, next) => {
 });
 
 // controllers
+app.use('/public', express.static('public'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/private', require('./routes/private'));
 app.use('/api/menu', require('./routes/menu'));

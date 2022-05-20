@@ -48,11 +48,17 @@ exports.register = async ( req, res, next ) => {
           border-top: 1px solid #dc5a41;
           border: 1px solid lightgray;
           background-color: white;
-          margin: 2em 2em;
+          margin: 2em auto;
           padding: 1em 3em;
           border-radius: 5px;
         "
       >
+			<div style="margin-top: 1em;">
+				<img
+					style="max-width: 125px;"
+					src="${process.env.LOGO_LOCATION}"
+				/>
+			</div>
         <h1
           style="
             font-family: roboto;
@@ -114,9 +120,10 @@ exports.register = async ( req, res, next ) => {
           max-width: 900px;
           border-top: 1px solid #dc5a41;
           margin: 0em 2em;
-          padding: 1em 3em;
+          padding: 1em 2em;
           text-align: center;
           font-family: roboto;
+					margin: 0 auto;
         "
       >
         <p style="font-size: 0.75em; color: gray;">
@@ -125,9 +132,9 @@ exports.register = async ( req, res, next ) => {
           This email was sent to ${email} to update you about
           registering account in
           <a
-            href="http://www.sushiville.com"
+            href="http://www.sushivilleny.com"
             style="text-decoration: none; color: #dc5a41;"
-            >sushiville.com.</a
+            >sushivilleny.com.</a
           >
           <br />
           Qeustions, comments, and support for Sushiville are available to
@@ -226,11 +233,17 @@ exports.forgotpassword = async ( req, res, next ) => {
 						border-top: 1px solid #dc5a41;
 						border: 1px solid lightgray;
 						background-color: white;
-						margin: 2em 2em;
+						margin: 2em auto;
 						padding: 1em 3em;
 						border-radius: 5px;
 					"
 				>
+				<div style="margin-top: 1em;">
+					<img
+						style="max-width: 125px;"
+						src="${process.env.LOGO_LOCATION}"
+					/>
+				</div>
 					<h1
 						style="
 							font-family: roboto;
@@ -275,20 +288,21 @@ exports.forgotpassword = async ( req, res, next ) => {
 						max-width: 900px;
 						border-top: 1px solid #dc5a41;
 						margin: 0em 2em;
-						padding: 1em 3em;
+						padding: 1em 2em;
 						text-align: center;
 						font-family: roboto;
+						margin: 0 auto;
 					"
 				>
 					<p style="font-size: 0.75em; color: gray;">
 						&#169; Sushiville, 67 Orange Turnpike, Sloatsburg, NY 10974, (845) 712
 						- 5006<br /><br />
 						This email was sent to {customer email} to update you about
-						registering account in
+						resetting password in
 						<a
-							href="http://www.sushiville.com"
+							href="http://www.sushivilleny.com"
 							style="text-decoration: none; color: #dc5a41;"
-							>sushiville.com.</a
+							>sushivilleny.com.</a
 						>
 						<br />
 						Qeustions, comments, and support for Sushiville are available to
@@ -365,11 +379,17 @@ exports.resetpassword = async ( req, res, next ) => {
           border-top: 1px solid #dc5a41;
           border: 1px solid lightgray;
           background-color: white;
-          margin: 2em 2em;
+          margin: 2em auto;
           padding: 1em 3em;
           border-radius: 5px;
         "
       >
+				<div style="margin-top: 1em;">
+					<img
+						style="max-width: 125px;"
+						src="${process.env.LOGO_LOCATION}"
+					/>
+				</div>
         <h1
           style="
             font-family: roboto;
@@ -390,6 +410,7 @@ exports.resetpassword = async ( req, res, next ) => {
           "
         >
           You have successfully updated your password.<br />
+					Please <a href="http:www.sushivilleny.com" style="text-decoration: none; color: #dc5a41;">login</a> and enjoy your sushi adventure!
         </p>
 
         <p
@@ -412,20 +433,21 @@ exports.resetpassword = async ( req, res, next ) => {
           max-width: 900px;
           border-top: 1px solid #dc5a41;
           margin: 0em 2em;
-          padding: 1em 3em;
+          padding: 1em 2em;
           text-align: center;
           font-family: roboto;
+					margin: 0 auto;
         "
       >
         <p style="font-size: 0.75em; color: gray;">
           &#169; Sushiville, 67 Orange Turnpike, Sloatsburg, NY 10974, (845) 712
           - 5006<br /><br />
           This email was sent to {customer email} to update you about
-          registering account in
+          resetting password in
           <a
-            href="http://www.sushiville.com"
+            href="http://www.sushivilleny.com"
             style="text-decoration: none; color: #dc5a41;"
-            >sushiville.com.</a
+            >sushivilleny.com.</a
           >
           <br />
           Qeustions, comments, and support for Sushiville are available to
@@ -435,7 +457,6 @@ exports.resetpassword = async ( req, res, next ) => {
             >service@sushivilleny.com</a
           >
         </p>
-        <p></p>
       </div>
     </div>
   </body>
