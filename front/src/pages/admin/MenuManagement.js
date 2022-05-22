@@ -20,7 +20,6 @@ const MenuManagement = (props) => {
       const config = {
         header: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.authToken}`
         }
       }
 

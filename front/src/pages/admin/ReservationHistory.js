@@ -5,7 +5,7 @@ import moment from 'moment';
 // MUI
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
-import { Typography, Grid, Button, Modal, Card, Chip, Stack, CircularProgress } from '@mui/material';
+import { Typography, Grid, Button, Modal, Card, CircularProgress } from '@mui/material';
 
 const statusFilter = (data) => {
   if (!!data) {
@@ -29,8 +29,8 @@ const ReservationHistory = (props) => {
 
   // States
   const [ loading, setLoading ] = useState(true);
-  const [ reservations, setReservations ] = useState([]);
-  const [ reservation, setReservation ] = useState([]);
+  const [ reservations, setReservations ] = useState(null);
+  const [ reservation, setReservation ] = useState(null);
   const [ modalLoading, setModalLoading ] = useState(false);
   const [ detailOpen, setDetailOpen ] = useState(false);
 
@@ -39,8 +39,8 @@ const ReservationHistory = (props) => {
     setModalLoading(true);
     setDetailOpen(true);
     const findOneReservation = async (id) => {
-      const foundReservation = reservations.find(reservation =>  reservation._id === id)
-      await setReservation(foundReservation);
+      const foundReservation = await reservations.find(reservation =>  reservation._id === id)
+      setReservation(foundReservation);
     }
     findOneReservation(e.currentTarget.value);
   }
@@ -58,7 +58,8 @@ const ReservationHistory = (props) => {
         }
       }
       const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/reservation/list/listreservation`, config)
-      setReservations(data.reservation);
+      console.log(data.reservation)
+      await setReservations(data.reservation);
     }
     fetchReservations();
   },[])
@@ -66,13 +67,12 @@ const ReservationHistory = (props) => {
 
   return (
     <ThemeProvider theme={theme}>
-      { loading ? 
+      { !reservations ? 
       <Grid container>
         <Grid item xs={12} sx={{ width: '100%', height: '75vh', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
           <CircularProgress />
           <Typography sx={{ marginTop: '1em'}}>Loading...</Typography>
         </Grid>
-        { reservations ? <>{setLoading(false)}</> : null }
       </Grid> :
       <>
       <Grid container>
@@ -86,7 +86,6 @@ const ReservationHistory = (props) => {
                 <Typography>Status</Typography>
               </Grid>
               <Grid item xs={3} sx={{ padding: '3px 3px', borderRight: '1px solid gray'}}>
-                {/* comments, contact, date, reservedate, customer, reservename, totalparty, status */}
                 <Typography>Reserved Date</Typography>
               </Grid>
               <Grid item xs={3}>
