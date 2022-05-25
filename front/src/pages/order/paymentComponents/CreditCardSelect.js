@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { Button, Select, MenuItem, InputLabel, Grid, CircularProgress, Typography, TextField, FormControl, Menu } from '@mui/material';
+import { Button, Select, MenuItem, InputLabel, Grid, CircularProgress, Typography, TextField, FormControl } from '@mui/material';
 import { formatCreditCardNumber, formatCVC, formatExpirationDate, formatZipCode } from "./CardUtils";
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../../theme/theme';
@@ -33,7 +33,6 @@ const CreditCardSelect = (props) => {
   const [ exp, setExp ] = useState('');
   const [ expMonth, setExpMonth ] = useState();
   const [ expYear, setExpYear ] = useState();
-  // const [ stripePromise, setStripePromise ] = useState(() => loadStripe('pk_test_51KlJjkKrjDamwGGy6pCBPHGF0QO2KduD8qoOJPwNSVIkJiivT8oULOqdNJ8D7N2NorkiNKdSmJNCjP8HmDAVuCll00y9TL2HIt'))
 
   // handler
   const cardAddHandler = (e) => {
@@ -121,7 +120,6 @@ const CreditCardSelect = (props) => {
       setExpMonth();
       setExpYear();
     }
-    console.log(expMonth, expYear, 'exp');
   }
 
   // useEffect
@@ -298,7 +296,6 @@ const CreditCardSelect = (props) => {
                 <Grid item xs={12} md={6}>
                   <Typography>
                     There is no credit card added
-                    {console.log(props.user)}
                   </Typography>
                   <Button variant="contained" onClick={cardAddHandler}>Add Credit Card</Button>
                 </Grid>

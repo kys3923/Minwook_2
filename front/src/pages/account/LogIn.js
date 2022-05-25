@@ -31,9 +31,9 @@ const LogIn = (props) => {
         { email, password },
         config
         );
-        localStorage.setItem("authToken", data.token);
-        localStorage.setItem("role", data.role);
-        localStorage.setItem("userId", data.userId);
+        sessionStorage.setItem("authToken", data.token);
+        sessionStorage.setItem("role", data.role);
+        sessionStorage.setItem("userId", data.userId);
         window.location.reload(false)
       } catch (error) {
         setError('Please check your email and password')
@@ -41,10 +41,10 @@ const LogIn = (props) => {
     }
 
   useEffect(() => {
-    if (localStorage.role == 'admin') {
+    if (sessionStorage.role == 'admin') {
       navigate('/dashboard')
 
-    } else if (localStorage.authToken) {
+    } else if (sessionStorage.authToken) {
       navigate('/')
     }
   }, []);

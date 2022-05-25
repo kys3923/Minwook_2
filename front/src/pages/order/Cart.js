@@ -29,7 +29,6 @@ const Cart = (props) => {
 
   // states
   const [ cartItemCount, setCartItemCount ] = useState(0);
-  const [ cartItemOpen, setCartItemOpen ] = useState(false);
   const [ cartItems, setCartItems ] = useState([]);
   const [ subTotal, setSubTotal] = useState(0);
   const [ removeItem, setRemoveItem ] = useState('')
@@ -116,11 +115,6 @@ const Cart = (props) => {
     }
     removeItemFromState();
     calcTotal();
-  }
-
-  const checkingHandler = (e) => {
-    console.table(cartItems)
-    console.log(subTotal)
   }
 
   const clearCart = (e) => {

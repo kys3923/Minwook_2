@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 // MUI
-import { Grid, Card, Typography, Button, FormGroup, FormControlLabel, Checkbox, Modal } from '@mui/material';
+import { Grid, Card, Typography, Button, Modal } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
 
@@ -23,7 +23,7 @@ const OrderDetails = (props) => {
     const request ={
       body: {
         "orderedItems": props.finalCart.Orders,
-        "customer": `${localStorage.userId}`,
+        "customer": `${sessionStorage.userId}`,
         "grandTotal": props.grandTotal
       }
     }

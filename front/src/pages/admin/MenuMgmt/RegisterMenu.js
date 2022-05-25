@@ -71,7 +71,7 @@ const RegisterMenu = (props) => {
     const config = {
       header: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.authToken}`
+        "Authorization": `Bearer ${sessionStorage.authToken}`
       }
     }
   
@@ -86,7 +86,6 @@ const RegisterMenu = (props) => {
         setOpenModal(true)
         setProcessing(false)
         resettingStates();
-        console.log(data.menu)
       }
       
     } catch (error) {

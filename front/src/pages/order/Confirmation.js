@@ -108,10 +108,10 @@ const Confirmation = (props) => {
             <Typography variant='h4' sx={{ color: 'darkgreen', fontWeight: 'bold'}}>Order Confirmation</Typography>
           </Grid>
           {/* Steps */}
-          <Stepper nonLinear activeStep={activeStep} sx={{ marginTop: '.5em', width: '100%'}} alternativeLabel>
+          <Stepper nonLinear activeStep={activeStep} disabled={true} sx={{ marginTop: '.5em', width: '100%'}} alternativeLabel>
             {steps.map((label, i) => (
               <Step key={label} completed={completed[i]}>
-                <StepButton color='inherit' onClick={handleStep(i)}>
+                <StepButton color='inherit' >
                   {label}
                 </StepButton>
               </Step>

@@ -63,7 +63,7 @@ const ForgotPassword = (props) => {
             paddingBottom: '5em'
           }}
         >
-          <h3 className='login_title'>Forgot Password</h3>
+          <h3 className='login_title'>Forgot / Reset Password</h3>
           {error && <span className='error_message'>{error}</span>}
           {success && <span className='success_message'>{success}</span>}
           <p className='forgotpassword_subtext'>

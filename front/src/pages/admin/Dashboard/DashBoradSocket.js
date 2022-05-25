@@ -36,7 +36,6 @@ const DashBoardSocket = (props) => {
     <ThemeProvider theme={theme}>
       <Grid container>
         <Grid item xs={12}>
-          {/* {socket ? <DashBoardSocketCumminication socket={socket} /> : <p>loading...</p>} */}
           <OrderStatus socketOrders={socketOrders} socketReservations={socketReservations} />
         </Grid>
       </Grid>

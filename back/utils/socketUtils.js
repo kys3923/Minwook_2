@@ -553,7 +553,7 @@ exports.connection = (io) => {
       const updateDB = async () => {
         const reqId = order;
         try {
-          const order = await Order.findByIdAndUpdate(reqId, { isFinished: true})
+          const order = await Order.findByIdAndUpdate(reqId, { isFinished: true, isPaid: true})
           order.save()
         } catch (err) {
           console.log(err)

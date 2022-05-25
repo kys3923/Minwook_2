@@ -18,7 +18,6 @@ const AddOn = (props) => {
   const [ addOnTotal, setAddOnTotal ] = useState();
   const [ grandTotalWithAddOn, setGrandTotalWithAddOn ] = useState();
   const [ alertModal, setAlertModal ] = useState(false);
-  const [ removingItem, setRemovingItem ] = useState('');
   const [ error, setError ] = useState('');
   // states---sauce
   const [ sauceOpen, SetSauceOpen ] = useState(false);
@@ -371,9 +370,6 @@ const AddOn = (props) => {
         const { data } = await axios.put(
           `${process.env.REACT_APP_SERVER_URL}/api/order/${props.orderId}`, request.body, config
         )
-        if (data.order) {
-          await console.log(request, data.order);
-        }
       } catch (error) {
         setError('Error from updating order')
       }

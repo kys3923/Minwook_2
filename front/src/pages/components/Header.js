@@ -58,7 +58,7 @@ const Header = (props) => {
     e.preventDefault();
 
     try {
-      localStorage.clear();
+      sessionStorage.clear();
       navigate('/')
       window.location.reload(false)
     } catch (error) {
@@ -88,12 +88,12 @@ const Header = (props) => {
                   :
                   null
                 }
-                {localStorage.role == "user" &&
+                {sessionStorage.role == "user" &&
                   <>
                   <Link to='account'><Button className={classes.navItems}><AccountBoxIcon /></Button></Link>
                   </>
                 }
-                {localStorage.role == "admin" && <>
+                {sessionStorage.role == "admin" && <>
                   <Link to='dashboard'><Button className={classes.navItems}><DashboardIcon /></Button></Link>
                 </>
                 }
@@ -106,12 +106,12 @@ const Header = (props) => {
                   :
                   null
                 }
-                {localStorage.role == "user" &&
+                {sessionStorage.role == "user" &&
                   <>
                   <Link to='account'><Button className={classes.navItems}><AccountBoxIcon />&nbsp;Account</Button></Link>
                   </>
                 }
-                {localStorage.role == "admin" && <>
+                {sessionStorage.role == "admin" && <>
                   <Link to='dashboard'><Button className={classes.navItems}><DashboardIcon /> Dashboard</Button></Link>
                 </>
                 }

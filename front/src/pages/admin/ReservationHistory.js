@@ -58,7 +58,6 @@ const ReservationHistory = (props) => {
         }
       }
       const { data } = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/reservation/list/listreservation`, config)
-      console.log(data.reservation)
       await setReservations(data.reservation);
     }
     fetchReservations();

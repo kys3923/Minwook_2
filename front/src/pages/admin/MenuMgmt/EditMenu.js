@@ -3,13 +3,11 @@ import { useState, useEffect } from 'react';
 // MUI
 import { ThemeProvider } from '@mui/material/styles'
 import theme from '../../../theme/theme';
-import { Typography, Grid, Button, Modal, Card, Chip, Stack, CircularProgreess, TextField, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel, Switch } from '@mui/material';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import { Typography, Grid, Button, Modal, Card, TextField, Switch } from '@mui/material';
 import { LoadingButton } from '@mui/lab'
 import axios from 'axios';
 
 const EditMenu = (props) => {
-  // menu model : name, description, price, category, Sub_Category, stock_availability
   const [ name, setName ] = useState('');
   const [ description, setDescription ] = useState('');
   const [ caption, setCaption ] = useState('');
@@ -21,8 +19,6 @@ const EditMenu = (props) => {
   const [ modalOpen, setModalOpen ] = useState(false);
   const [ selectedID, setSelectedID ] = useState('')
   const [ selectedMenu, setSelectedMenu ] = useState();
-  const [ error, setError ] = useState('loading');
-  const [ isLoading, setIsLoading ] = useState(false);
   const [ updateIsProcessing, setUpdateIsProcessing ] = useState(false);
   const [ deleteIsProcessing, setDeleteIsProcessing ] = useState(false);
   
@@ -41,7 +37,6 @@ const EditMenu = (props) => {
         }
       }
     const findOneMenu = async (data) => {
-      console.log(data, 'data', receivedData)
       const foundMenu = receivedData.find(menu => menu._id === data)
       await setSelectedMenu(foundMenu)
       setStates(foundMenu)
@@ -144,7 +139,6 @@ const EditMenu = (props) => {
 
       try {
         const { data } = await axios.delete(`${process.env.REACT_APP_SERVER_URL}/api/menu/delete/${selectedID}`, request.body, config)
-        console.log(data)
         setDeleteIsProcessing(false)
         modalCloser()
       } catch (err) {
@@ -155,7 +149,6 @@ const EditMenu = (props) => {
     // ------------------------------------- receiving all menu from api
     useEffect(() => {
       if (props.receivedData.length > 0) {
-        setIsLoading(false);
         setReceivedData(props.receivedData);
       }
     },[props.receivedData, selectedMenu])
@@ -309,7 +302,6 @@ const EditMenu = (props) => {
             </Grid>
             <Grid item xs={12}>
               <Grid container spacing={2}>
-                {console.log(selectedMenu)}
                 <Grid item xs={4}>
                   <Button variant='outlined' onClick={modalCloser} sx={{ width: '100%'}}>Close</Button>
                 </Grid>

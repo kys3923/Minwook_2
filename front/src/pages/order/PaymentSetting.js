@@ -7,7 +7,7 @@ import { Elements } from '@stripe/react-stripe-js';
 // MUI
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
-import { Grid, Typography, Card, CircularProgress, Button, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Grid, Typography, Card, CircularProgress } from '@mui/material';
 
 // Stripe
 

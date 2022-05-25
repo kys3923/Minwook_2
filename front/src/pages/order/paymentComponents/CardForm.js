@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { Button, Grid, Typography, Card, TextField } from '@mui/material';
+import { Grid, Typography, Card } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../../theme/theme';
@@ -12,7 +12,6 @@ import styled from "@emotion/styled";
 const Cardform = (props) => {
 
   // states 
-  const [ pageLoading, setPageLoading ] = useState(false);
   const [ paymentProcessing, setPaymentProcessing ] = useState(false);
   const [ line1, setLine1 ] = useState('');
   const [ city, setCity ] = useState('');
@@ -69,8 +68,6 @@ const Cardform = (props) => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    // setPaymentProcessing(true);
-
     const billingDetails = {
       name: cardName,
       address: {
@@ -103,24 +100,18 @@ const Cardform = (props) => {
       const { error } = await stripe.confirmCardPayment(clientSecret, {
           payment_method: paymentMethodReq.paymentMethod.id
         })
-          
-          console.log(paymentMethodReq)
-
         
       if (error) {
         setCheckoutError(error.message)
         setPaymentProcessing(false)
-        console.log(error.message)
         return
       }
 
       props.handleComplete();
-      // TODO: send email
       props.handleNext();
 
     } catch (err) {
       setCheckoutError(err.message)
-      console.log(err.message)
     }
 
   }

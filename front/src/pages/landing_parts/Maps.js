@@ -2,30 +2,10 @@ import { GoogleMap, useLoadScript, Marker, InfoWindow } from '@react-google-maps
 import React from 'react';
 import restaurantData from '../../Data/Restaurant.json'
 
-// function Map() {
-//   // const [selectedMarker, setSelectedMarker] = useState(true);
-
-//   return (
-//     <div>
-//       <GoogleMap
-//         defaultZoom={16}
-//         defaultCenter={{ lat: restaurantData[0].lat, lng: restaurantData[0].lng }}
-//       >
-//         <Marker 
-//           position={{ lat: restaurantData[0].lat, lng: restaurantData[0].lng }}
-//         />
-//       </GoogleMap>
-//     </div>
-//   );
-// }
-
-// const WrappedMap = withScriptjs(withGoogleMap(Map));
-
 const mapContainerStyle = {
   width: "100%",
   height: "50vh"
 }
-
 
 const Maps = (props) => {
 

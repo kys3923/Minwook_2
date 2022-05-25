@@ -13,17 +13,18 @@ const DetailCard = (props) => {
 
   // states
   const [ fetchedData, setFetchedData ] = useState();
-
+  
   // useEffect
   useEffect(() => {
-    if (!!props.value) {
+    const id = props.value;
+    if (!!id) {
       const fetchData = async () => {
         const config = {
           header: {
             "Content-Type": "application/json"
           }
         }
-        const request = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/order/${props.value}`, config)
+        const request = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/order/${id}`, config)
         setFetchedData(request.data.order)
         return request
       }
@@ -50,7 +51,6 @@ const DetailCard = (props) => {
         : 
           <Grid container>
             <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'row', borderBottom: '1px solid #dc5a41', marginBottom: '7px'}}>
-              {console.log(fetchedData)}
               <Typography variant='h6' sx={{ marginRight: '1em'}}>Order Number:</Typography>
               <Typography variant='h6' sx={{ color: '#dc5a41'}}>{fetchedData[0].OrderNumber}</Typography>
             </Grid>
@@ -82,7 +82,7 @@ const DetailCard = (props) => {
               </Typography>
             </Grid>
             <Grid item xs={12} sx={{ marginBottom: '.5em'}}>
-              <Typography variant='h6' sx={{ color: 'darkgreen', marginTop: '.25em'}}>
+              <Typography variant='body1' sx={{ color: 'darkgreen', marginTop: '.25em', fontWeight: 'bold'}}>
                 Ordered Items
               </Typography>
             </Grid>
@@ -207,7 +207,7 @@ const DetailCard = (props) => {
               ))}
             </Grid>
             <Grid item xs={12} sx={{ marginBottom: '.5em'}}>
-              <Typography variant='h6' sx={{ color: 'darkgreen', marginTop: '.25em'}}>
+            <Typography variant='body1' sx={{ color: 'darkgreen', marginTop: '.25em', fontWeight: 'bold'}}>
                 Added Items
               </Typography>
             </Grid>
@@ -215,16 +215,16 @@ const DetailCard = (props) => {
               {fetchedData[0].addOns.length > 0 ?
               <>
                 {fetchedData[0].addOns.map((item, i) => (
-                    <Card key={i} sx={{ padding: '1em 1em', borderBottom: '1px solid lightgray'}} elevation={0}>
-                      <Grid container>
+                    <Card key={i} elevation={0}>
+                      <Grid container sx={{ paddingLeft: '1em'}}>
                         <Grid item xs={7}>
-                          <Typography sx={{ color: '#dc5a41', fontSize: '1.1125em'}}>{item.name}</Typography>
+                          <Typography sx={{ color: 'gray'}}>{item.name}</Typography>
                         </Grid>
                         <Grid item xs={2}>
                           <Typography sx={{ fontStyle: 'italic'}}>x{item.qty}</Typography>
                         </Grid>
                         <Grid item xs={3}>
-                          <Typography sx={{ color: 'darkgreen', marginBottom: '.5em', textAlign: 'right', paddingRight: '1em' }}>$&nbsp;{(item.price.toFixed(2))}</Typography>
+                          <Typography sx={{ color: 'darkgreen', textAlign: 'right', paddingRight: '1em' }}>$&nbsp;{(item.price.toFixed(2))}</Typography>
                         </Grid>
                       </Grid>
                     </Card>
@@ -241,7 +241,9 @@ const DetailCard = (props) => {
             { fetchedData[0].comments ?
               <>
                 <Grid item xs={12} sx={{ marginBottom: '.5em', marginTop: '1em'}}>
-                  <Typography>Options</Typography>
+                  <Typography variant='body1' sx={{ color: 'darkgreen', marginTop: '.25em', fontWeight: 'bold'}}>
+                    Order Comments
+                  </Typography>
                 </Grid>
                 <Grid item xs={12}>
                   <Card xs={{ padding: '1em 1em', borderBottom: '1px solid lightgray'}} elevation={0}>

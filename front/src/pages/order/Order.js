@@ -106,9 +106,9 @@ const Order = (props) => {
     function now() {
       const date = new Date();
       let localeTime = moment.tz(date, 'America/New_York')
-      // let openClose = storeOpener(determineDay(localeTime), TimeFormatter(localeTime))
-      // TODO: bottome is the test time => set time to current
-      let openClose = storeOpener('regular hours', 1000)
+      let openClose = storeOpener(determineDay(localeTime), TimeFormatter(localeTime))
+      // bottom is the test time => set time to current
+      // let openClose = storeOpener('regular hours', 1000)
       if (openClose === 'regular open' || openClose === 'longer hour open') {
         setStoreOpen(true);
       } else if (openClose === 'lunch hour') {

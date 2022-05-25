@@ -13,7 +13,7 @@ const AdminLogout = (props) => {
   
   const logoutButtonHandler = async (e) => {
     try {
-      localStorage.clear()
+      sessionStorage.clear()
       navigate('/')
       window.location.reload(false)
     } catch (error) {

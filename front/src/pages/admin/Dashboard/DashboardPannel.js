@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 // MUI
 import { ThemeProvider } from '@mui/material/styles';
-import { Typography, Grid, Accordion, AccordionSummary, AccordionDetails, Modal, CircularProgress } from "@mui/material";
+import { Typography, Grid, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 // components

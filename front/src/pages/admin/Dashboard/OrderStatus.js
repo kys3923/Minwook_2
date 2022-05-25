@@ -23,7 +23,6 @@ const OrderStatus = (props) => {
   const [ socketReadyOrders, setSocketReadyOrders ] = useState([]);
   const [ socketNewReservations, setSocketNewReservations ] = useState([]);
   const [ socketConfirmedReservations, setSocketConfirmedReservations ] = useState([]);
-  const [ buttonLoading, setButtonLoading ] = useState(false);
   const [ modalValue, setModalValue ] = useState('');
   const [ modalOpen, setModalOpen ] = useState(false);
   const [ modalResValue, setModalResValue ] = useState('');
@@ -223,13 +222,11 @@ const OrderStatus = (props) => {
   }
 
   const finishOrderHandler = (e) => {
-    console.log(e.currentTarget.value);
     const connectingSocket = async () => {
       try {
         await socket.emit('finishOrder', e.currentTarget.value)
-        console.log('req sent')
       } catch (err) {
-        console.log.apply(err)
+        console.log(err)
       }
     }
     connectingSocket();
@@ -282,7 +279,6 @@ const OrderStatus = (props) => {
               </Grid>
             : 
               <Grid container sx={{ maxHeight: '50vh', overflow: 'auto', '&::-webkit-scrollbar': {display: 'none'}}} spacing={2} >
-                {console.log(props.socketOrders, 'socket', socketNewOrders.length, 'neworders', socketConfirmedOrders.length, 'confirmed O', socketReadyOrders.length, 'readyPU', socketConfirmedReservations.length, 'confirmed res', socketNewReservations, 'res new')}
                 {socketNewOrders.map((order, i) => (
                   <Grid item xs={12} key={i}>
                     <Card sx={{ padding: '1em 1em'}}>

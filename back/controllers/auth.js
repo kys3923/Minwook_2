@@ -210,7 +210,7 @@ exports.forgotpassword = async ( req, res, next ) => {
 		await user.save();
 
 		// TODO: update server URL
-		const resetUrl = `http://localhost:3000/passwordreset/${resetToken}`;
+		const resetUrl = `http://sushivilleny.com/passwordreset/${resetToken}`;
 
 		const message = `
 			<head>

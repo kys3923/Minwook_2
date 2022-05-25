@@ -132,15 +132,12 @@ const OrderFinal = (props) => {
           `${process.env.REACT_APP_SERVER_URL}/api/order/${props.orderId}`, request.body, config
         )
         if(data.order) {
-          await console.log(data.order, 'from request')
           setLoading(false);
           setIsUpdated(!isUpdated);
         }
       } catch (error) {
         console.log(error)
       }
-
-      console.log(comments, payAtRestaurant);
     }
   }
 

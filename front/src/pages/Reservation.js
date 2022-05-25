@@ -94,7 +94,7 @@ const Reservation = (props) => {
   }
 
   useEffect(() => {
-    setUserId(localStorage.userId);
+    setUserId(sessionStorage.userId);
   },[])
 
   return (

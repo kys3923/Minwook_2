@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { BrowserRouter as Router, Route, Routes, Navigate, Outlet } from 'react-router-dom'
 import { useState, useEffect } from 'react';
-import moment from 'moment';
 import axios from 'axios';
 
 // import Landing from './pages/Landing';
@@ -21,20 +20,22 @@ import EditMenu from './pages/admin/MenuMgmt/EditMenu';
 import RegisterMenu from './pages/admin/MenuMgmt/RegisterMenu';
 import Account from './pages/account/Account';
 import TOC from './pages/TermsOfConditions/TOC';
+import NotFound from './pages/landing_parts/NotFound';
 
 function App() {
 
-  const adminUser = localStorage.role;
   const [ authUser, setAuthUser ] = useState('');
   const [ isAutoOpen, setIsAutoOpen ] = useState();
   const [ manualOpen, setManualOpen ] = useState();
-
+  
   useEffect(() => {
-    if (adminUser == 'user') {
-      setAuthUser('user')
-    }
-    if (adminUser == "admin") {
-      setAuthUser('admin')
+    const adminUser = sessionStorage.role;
+    const setUser = () => {
+      if (adminUser === 'user') {
+        setAuthUser('user')
+      } else if (adminUser === 'admin') {
+        setAuthUser('admin')
+      }
     }
 
     async function fetchStatus() {
@@ -48,11 +49,12 @@ function App() {
       setManualOpen(request.data.status[0].manualStatus);
       return request
     }
+    setUser();
     fetchStatus();
   },[isAutoOpen, manualOpen])
 
   const AdminRoute = () => {
-    if(authUser == 'admin') {
+    if(authUser === 'admin') {
       return <Outlet />
     } else {
       return <Navigate to='login' />
@@ -60,10 +62,9 @@ function App() {
   }
 
   const UserRoute = () => {
-    if(authUser == 'user' || authUser == 'admin') {
+    if(authUser === 'user' || authUser === 'admin') {
       return <Outlet />
-    }
-    if(!adminUser) {
+    } else {
       return <Navigate to='login' />
     }
   }
@@ -96,6 +97,7 @@ function App() {
           </Route>
         </Route>
         {/* TODO: add not found page */}
+        <Route path='*' element={<NotFound />} />
       </Routes>
       <Footer />
     </Router>

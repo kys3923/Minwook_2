@@ -18,14 +18,12 @@ exports.chargeCard = async (req, res) => {
 
     res.status(200).send(paymentIntent.client_secret)
 
-    // return res.status(200).json({
-    //   confirmed: payment
-    // })
+
   } catch (error) {
     console.log(error);
     return res.status(400).json({
       message: error.message
     })
   }
-  // send email
+// send email
 }

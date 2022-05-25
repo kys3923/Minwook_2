@@ -36,7 +36,7 @@ const Register = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.authToken) {
+    if (sessionStorage.authToken) {
       navigate('/')
     }
   }, []);
@@ -66,9 +66,9 @@ const Register = (props) => {
         {username, email, password, contact}, 
         config);
 
-      localStorage.setItem("authToken", data.token);
-      localStorage.setItem("role", data.role)
-      localStorage.setItem('userId', data.userId)
+      sessionStorage.setItem("authToken", data.token);
+      sessionStorage.setItem("role", data.role)
+      sessionStorage.setItem('userId', data.userId)
       window.location.reload(false)
     } catch (error) {
       setError('The email address has already taken');
